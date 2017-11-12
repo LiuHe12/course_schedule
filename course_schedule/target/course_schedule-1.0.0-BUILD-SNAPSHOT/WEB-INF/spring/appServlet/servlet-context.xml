@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="edu.pku.course_schedule" />
+	<context:component-scan base-package="edu.pku.course_schedule.controller" />
 	
 	
 	
