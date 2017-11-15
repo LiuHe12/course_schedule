@@ -1,5 +1,5 @@
 package edu.pku.course_schedule.dao.impl;
 
-public class DaoJdbcImpl {
+public class JdbcDao implements Dao{
 
 }
