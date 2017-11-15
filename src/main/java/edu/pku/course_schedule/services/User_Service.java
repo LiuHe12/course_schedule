@@ -1,5 +1,7 @@
 package edu.pku.course_schedule.services;
 
+import java.util.ArrayList;
+
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Teacher;
 
@@ -13,9 +15,9 @@ import edu.pku.course_schedule.dao.entity.Teacher;
 */
 public interface User_Service {
 
-	public boolean login(String userId,String password);//用户登录
+	public Object login(String userId,String password,int identify);//用户登录
 	
-	public void modifyPassword();//修改密码
+	public void modifyPassword(String userId,int identify,String newPassword);//修改密码
 	
 	public boolean addStudent(Student student);//添加学生
 	
@@ -25,6 +27,12 @@ public interface User_Service {
 	
 	public boolean modifyTeacher(String teacher_id,Teacher teacher);//修改老师信息
 	
-	//TODO 建议整合一下用户表，添加身份信息
-	public boolean delUser(String user_id);//删除用户
+	public boolean delUser(String user_id,int identify);//删除用户
+	
+	public Object getUser(String user_id,int identify);//获取用户信息
+	
+	public ArrayList<Object> getAllUser(int identify);//获取所有指定身份用户信息
+	
+	public ArrayList<Object> getUserByName(String identifyId,int identify);//根据身份证号查找用户
+	
 }

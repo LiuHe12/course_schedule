@@ -16,27 +16,27 @@ public interface Course_Service {
 	
 	public Course getCourse(int course_id);//通过课程号查找课程详细信息
 	
-	public ArrayList<Course> getCourses(Date startDate,Date endDate);//查找指定时间段的所有课程
+	public ArrayList<Course> getCoursesByTime(Date startDate,Date endDate);//查找指定时间段的所有课程
 	
-	public ArrayList<Course> getCourses(String user_id);//查找用户的所有课程
+	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus);//查找用户的课程(0已排，1未排)
 	
-	public Course_pass getCourse_Pass(int Course);//通过课程号查找已上过课程的详细信息
+	public void setSatification(int course_id,int score);//学生进行课程满意度打分
 	
-	public ArrayList<Course_pass> getCourse_Passes(String teacher_id,String student_id);//
+	public void setEvaluate(int course_id,String evaluate);//老师进行课程评价内容
 	
-	public ArrayList<Course> getCourse_Passes(String user_id);//查找用户的所有已上课程
+	public ArrayList<Course> getAllCoursePasses(Date startDate,Date endDate);//查找所有已经上过的课
 	
 	public boolean addCourse(Course course);//添加课程
 	
 	public boolean delCourse(int course_id);//根据课程号删除课程
 	
-	//TODO 删除课程只需要老师ID和时间 或者学生ID和时间其实也OK，商量一下
-	public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
+	public ArrayList<Course> waitEvaluateCourses(String teacher_id);//得到老师已上未评价课程
+	
+	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
 	
 	public boolean setCoursePass(int course_id);//通过课程号设置课程已上
 	
-	//TODO
 	public boolean setCoursePass(String teacher_id,String student_id,Date course_time);//根据老师id，学生id和上课时间标记已上课
 
-
+	//TODO邮件提醒上课功能
 }
