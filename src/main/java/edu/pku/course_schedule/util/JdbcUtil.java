@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.services;
+package edu.pku.course_schedule.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,6 +13,14 @@ import org.apache.taglibs.standard.tag.common.xml.IfTag;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+/**   
+* @Title:  JdbcUtil
+* @Package package edu.pku.course_schedule.util;
+* @Description: jdbc线程池工具类
+* @author Haylee  
+* @date 2017/11/14
+* @version V1.0   
+*/
 public class JdbcUtil {
 	static JdbcPool jdbcPool=new JdbcPool();
 	private static Logger logger=Logger.getLogger(JdbcUtil.class);

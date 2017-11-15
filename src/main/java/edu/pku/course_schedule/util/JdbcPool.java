@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.services;
+package edu.pku.course_schedule.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,14 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import java.util.logging.Logger;
 
-
+/**   
+* @Title:  JdbcPool
+* @Package package edu.pku.course_schedule.util;
+* @Description: Jdbc线程池
+* @author Haylee  
+* @date 2017/11/14
+* @version V1.0   
+*/
 public class JdbcPool implements DataSource{
 	
 	private  String driver;
