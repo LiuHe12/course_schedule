@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.dao;
+package edu.pku.course_schedule.dao.entity;
 
 public class Teacher {
 
@@ -6,12 +6,10 @@ public class Teacher {
 	
 	private String teacher_Name;
 	
-	private int teacher_kind; // æ•™å¸ˆç§ç±»ï¼ˆåŠ©æ•™ä¸º0ï¼Œæ­£å¸¸æ•™å¸ˆä¸º1ï¼Œä¿è–ªæ•™å¸ˆä¸º2ï¼‰
+	private int teacher_kind; // şı™åşıç§ç±»ï¼ˆåŠ©şı™ä¸º0ï¼Œæ­£å¸¸æşıå¸ˆä¸º1ï¼Œäşışıªæşıå¸ˆä¸º2ï¼şı	
+	private int teacher_baseSalary; // şıºçşıå·¥èşı
 	
-	private int teacher_baseSalary; // åŸºç¡€å·¥èµ„
-	
-	private int teacher_baseCourse; // å¿…é¡»è¯¾æ—¶æ•°
-	
+	private int teacher_baseCourse; // å¿…é¡»è¯¾æ—¶şışı	
 	private int teacher_speakprice;
 	
 	private int teacher_readprice;

@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.dao;
+package edu.pku.course_schedule.dao.entity;
 
 public class Administrator {
 	

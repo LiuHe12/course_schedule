@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.dao;
+package edu.pku.course_schedule.dao.entity;
 
 import java.sql.Date;
 
@@ -9,27 +9,25 @@ public class Student {
 	
 	private String student_Name;
 	
-	private int student_listen; // å¬åŠ›è¯¾æ—¶æ•°ï¼Œé»˜è®¤ä¸º0
+	private int student_listen; // şı¬åşıè¯¾æ—¶şı°ïşıé»˜è®¤ä¸şı
 	
-	private String student_listen_teacher; // fk, å¬åŠ›è€å¸ˆIDï¼Œé»˜è®¤ä¸ºç©º
-	
-	private int student_ID_speak; // å£è¯­è¯¾æ—¶æ•°ï¼Œé»˜è®¤ä¸º0
+	private String student_listen_teacher; // fk, şı¬åşışıåşıIDï¼Œéşıè®¤ä¸ºç©şı	
+	private int student_ID_speak; // şışı¯­è¯¾æ—¶şı°ïşıé»˜è®¤ä¸şı
 	
 	private String student_ID_speak_teacher; // fk, é»˜è®¤ä¸ºç©º
 	
-	private int student_read; // é˜…è¯»è¯¾æ—¶æ•°ï¼Œé»˜è®¤ä¸º0
+	private int student_read; // şı…è¯»è¯¾æ—¶şı°ïşıé»˜è®¤ä¸şı
 	
 	private String student_read_teacher; // fk, é»˜è®¤ä¸ºç©º
 	
-	private int student_write; // å†™ä½œè¯¾æ—¶æ•°ï¼Œé»˜è®¤ä¸º0
+	private int student_write; // şı™äşıè¯¾æ—¶şı°ïşıé»˜è®¤ä¸şı
 	
 	private String student_write_teacher; // fk, é»˜è®¤ä¸ºç©º
 	
-	private int student_support; // åŠ©æ•™è¯¾æ—¶æ•°ï¼Œé»˜è®¤ä¸º0
+	private int student_support; // şı©æşıè¯¾æ—¶şı°ïşıé»˜è®¤ä¸şı
 	
-	private String student_support_teacher; // fk, åŠ©æ•™IDï¼Œé»˜è®¤ä¸ºç©º
-	
-	private Date enrolltime; // æŠ¥åæ—¶é—´
+	private String student_support_teacher; // fk, şı©æşıIDï¼Œéşıè®¤ä¸ºç©şı	
+	private Date enrolltime; // şı¥åşışı¶é—´
 
 	
 	

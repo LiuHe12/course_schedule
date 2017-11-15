@@ -1,4 +1,4 @@
-package edu.pku.course_schedule.dao;
+package edu.pku.course_schedule.dao.entity;
 
 import java.sql.Date;
 
@@ -11,13 +11,13 @@ public class Course {
 	
 	private String teacher_ID;// fk
 	
-	Date course_time; // ä¸Šè¯¾æ—¶é—´
+	Date course_time; // ä¸Šè¯¾şı¶é—´
 	
-	private int course_size; // è¯¾æ—¶é•¿åº¦ï¼Œåˆ†é’Ÿä¸ºå•ä½
+	private int course_size; // è¯¾æ—¶şı¿åº¦ï¼ŒåşışıŸä¸ºşı•äşı
 	
-	private int course_name; // è¯¾ç¨‹åï¼Œåˆ†ä¸ºå¬è¯´è¯»å†™å’ŒåŠ©æ•™5ç§ï¼Œåˆ†åˆ«ä¸º1,2,3,4,5
+	private int course_name; // è¯¾çşışıïşışı†ä¸ºşı¬è¯´è¯»åşışıŒåŠ©şışıç§ïşışı†åˆ«ä¸şı,2,3,4,5
 	
-	private int course_room; // ä¸Šè¯¾æ•™å®¤ï¼Œä»1å¼€å§‹ç¼–å·
+	private int course_room; // ä¸Šè¯¾şı™å®¤ï¼Œäşı1å¼şışıç¼–å·
 
 	
 	/**********Getter and Setter**********/

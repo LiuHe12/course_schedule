@@ -1,15 +1,15 @@
-package edu.pku.course_schedule.dao;
+package edu.pku.course_schedule.dao.entity;
 
 public class Teacher_salary {
 
 	
 	private String teacher_ID; // pk,fk
 	
-	private String salary_time; // pk, å·¥èµ„æ—¶é—´ï¼Œå¦‚201706
+	private String salary_time; // pk, å·¥èşışı¶é—´ï¼Œåşı201706
 	
-	private int bonus; // å½“æœˆå¥–é‡‘ï¼Œé»˜è®¤ä¸º0
+	private int bonus; // å½“æşıå¥–éşıï¼Œéşıè®¤ä¸º0
 	
-	private int salary; // å·¥èµ„ï¼Œé»˜è®¤ä¸ºç©ºï¼Œç”±è¯¾æ—¶æ•°ä¸å¥–é‡‘çš„å’Œå¾—å‡ºåæ›´æ–°
+	private int salary; // å·¥èşıï¼Œéşıè®¤ä¸ºç©ºïşışı±è¯¾şı¶æ•°ä¸åşışı‘çşışıŒåşışıºåşışı´æ–°
 
 	
 	
