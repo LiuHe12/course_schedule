@@ -3,7 +3,7 @@ package edu.pku.course_schedule.services;
 import java.sql.Date;
 import java.util.ArrayList;
 import edu.pku.course_schedule.dao.entity.Course;
-import edu.pku.course_schedule.dao.entity.Course_pass;
+//import edu.pku.course_schedule.dao.entity.Course_pass;
 /**   
 * @Title:  Course_Service
 * @Package edu.pku.course_schedule.services;
