@@ -5,11 +5,11 @@ public class Teacher_salary {
 	
 	private String teacher_ID; // pk,fk
 	
-	private String salary_time; // pk, å·¥èþýþý¶é—´ï¼Œåþý201706
+	private String salary_time; 
 	
-	private int bonus; // å½“æþýå¥–éþýï¼Œéþýè®¤ä¸º0
+	private int bonus; 
 	
-	private int salary; // å·¥èþýï¼Œéþýè®¤ä¸ºç©ºïþýþý±è¯¾þý¶æ•°ä¸Žåþýþý‘çþýþýŒåþýþýºåþýþý´æ–°
+	private int salary; 
 
 	
 	
