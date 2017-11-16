@@ -7,19 +7,17 @@ public class Teacher {
 	private String teacher_Name;
 	
 	private int teacher_kind; // şı™åşıç§ç±»ï¼ˆåŠ©şı™ä¸º0ï¼Œæ­£å¸¸æşıå¸ˆä¸º1ï¼Œäşışıªæşıå¸ˆä¸º2ï¼şı	
+	
 	private int teacher_baseSalary; // şıºçşıå·¥èşı
 	
-	private int teacher_baseCourse; // å¿…é¡»è¯¾æ—¶şışı	
-	private int teacher_speakprice;
+	private int password;
 	
-	private int teacher_readprice;
-	
-	private int teacher_writeprice;
-	
-	private int teacher_listenprice;
+	private String identify_Id;
 	
 	
 	
+
+
 	/**********Getter and Setter**********/
 
 	public String getTeacher_ID() {
@@ -54,44 +52,20 @@ public class Teacher {
 		this.teacher_baseSalary = teacher_baseSalary;
 	}
 
-	public int getTeacher_baseCourse() {
-		return teacher_baseCourse;
+	public String getIdentify_Id() {
+		return identify_Id;
 	}
 
-	public void setTeacher_baseCourse(int teacher_baseCourse) {
-		this.teacher_baseCourse = teacher_baseCourse;
+	public void setIdentify_Id(String identify_Id) {
+		this.identify_Id = identify_Id;
 	}
 
-	public int getTeacher_speakprice() {
-		return teacher_speakprice;
+	public int getPassword() {
+		return password;
 	}
 
-	public void setTeacher_speakprice(int teacher_speakprice) {
-		this.teacher_speakprice = teacher_speakprice;
-	}
-
-	public int getTeacher_readprice() {
-		return teacher_readprice;
-	}
-
-	public void setTeacher_readprice(int teacher_readprice) {
-		this.teacher_readprice = teacher_readprice;
-	}
-
-	public int getTeacher_writeprice() {
-		return teacher_writeprice;
-	}
-
-	public void setTeacher_writeprice(int teacher_writeprice) {
-		this.teacher_writeprice = teacher_writeprice;
-	}
-
-	public int getTeacher_listenprice() {
-		return teacher_listenprice;
-	}
-
-	public void setTeacher_listenprice(int teacher_listenprice) {
-		this.teacher_listenprice = teacher_listenprice;
+	public void setPassword(int password) {
+		this.password = password;
 	}
 
 }
