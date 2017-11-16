@@ -11,13 +11,19 @@ public class Course {
 	
 	private String teacher_ID;// fk
 	
-	Date course_time; // ä¸Šè¯¾şı¶é—´
+	private Date course_time; 
 	
-	private int course_size; // è¯¾æ—¶şı¿åº¦ï¼ŒåşışıŸä¸ºşı•äşı
+	private Date rest_time;
 	
-	private int course_name; // è¯¾çşışıïşışı†ä¸ºşı¬è¯´è¯»åşışıŒåŠ©şışıç§ïşışı†åˆ«ä¸şı,2,3,4,5
+	private String course_name; 
 	
-	private int course_room; // ä¸Šè¯¾şı™å®¤ï¼Œäşı1å¼şışıç¼–å·
+	private int satification;
+	
+	private String evaluate;
+	
+	private int course_price;
+	
+	private int status;
 
 	
 	/**********Getter and Setter**********/
@@ -54,30 +60,53 @@ public class Course {
 		this.course_time = course_time;
 	}
 
-	public int getCourse_size() {
-		return course_size;
-	}
-
-	public void setCourse_size(int course_size) {
-		this.course_size = course_size;
-	}
-
-	public int getCourse_name() {
+	public String getCourse_name() {
 		return course_name;
 	}
 
-	public void setCourse_name(int course_name) {
+	public void setCourse_name(String course_name) {
 		this.course_name = course_name;
 	}
 
-	public int getCourse_room() {
-		return course_room;
+	public Date getRest_time() {
+		return rest_time;
 	}
 
-	public void setCourse_room(int course_room) {
-		this.course_room = course_room;
+	public void setRest_time(Date rest_time) {
+		this.rest_time = rest_time;
 	}
 
+	public int getSatification() {
+		return satification;
+	}
+
+	public void setSatification(int satification) {
+		this.satification = satification;
+	}
+
+	public String getEvaluate() {
+		return evaluate;
+	}
+
+	public void setEvaluate(String evaluate) {
+		this.evaluate = evaluate;
+	}
+
+	public int getCourse_price() {
+		return course_price;
+	}
+
+	public void setCourse_price(int course_price) {
+		this.course_price = course_price;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	
 
 }
