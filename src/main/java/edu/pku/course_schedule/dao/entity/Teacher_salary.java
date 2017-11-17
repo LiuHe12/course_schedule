@@ -3,32 +3,33 @@ package edu.pku.course_schedule.dao.entity;
 public class Teacher_salary {
 
 	
-	private String teacher_ID; // pk,fk
+	private String teacher_id; 
 	
-	private String salary_time; 
+	private String time; 
 	
 	private int bonus; 
 	
-	private int salary; 
+	private int salary;
 
+	
 	
 	
 	/**********Getter and Setter**********/
 	
-	public String getTeacher_ID() {
-		return teacher_ID;
+	public String getTeacher_id() {
+		return teacher_id;
 	}
 
-	public void setTeacher_ID(String teacher_ID) {
-		this.teacher_ID = teacher_ID;
+	public void setTeacher_id(String teacher_id) {
+		this.teacher_id = teacher_id;
 	}
 
-	public String getSalary_time() {
-		return salary_time;
+	public String getTime() {
+		return time;
 	}
 
-	public void setSalary_time(String salary_time) {
-		this.salary_time = salary_time;
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 	public int getBonus() {
@@ -46,6 +47,7 @@ public class Teacher_salary {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
+
 	
 	
 }

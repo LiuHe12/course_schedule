@@ -2,19 +2,21 @@ package edu.pku.course_schedule.dao.entity;
 
 public class Administrator {
 	
-	private String ID; // pk
+	private String id; // pk
 	
 	private String password;
 	
 	
-	/**********Getter and Setter**********/
 	
-	public String getID() {
-		return ID;
+	
+	/**********Getter and Setter**********/
+
+	public String getId() {
+		return id;
 	}
 
-	public void setID(String iD) {
-		ID = iD;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getPassword() {
@@ -25,6 +27,10 @@ public class Administrator {
 		this.password = password;
 	}
 	
+	
+	
+	
+
 	
 	
 	

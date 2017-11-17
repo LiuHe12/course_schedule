@@ -1,20 +1,22 @@
 package edu.pku.course_schedule.dao.entity;
 
-public class Teacher {
+import java.sql.Date;
 
-	private String id; // pk
+
+public class Student {
+	
+	private String id;
 	
 	private String name;
+		
+	private Date enroll_time; 
+
+	private String email;
 	
-	private int kind; 
-	
-	private int base_salary; 
-	
-	private int password;
+	private String password;
 	
 	private String identify_id;
 
-	
 	
 	
 	/**********Getter and Setter**********/
@@ -35,27 +37,27 @@ public class Teacher {
 		this.name = name;
 	}
 
-	public int getKind() {
-		return kind;
+	public Date getEnroll_time() {
+		return enroll_time;
 	}
 
-	public void setKind(int kind) {
-		this.kind = kind;
+	public void setEnroll_time(Date enroll_time) {
+		this.enroll_time = enroll_time;
 	}
 
-	public int getBase_salary() {
-		return base_salary;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setBase_salary(int base_salary) {
-		this.base_salary = base_salary;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public int getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(int password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -66,6 +68,8 @@ public class Teacher {
 	public void setIdentify_id(String identify_id) {
 		this.identify_id = identify_id;
 	}
+	
+	
 	
 	
 	
