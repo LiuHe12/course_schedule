@@ -67,4 +67,10 @@ public class JdbcUtil {
 		}
 		releaseConn(conn);
 	}
+	public static void release(Statement statement,Connection conn) throws SQLException {
+		if(statement!=null) {
+			statement.close();
+		}
+		releaseConn(conn);
+	}
 }

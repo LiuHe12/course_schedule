@@ -10,7 +10,7 @@ public class Teacher {
 	
 	private int base_salary; 
 	
-	private int password;
+	private String password;
 	
 	private String identify_id;
 
@@ -51,12 +51,12 @@ public class Teacher {
 		this.base_salary = base_salary;
 	}
 
-	public int getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(int password) {
-		this.password = password;
+	public void setPassword(String password2) {
+		this.password = password2;
 	}
 
 	public String getIdentify_id() {
