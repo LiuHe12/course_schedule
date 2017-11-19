@@ -1,5 +1,7 @@
 package edu.pku.course_schedule.dao.impl;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -20,98 +22,63 @@ import edu.pku.course_schedule.util.JdbcUtil;
 import edu.pku.course_schedule.util.MD5Util;
 
 @SuppressWarnings("all")
-public class JdbcDao implements Dao{
+public class JdbcDao implements Dao {
 
-	private Logger logger=Logger.getLogger(JdbcDao.class);
-	private static JdbcUtil jdbcUtil=new JdbcUtil();
-	private static String administrator_table_name="administrator";
-	private static String teacher_table_name="teacher";
-	private static String student_table_name="student";
-	private static String studentCourse_table_name="student_course";
-	private static String course_table_name="course";
-	private static String teacherSalary_table_name="teacher_salary";
-	private static final int administrator_identify=0;
-	private static final int teacher_identify=1;
-	private static final int student_identity=2;
-	
+	private Logger logger = Logger.getLogger(JdbcDao.class);
+	private static JdbcUtil jdbcUtil = new JdbcUtil();
+	private static String administrator_table_name = "administrator";
+	private static String teacher_table_name = "teacher";
+	private static String student_table_name = "student";
+	private static String studentCourse_table_name = "student_course";
+	private static String course_table_name = "course";
+	private static String teacherSalary_table_name = "teacher_salary";
+	private static final int administrator_identify = 0;
+	private static final int teacher_identify = 1;
+	private static final int student_identity = 2;
+
 	@Override
 	public Object login(String userId, String password, int identify) throws SQLException {
-		Connection conn=jdbcUtil.getConnection();
-		String sql="select * from ? where id= ?";
-		PreparedStatement pStatement=(PreparedStatement)conn.prepareStatement(sql);
-		
-		if(identify==administrator_identify) {
-			pStatement.setString(1, administrator_table_name);
-		}	
-		else if(identify==teacher_identify) {
-			pStatement.setString(1, teacher_table_name);
-		}else if(identify==student_identity) {
-			pStatement.setString(1, student_table_name);
-		}
-		pStatement.setString(2, userId);
-		ResultSet rs=pStatement.executeQuery();
-		if(rs.next()) {
-			if(!rs.getString("password").equals(MD5Util.getMD5(password))) {
-				return null;
-			}else {
-				if(identify==administrator_identify) {
-					Administrator administrator=new Administrator();
-					administrator.setId(userId);
-					administrator.setPassword(password);
-					jdbcUtil.release(pStatement, rs, conn);
-					return administrator;
-				}else if(identify==teacher_identify) {
-					 Teacher teacher=new Teacher();
-					 teacher.setId(userId);
-					 teacher.setPassword(password);
-					 teacher.setName(rs.getString("name"));
-					 teacher.setKind(rs.getInt("kind"));
-					 teacher.setBase_salary(rs.getInt("base_salary"));
-					 teacher.setIdentify_id(rs.getString("identify_id"));
-					 jdbcUtil.release(pStatement, rs, conn);
-					 return teacher;
-				}else if(identify==student_identity) {
-					Student student=new Student();
-					student.setId(userId);
-					student.setName(rs.getString("name"));
-					student.setPassword(password);
-					student.setEnroll_time(rs.getDate("enroll_time"));
-					String email=rs.getString("email");
-					if(email!=null) {
-						student.setEmail(email);
-					}
-					student.setIdentify_id(rs.getString("identify_id"));
-					jdbcUtil.release(pStatement, rs, conn);
-					return student;
-				}
+		if(identify==teacher_identify) {
+			Teacher teacher=(Teacher)getUser(userId, identify);
+			if(MD5Util.getMD5(password).equals(teacher.getPassword())) {
+				return teacher;
 			}
-		}	
-		jdbcUtil.release(pStatement, rs, conn);
+		}else if(identify==student_identity) {
+			Student student=(Student)getUser(userId, identify);
+			if(MD5Util.getMD5(password).equals(student.getPassword())) {
+				return student;
+			}
+		}else if(identify==administrator_identify) {
+			Administrator adm=(Administrator)getUser(userId, identify);
+			if(MD5Util.getMD5(password).equals(adm.getPassword())) {
+				return adm;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public boolean modifyPassword(String userId, int identify, String newPassword) throws SQLException {
-		Connection conn=jdbcUtil.getConnection();
-		String sql="update ? set password=? where id=?";
-		PreparedStatement preparedStatement=(PreparedStatement) conn.prepareStatement(sql);
-		Object obj=getUser(userId, identify);
-		if(obj!=null) {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set password=? where id=?";
+		PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+		Object obj = getUser(userId, identify);
+		if (obj != null) {
 			jdbcUtil.release(preparedStatement, conn);
 			logger.info(String.format("[ %s ]账户不存在！！", userId));
 			return false;
-		}else {
-			if(identify==teacher_identify) {
+		} else {
+			if (identify == teacher_identify) {
 				preparedStatement.setString(1, teacher_table_name);
 
-			}else if(identify==student_identity) {
+			} else if (identify == student_identity) {
 				preparedStatement.setString(1, student_table_name);
 			}
 			preparedStatement.setString(2, newPassword);
 			preparedStatement.setString(3, userId);
-			
-			int count=preparedStatement.executeUpdate();
-			if(count<=0) {
+
+			int count = preparedStatement.executeUpdate();
+			if (count <= 0) {
 				logger.info(String.format("更新 [ %s ]密码失败 ", userId));
 				jdbcUtil.release(preparedStatement, conn);
 				return false;
@@ -122,30 +89,29 @@ public class JdbcDao implements Dao{
 		return true;
 	}
 
-
 	@Override
 	public boolean addStudent(Student student) throws SQLException {
-		Connection conn=jdbcUtil.getConnection();
-		String sql=null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = null;
 		PreparedStatement st;
-		if(student.getEmail()!=null) {
-			sql="insert into ? values (?,?,?,?,?)";
-			st=(PreparedStatement)conn.prepareStatement(sql);
+		if (student.getEmail() != null) {
+			sql = "insert into ? values (?,?,?,?,?)";
+			st = (PreparedStatement) conn.prepareStatement(sql);
 			st.setString(2, student.getName());
 			st.setDate(3, student.getEnroll_time());
-			st.setString(4,student.getEmail());
+			st.setString(4, student.getEmail());
 			st.setString(5, student.getIdentify_id());
-		}else {
-			sql="insert into ? (name,enroll_time,password,identify_id) values (?,?,?,?)";
-			st=(PreparedStatement)conn.prepareStatement(sql);
+		} else {
+			sql = "insert into ? (name,enroll_time,password,identify_id) values (?,?,?,?)";
+			st = (PreparedStatement) conn.prepareStatement(sql);
 			st.setString(2, student.getName());
 			st.setDate(3, student.getEnroll_time());
 			st.setString(4, student.getIdentify_id());
 		}
 		st.setString(1, student_table_name);
-		boolean r=st.execute();
+		boolean r = st.execute();
 		jdbcUtil.release(st, conn);
-		if(!r) {
+		if (!r) {
 			logger.debug(String.format("插入学生[ %s] 失败", student.getName()));
 			return false;
 		}
@@ -155,19 +121,20 @@ public class JdbcDao implements Dao{
 
 	@Override
 	public boolean addTeacher(Teacher teacher) throws SQLException {
-		Connection conn=jdbcUtil.getConnection();
-		String sql="insert into ? values (?,?,?,?,?)";
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
-		
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "insert into ? values (?,?,?,?,?)";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+
 		st.setString(1, teacher_table_name);
 		st.setString(2, teacher.getName());
 		st.setInt(3, teacher.getKind());
 		st.setInt(4, teacher.getBase_salary());
 		st.setString(5, MD5Util.getMD5(teacher.getPassword()));
 		st.setString(6, teacher.getIdentify_id());
-		boolean r=st.execute();
-		jdbcUtil.release(st, conn);
-		if(!r) {
+		boolean r = st.execute();
+		jdbcUtil.release(st
+				, conn);
+		if (!r) {
 			logger.debug(String.format("插入教师[ %s] 失败", teacher.getName()));
 			return false;
 		}
@@ -177,25 +144,131 @@ public class JdbcDao implements Dao{
 
 	@Override
 	public boolean modifyStudent(String student_id, Student student) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Student stu=(Student) getUser(student_id, student_identity);
+		if(stu==null) {
+			logger.info(String.format("学生[ %s ] 不存在！",student_id));
+			return false;
+		}
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set name=?,enroll_time=?,email=?,identify_id=? where id=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, student_table_name);
+		st.setString(2, student.getName());
+		st.setDate(3, student.getEnroll_time());
+		st.setString(4, student.getEmail());
+		st.setString(5, student.getIdentify_id());
+		st.setString(6, student_id);
+		boolean r = st.execute();
+		if(!r) {
+			logger.info(String.format("更新学生[ %s ]信息 失败！",student_id));
+			jdbcUtil.release(st, conn);
+			return false;
+		}
+		logger.info(String.format("更新学生[ %s ]信息成功！",student_id));
+		jdbcUtil.release(st, conn);
+		return true;
 	}
 
 	@Override
 	public boolean modifyTeacher(String teacher_id, Teacher teacher) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Student tch=(Student) getUser(teacher_id, teacher_identify);
+		if(tch==null) {
+			logger.info(String.format("教师[ %s ] 不存在！",teacher_id));
+			return false;
+		}
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set name=?,kind=?,base_salary=?,identify_id=? where id=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacher_table_name);
+		st.setString(2, teacher.getName());
+		st.setInt(3, teacher.getKind());
+		st.setInt(4, teacher.getBase_salary());
+		st.setString(5, teacher.getIdentify_id());
+		st.setString(6, teacher_id);
+		boolean r = st.execute();
+		if(!r) {
+			logger.info(String.format("更新教师[ %s ]信息 失败！",teacher_id));
+			jdbcUtil.release(st, conn);
+			return false;
+		}
+		logger.info(String.format("更新学生[ %s ]教师信息成功！",teacher_id));
+		jdbcUtil.release(st, conn);
+		return true;
 	}
 
 	@Override
 	public boolean delUser(String user_id, int identify) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Object user=(Student) getUser(user_id, identify);
+		if(user==null) {
+			logger.info(String.format("用户[ %s ] 不存在！",user_id));
+			return false;
+		}
+		Connection conn=jdbcUtil.getConnection();
+		String sql="delete from ? where id=";
+		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+		if(identify==teacher_identify) {
+			st.setString(1, teacher_table_name);
+		}	else if(identify==student_identity) {
+			st.setString(1, student_table_name);
+		}
+		st.setString(2, user_id);
+		boolean r=st.execute();
+		if(!r) {
+			logger.info(String.format("删除用户[ %s ] 失败！",user_id));
+			return false;
+		}
+		logger.info(String.format("删除用户[ %s ] 成功！",user_id));
+		return true;
 	}
 
 	@Override
 	public Object getUser(String user_id, int identify) throws SQLException {
-		// TODO Auto-generated method stub
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where id= ?";
+		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
+
+		if (identify == administrator_identify) {
+			pStatement.setString(1, administrator_table_name);
+		} else if (identify == teacher_identify) {
+			pStatement.setString(1, teacher_table_name);
+		} else if (identify == student_identity) {
+			pStatement.setString(1, student_table_name);
+		}
+		pStatement.setString(2, user_id);
+		ResultSet rs = pStatement.executeQuery();
+		if (rs.next()) {
+			if (identify == administrator_identify) {
+				Administrator administrator = new Administrator();
+				administrator.setId(user_id);
+				administrator.setPassword(rs.getString("password"));
+					jdbcUtil.release(pStatement, rs, conn);
+					return administrator;
+			} else if (identify == teacher_identify) {
+				Teacher teacher = new Teacher();
+				teacher.setId(user_id);
+				teacher.setPassword(rs.getString("password"));
+				teacher.setName(rs.getString("name"));
+				teacher.setKind(rs.getInt("kind"));
+				teacher.setBase_salary(rs.getInt("base_salary"));
+				teacher.setIdentify_id(rs.getString("identify_id"));
+				jdbcUtil.release(pStatement, rs, conn);
+				return teacher;
+			} else if (identify == student_identity) {
+					Student student = new Student();
+					student.setId(user_id);
+					student.setName(rs.getString("name"));
+					student.setPassword(rs.getString("password"));
+					student.setEnroll_time(rs.getDate("enroll_time"));
+					String email = rs.getString("email");
+					if (email != null) {
+						student.setEmail(email);
+					}
+					student.setIdentify_id(rs.getString("identify_id"));
+					jdbcUtil.release(pStatement, rs, conn);
+					return student;
+				}
+			}
+		jdbcUtil.release(pStatement, rs, conn);
 		return null;
 	}
 
@@ -232,13 +305,13 @@ public class JdbcDao implements Dao{
 	@Override
 	public void setSatification(int course_id, int score) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setEvaluate(int course_id, String evaluate) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -314,5 +387,4 @@ public class JdbcDao implements Dao{
 		return 0;
 	}
 
-	
 }
