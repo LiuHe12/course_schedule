@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -38,19 +39,19 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Object login(String userId, String password, int identify) throws SQLException {
-		if(identify==teacher_identify) {
-			Teacher teacher=(Teacher)getUser(userId, identify);
-			if(MD5Util.getMD5(password).equals(teacher.getPassword())) {
+		if (identify == teacher_identify) {
+			Teacher teacher = (Teacher) getUser(userId, identify);
+			if (MD5Util.getMD5(password).equals(teacher.getPassword())) {
 				return teacher;
 			}
-		}else if(identify==student_identity) {
-			Student student=(Student)getUser(userId, identify);
-			if(MD5Util.getMD5(password).equals(student.getPassword())) {
+		} else if (identify == student_identity) {
+			Student student = (Student) getUser(userId, identify);
+			if (MD5Util.getMD5(password).equals(student.getPassword())) {
 				return student;
 			}
-		}else if(identify==administrator_identify) {
-			Administrator adm=(Administrator)getUser(userId, identify);
-			if(MD5Util.getMD5(password).equals(adm.getPassword())) {
+		} else if (identify == administrator_identify) {
+			Administrator adm = (Administrator) getUser(userId, identify);
+			if (MD5Util.getMD5(password).equals(adm.getPassword())) {
 				return adm;
 			}
 		}
@@ -132,8 +133,7 @@ public class JdbcDao implements Dao {
 		st.setString(5, MD5Util.getMD5(teacher.getPassword()));
 		st.setString(6, teacher.getIdentify_id());
 		boolean r = st.execute();
-		jdbcUtil.release(st
-				, conn);
+		jdbcUtil.release(st, conn);
 		if (!r) {
 			logger.debug(String.format("插入教师[ %s] 失败", teacher.getName()));
 			return false;
@@ -144,9 +144,9 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public boolean modifyStudent(String student_id, Student student) throws SQLException {
-		Student stu=(Student) getUser(student_id, student_identity);
-		if(stu==null) {
-			logger.info(String.format("学生[ %s ] 不存在！",student_id));
+		Student stu = (Student) getUser(student_id, student_identity);
+		if (stu == null) {
+			logger.info(String.format("学生[ %s ] 不存在！", student_id));
 			return false;
 		}
 		Connection conn = jdbcUtil.getConnection();
@@ -159,21 +159,21 @@ public class JdbcDao implements Dao {
 		st.setString(5, student.getIdentify_id());
 		st.setString(6, student_id);
 		boolean r = st.execute();
-		if(!r) {
-			logger.info(String.format("更新学生[ %s ]信息 失败！",student_id));
+		if (!r) {
+			logger.info(String.format("更新学生[ %s ]信息 失败！", student_id));
 			jdbcUtil.release(st, conn);
 			return false;
 		}
-		logger.info(String.format("更新学生[ %s ]信息成功！",student_id));
+		logger.info(String.format("更新学生[ %s ]信息成功！", student_id));
 		jdbcUtil.release(st, conn);
 		return true;
 	}
 
 	@Override
 	public boolean modifyTeacher(String teacher_id, Teacher teacher) throws SQLException {
-		Student tch=(Student) getUser(teacher_id, teacher_identify);
-		if(tch==null) {
-			logger.info(String.format("教师[ %s ] 不存在！",teacher_id));
+		Student tch = (Student) getUser(teacher_id, teacher_identify);
+		if (tch == null) {
+			logger.info(String.format("教师[ %s ] 不存在！", teacher_id));
 			return false;
 		}
 		Connection conn = jdbcUtil.getConnection();
@@ -186,38 +186,38 @@ public class JdbcDao implements Dao {
 		st.setString(5, teacher.getIdentify_id());
 		st.setString(6, teacher_id);
 		boolean r = st.execute();
-		if(!r) {
-			logger.info(String.format("更新教师[ %s ]信息 失败！",teacher_id));
+		if (!r) {
+			logger.info(String.format("更新教师[ %s ]信息 失败！", teacher_id));
 			jdbcUtil.release(st, conn);
 			return false;
 		}
-		logger.info(String.format("更新学生[ %s ]教师信息成功！",teacher_id));
+		logger.info(String.format("更新学生[ %s ]教师信息成功！", teacher_id));
 		jdbcUtil.release(st, conn);
 		return true;
 	}
 
 	@Override
 	public boolean delUser(String user_id, int identify) throws SQLException {
-		Object user=(Student) getUser(user_id, identify);
-		if(user==null) {
-			logger.info(String.format("用户[ %s ] 不存在！",user_id));
+		Object user = (Student) getUser(user_id, identify);
+		if (user == null) {
+			logger.info(String.format("用户[ %s ] 不存在！", user_id));
 			return false;
 		}
-		Connection conn=jdbcUtil.getConnection();
-		String sql="delete from ? where id=";
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
-		if(identify==teacher_identify) {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "delete from ? where id=";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		if (identify == teacher_identify) {
 			st.setString(1, teacher_table_name);
-		}	else if(identify==student_identity) {
+		} else if (identify == student_identity) {
 			st.setString(1, student_table_name);
 		}
 		st.setString(2, user_id);
-		boolean r=st.execute();
-		if(!r) {
-			logger.info(String.format("删除用户[ %s ] 失败！",user_id));
+		boolean r = st.execute();
+		if (!r) {
+			logger.info(String.format("删除用户[ %s ] 失败！", user_id));
 			return false;
 		}
-		logger.info(String.format("删除用户[ %s ] 成功！",user_id));
+		logger.info(String.format("删除用户[ %s ] 成功！", user_id));
 		return true;
 	}
 
@@ -241,8 +241,8 @@ public class JdbcDao implements Dao {
 				Administrator administrator = new Administrator();
 				administrator.setId(user_id);
 				administrator.setPassword(rs.getString("password"));
-					jdbcUtil.release(pStatement, rs, conn);
-					return administrator;
+				jdbcUtil.release(pStatement, rs, conn);
+				return administrator;
 			} else if (identify == teacher_identify) {
 				Teacher teacher = new Teacher();
 				teacher.setId(user_id);
@@ -254,39 +254,120 @@ public class JdbcDao implements Dao {
 				jdbcUtil.release(pStatement, rs, conn);
 				return teacher;
 			} else if (identify == student_identity) {
-					Student student = new Student();
-					student.setId(user_id);
-					student.setName(rs.getString("name"));
-					student.setPassword(rs.getString("password"));
-					student.setEnroll_time(rs.getDate("enroll_time"));
-					String email = rs.getString("email");
-					if (email != null) {
-						student.setEmail(email);
-					}
-					student.setIdentify_id(rs.getString("identify_id"));
-					jdbcUtil.release(pStatement, rs, conn);
-					return student;
+				Student student = new Student();
+				student.setId(user_id);
+				student.setName(rs.getString("name"));
+				student.setPassword(rs.getString("password"));
+				student.setEnroll_time(rs.getDate("enroll_time"));
+				String email = rs.getString("email");
+				if (email != null) {
+					student.setEmail(email);
 				}
+				student.setIdentify_id(rs.getString("identify_id"));
+				jdbcUtil.release(pStatement, rs, conn);
+				return student;
 			}
+		}
 		jdbcUtil.release(pStatement, rs, conn);
 		return null;
 	}
 
 	@Override
 	public ArrayList<Object> getAllUser(int identify) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ?";
+		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
+		ArrayList users = null;
+		if (identify == administrator_identify) {
+			users = new ArrayList<Administrator>();
+			pStatement.setString(1, administrator_table_name);
+		} else if (identify == teacher_identify) {
+			users = new ArrayList<Teacher>();
+			pStatement.setString(1, teacher_table_name);
+		} else if (identify == student_identity) {
+			users = new ArrayList<Student>();
+			pStatement.setString(1, student_table_name);
+		}
+
+		ResultSet rs = pStatement.executeQuery();
+
+		if (rs.next()) {
+			if (identify == teacher_identify) {
+				Teacher teacher = new Teacher();
+				teacher.setId(rs.getString("id"));
+				teacher.setPassword(rs.getString("password"));
+				teacher.setName(rs.getString("name"));
+				teacher.setKind(rs.getInt("kind"));
+				teacher.setBase_salary(rs.getInt("base_salary"));
+				teacher.setIdentify_id(rs.getString("identify_id"));
+				users.add(teacher);
+			} else if (identify == student_identity) {
+				Student student = new Student();
+				student.setId(rs.getString("id"));
+				student.setName(rs.getString("name"));
+				student.setPassword(rs.getString("password"));
+				student.setEnroll_time(rs.getDate("enroll_time"));
+				String email = rs.getString("email");
+				if (email != null) {
+					student.setEmail(email);
+				}
+				student.setIdentify_id(rs.getString("identify_id"));
+				users.add(student);
+			}
+		}
+		jdbcUtil.release(pStatement, rs, conn);
+		return users;
 	}
 
 	@Override
-	public ArrayList<Object> getUserByName(String identifyId, int identify) throws SQLException {
-		// TODO Auto-generated method stub
+	public Object getUserByIdentityId(String identifyId, int identify) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where identify_id= ?";
+		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
+
+		if (identify == administrator_identify) {
+			pStatement.setString(1, administrator_table_name);
+		} else if (identify == teacher_identify) {
+			pStatement.setString(1, teacher_table_name);
+		} else if (identify == student_identity) {
+			pStatement.setString(1, student_table_name);
+		}
+		pStatement.setString(2, identifyId);
+		ResultSet rs = pStatement.executeQuery();
+		if (rs.next()) {
+
+			if (identify == teacher_identify) {
+				Teacher teacher = new Teacher();
+				teacher.setId(rs.getString("id"));
+				teacher.setPassword(rs.getString("password"));
+				teacher.setName(rs.getString("name"));
+				teacher.setKind(rs.getInt("kind"));
+				teacher.setBase_salary(rs.getInt("base_salary"));
+				teacher.setIdentify_id(rs.getString("identify_id"));
+				jdbcUtil.release(pStatement, rs, conn);
+				return teacher;
+			} else if (identify == student_identity) {
+				Student student = new Student();
+				student.setId(rs.getString("id"));
+				student.setName(rs.getString("name"));
+				student.setPassword(rs.getString("password"));
+				student.setEnroll_time(rs.getDate("enroll_time"));
+				String email = rs.getString("email");
+				if (email != null) {
+					student.setEmail(email);
+				}
+				student.setIdentify_id(rs.getString("identify_id"));
+				jdbcUtil.release(pStatement, rs, conn);
+				return student;
+			}
+		}
+		jdbcUtil.release(pStatement, rs, conn);
 		return null;
 	}
 
 	@Override
 	public Course getCourse(int course_id) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

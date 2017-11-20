@@ -29,7 +29,7 @@ public Object login(String userId,String password,int identify) throws SQLExcept
 	
 	public ArrayList<Object> getAllUser(int identify)throws SQLException;//获取所有指定身份用户信息
 	
-	public ArrayList<Object> getUserByName(String identifyId,int identify)throws SQLException;//根据身份证号查找用户
+	public Object getUserByIdentityId(String identifyId,int identify)throws SQLException;//根据身份证号查找用户
 	
 	public Course getCourse(int course_id)throws SQLException;//通过课程号查找课程详细信息
 	
