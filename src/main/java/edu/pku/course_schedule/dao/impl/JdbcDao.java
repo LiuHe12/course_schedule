@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,9 +34,10 @@ public class JdbcDao implements Dao {
 	private static String studentCourse_table_name = "student_course";
 	private static String course_table_name = "course";
 	private static String teacherSalary_table_name = "teacher_salary";
-	private static final int administrator_identify = 0;
-	private static final int teacher_identify = 1;
-	private static final int student_identity = 2;
+	public static final int administrator_identify = 0;
+	public static final int teacher_identify = 1;
+	public static final int student_identity = 2;
+	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 
 	@Override
 	public Object login(String userId, String password, int identify) throws SQLException {
@@ -136,10 +138,11 @@ public class JdbcDao implements Dao {
 		jdbcUtil.release(st, conn);
 		if (!r) {
 			logger.debug(String.format("插入教师[ %s] 失败", teacher.getName()));
-			return false;
+		} else {
+			logger.debug(String.format("插入教师 [ %s ]成功", teacher.getName()));
 		}
-		logger.debug(String.format("插入教师 [ %s ]成功", teacher.getName()));
-		return true;
+
+		return r;
 	}
 
 	@Override
@@ -161,12 +164,11 @@ public class JdbcDao implements Dao {
 		boolean r = st.execute();
 		if (!r) {
 			logger.info(String.format("更新学生[ %s ]信息 失败！", student_id));
-			jdbcUtil.release(st, conn);
-			return false;
+		} else {
+			logger.info(String.format("更新学生[ %s ]信息成功！", student_id));
 		}
-		logger.info(String.format("更新学生[ %s ]信息成功！", student_id));
 		jdbcUtil.release(st, conn);
-		return true;
+		return r;
 	}
 
 	@Override
@@ -188,12 +190,12 @@ public class JdbcDao implements Dao {
 		boolean r = st.execute();
 		if (!r) {
 			logger.info(String.format("更新教师[ %s ]信息 失败！", teacher_id));
-			jdbcUtil.release(st, conn);
-			return false;
+		} else {
+			logger.info(String.format("更新学生[ %s ]教师信息成功！", teacher_id));
 		}
-		logger.info(String.format("更新学生[ %s ]教师信息成功！", teacher_id));
+
 		jdbcUtil.release(st, conn);
-		return true;
+		return r;
 	}
 
 	@Override
@@ -215,10 +217,12 @@ public class JdbcDao implements Dao {
 		boolean r = st.execute();
 		if (!r) {
 			logger.info(String.format("删除用户[ %s ] 失败！", user_id));
-			return false;
+
+		} else {
+			logger.info(String.format("删除用户[ %s ] 成功！", user_id));
 		}
-		logger.info(String.format("删除用户[ %s ] 成功！", user_id));
-		return true;
+
+		return r;
 	}
 
 	@Override
@@ -259,10 +263,7 @@ public class JdbcDao implements Dao {
 				student.setName(rs.getString("name"));
 				student.setPassword(rs.getString("password"));
 				student.setEnroll_time(rs.getDate("enroll_time"));
-				String email = rs.getString("email");
-				if (email != null) {
-					student.setEmail(email);
-				}
+				student.setEmail(rs.getString("email"));
 				student.setIdentify_id(rs.getString("identify_id"));
 				jdbcUtil.release(pStatement, rs, conn);
 				return student;
@@ -367,43 +368,166 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Course getCourse(int course_id) throws SQLException {
-		
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where course_id=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setInt(2, course_id);
+		ResultSet rs = st.executeQuery();
+		Course course = null;
+		while (rs.next()) {
+			course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			String satisfactionStr = rs.getString("satisfaction");
+			if (satisfactionStr != null) {
+				course.setSatisfaction(Integer.parseInt(satisfactionStr));
+			}
+			course.setEvaluate(rs.getString("evaluate"));
+			course.setCourse_price(rs.getInt("price"));
+			course.setStatus(rs.getInt("status"));
+		}
+		jdbcUtil.release(st, rs, conn);
+		return course;
 	}
 
 	@Override
 	public ArrayList<Course> getCoursesByTime(Date startDate, Date endDate) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Course> courses = new ArrayList<Course>();
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where time> ? and rest_time< ? ";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setDate(2, startDate);
+		st.setDate(3, endDate);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			String satisfactionStr = rs.getString("satisfaction");
+			if (satisfactionStr != null) {
+				course.setSatisfaction(Integer.parseInt(satisfactionStr));
+			}
+			course.setEvaluate(rs.getString("evaluate"));
+			course.setCourse_price(rs.getInt("price"));
+			course.setStatus(rs.getInt("status"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 	@Override
 	public ArrayList<Course> getCoursesByUserId(String user_id, int courseStatus) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		ArrayList<Course> courses = new ArrayList<Course>();
+		String sql = "select * from ? where (student_id =? or teacher_id=?) and status =?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setString(2, user_id);
+		st.setString(3, user_id);
+		st.setInt(4, courseStatus);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			String satisfactionStr = rs.getString("satisfaction");
+			if (satisfactionStr != null) {
+				course.setSatisfaction(Integer.parseInt(satisfactionStr));
+			}
+			course.setEvaluate(rs.getString("evaluate"));
+			course.setCourse_price(rs.getInt("price"));
+			course.setStatus(rs.getInt("status"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 	@Override
 	public void setSatification(int course_id, int score) throws SQLException {
-		// TODO Auto-generated method stub
-
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set satisfaction = ? where course_id= ? ";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setInt(2, score);
+		st.setInt(3, course_id);
+		int r = st.executeUpdate();
+		if (r >= 1) {
+			logger.info(String.format("[ %d ] is set satification successfully -> %s", course_id,
+					df.format(new java.util.Date())));
+		} else {
+			logger.info(String.format("[ %d ] is set satification failed -> %s", course_id,
+					df.format(new java.util.Date())));
+		}
+		jdbcUtil.release(st, conn);
 	}
 
 	@Override
 	public void setEvaluate(int course_id, String evaluate) throws SQLException {
-		// TODO Auto-generated method stub
+		Connection conn = jdbcUtil.getConnection();
+		getCourse(course_id);
+		String sql = " ";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setString(2, evaluate);
+		st.setInt(3, course_id);
+		int r = st.executeUpdate();
+		jdbcUtil.release(st, conn);
 
 	}
 
 	@Override
 	public ArrayList<Course> getAllCoursePasses(Date startDate, Date endDate) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		ArrayList<Course> courses = new ArrayList<Course>();
+		String sql = "select * from ? where time>? and rest_time< ? and status >=1";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setDate(2, startDate);
+		st.setDate(3, endDate);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			String satisfactionStr = rs.getString("satisfaction");
+			if (satisfactionStr != null) {
+				course.setSatisfaction(Integer.parseInt(satisfactionStr));
+			}
+			course.setEvaluate(rs.getString("evaluate"));
+			course.setCourse_price(rs.getInt("price"));
+			course.setStatus(rs.getInt("status"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 	@Override
 	public boolean addCourse(Course course) throws SQLException {
-		// TODO Auto-generated method stub
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "insert into ? (student_id,teacher_id,time,rest_time) values (?,?,?,?,?)";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		// TODO
 		return false;
 	}
 
@@ -433,39 +557,117 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Teacher_salary getSalary(String teacher_id, String salary_time) throws SQLException {
-		// TODO Auto-generated method stub
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where teacher_id= ? and time= ?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacher_table_name);
+		st.setString(2, teacher_id);
+		st.setString(3, salary_time);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			return teacher_salary;
+		}
 		return null;
 	}
 
 	@Override
 	public ArrayList<Teacher_salary> getSalaries(String teacher_id, String startTime, String endTime)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where time between ? and ?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacherSalary_table_name);
+		st.setString(2, startTime);
+		st.setString(3, endTime);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			teacher_salaries.add(teacher_salary);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return teacher_salaries;
 	}
 
 	@Override
 	public List<Teacher_salary> getAllSalaries(String time) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where time=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacherSalary_table_name);
+		st.setString(2, time);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			teacher_salaries.add(teacher_salary);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return teacher_salaries;
 	}
 
 	@Override
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime, String endTime) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where time between ? and ?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacherSalary_table_name);
+		st.setString(2, startTime);
+		st.setString(3, endTime);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			teacher_salaries.add(teacher_salary);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return teacher_salaries;
 	}
 
 	@Override
-	public boolean setBonus(String teacher_id, String salary_time) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean setBonus(String teacher_id, String salary_time, int bonus) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set bonus=? where teacher_id=?, time=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacherSalary_table_name);
+		st.setInt(2, bonus);
+		st.setString(3, teacher_id);
+		st.setString(4, salary_time);
+		boolean r = st.execute();
+		jdbcUtil.release(st, conn);
+		if (r) {
+			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 成功 ->%s", teacher_id, salary_time, bonus,
+					df.format(new java.util.Date())));
+		} else {
+			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 失败->%s", teacher_id, salary_time, bonus,
+					df.format(new java.util.Date())));
+		}
+		jdbcUtil.release(st, conn);
+		return r;
 	}
 
-	@Override
-	public int calSalary(String teacher_id, String salary_time) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	// @Override
+	// public int calSalary(String teacher_id, String salary_time) throws
+	// SQLException {
+	// // TODO Auto-generated method stub
+	// return 0;
+	// }
 
 }

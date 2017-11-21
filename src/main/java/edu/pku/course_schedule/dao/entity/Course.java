@@ -91,7 +91,8 @@ public class Course {
 	}
 
 	public void setEvaluate(String evaluate) {
-		this.evaluate = evaluate;
+		if(evaluate!=null)
+			this.evaluate = evaluate;
 	}
 
 	public int getCourse_price() {

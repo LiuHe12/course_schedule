@@ -65,7 +65,7 @@ public Object login(String userId,String password,int identify) throws SQLExcept
 	//获取所有老师指定时间段的工资明细
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime,String endTime)throws SQLException;
 	
-	public boolean setBonus(String teacher_id,String salary_time)throws SQLException;//设定老师指定时间的奖金
+	public boolean setBonus(String teacher_id,String salary_time,int bonus)throws SQLException;;//设定老师指定时间的奖金
 	
-	public int calSalary(String teacher_id,String salary_time)throws SQLException;//计算老师指定时间的工资
+	//public int calSalary(String teacher_id,String salary_time)throws SQLException;//计算老师指定时间的工资
 }

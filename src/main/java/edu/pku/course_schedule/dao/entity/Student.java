@@ -50,7 +50,9 @@ public class Student {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		if(email!=null) {
+			this.email = email;
+		}
 	}
 
 	public String getPassword() {
