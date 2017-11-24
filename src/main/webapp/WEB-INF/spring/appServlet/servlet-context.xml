@@ -9,7 +9,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
+	<!--DispatcherServlet上下文，仅仅搜索@Controller标注的类。不搜索其它搜索的类 -->
+	<context:component-scan base-package="edu.pku.course_schedule.controller">
+  	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+  	</context:component-scan> 
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
@@ -18,7 +21,7 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="prefix" value="/WEB-INF/views/jsp/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	

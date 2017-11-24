@@ -480,13 +480,19 @@ public class JdbcDao implements Dao {
 	@Override
 	public void setEvaluate(int course_id, String evaluate) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		getCourse(course_id);
-		String sql = " ";
+		String sql = "update ? set evaluate=?,status=? where course_id=? and status=1";
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, course_table_name);
 		st.setString(2, evaluate);
-		st.setInt(3, course_id);
+		st.setInt(3, 2);
+		st.setInt(4, course_id);
 		int r = st.executeUpdate();
+		if (r >= 1) {
+			logger.info(
+					String.format("[ %s ] evaluate successfully -> %s", course_id, df.format(new java.util.Date())));
+		} else {
+			logger.info(String.format("[ %s ] evaluate failed -> %s", course_id, df.format(new java.util.Date())));
+		}
 		jdbcUtil.release(st, conn);
 
 	}
@@ -525,34 +531,134 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean addCourse(Course course) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = "insert into ? (student_id,teacher_id,time,rest_time) values (?,?,?,?,?)";
+		String sql = "insert into ? (student_id,teacher_id,time,rest_time,name) values (?,?,?,?,?)";
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-		// TODO
-		return false;
+		st.setString(1, course_table_name);
+		st.setString(2, course.getStudent_ID());
+		st.setString(3, course.getTeacher_ID());
+		st.setDate(4, course.getTime());
+		st.setDate(5, course.getRest_time());
+		st.setString(6, course.getName());
+
+		boolean r = st.execute();
+		if (r) {
+			logger.info(String.format("add course [ %s ] successfully -> %s", course.getCourse_ID(),
+					df.format(new java.util.Date())));
+		} else {
+			logger.info(String.format("add course [ %s ] failed -> %s", course.getCourse_ID(),
+					df.format(new java.util.Date())));
+		}
+		jdbcUtil.release(st, conn);
+		return r;
 	}
 
 	@Override
 	public boolean delCourse(int course_id) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "delete from ? where course_id =?";
+		PreparedStatement st = (PreparedStatement) conn.prepareCall(sql);
+		st.setString(1, course_table_name);
+		st.setInt(2, course_id);
+		boolean r = st.execute();
+		if (r) {
+			logger.info(String.format("delete course [ %s ] successfully -> %s", course_id,
+					df.format(new java.util.Date())));
+		} else {
+			logger.info(String.format("delete course [ %s ] failed -> %s", course_id, df.format(new java.util.Date())));
+		}
+		jdbcUtil.release(st, conn);
+		return r;
+	}
+
+	@Override
+	public ArrayList<Course> waitSatisCourses(String student_id) throws SQLException {
+		ArrayList<Course> courses = new ArrayList<Course>();
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where satisfaction=-1 and student_id=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setString(2, student_id);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 	@Override
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Course> courses = new ArrayList<Course>();
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from ? where status=1 and teacher_id=?";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setString(2, teacher_id);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getInt("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTime(rs.getDate("time"));
+			course.setRest_time(rs.getDate("rest_time"));
+			course.setName(rs.getString("name"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 	@Override
 	public boolean setCoursePass(int course_id) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set status = ? where course_id= ? and status=0 ";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setInt(2, 1);// 1
+		st.setInt(3, course_id);
+		int r = st.executeUpdate();
+		jdbcUtil.release(st, conn);
+		if (r >= 1) {
+			logger.info(String.format("[ %d ] is set course pass successfully -> %s", course_id,
+					df.format(new java.util.Date())));
+			return true;
+
+		} else {
+			logger.info(String.format("[ %d ] is set course pass failed -> %s", course_id,
+					df.format(new java.util.Date())));
+			return false;
+		}
 	}
 
 	@Override
 	public boolean setCoursePass(String teacher_id, String student_id, Date course_time) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "update ? set status = ? where teacher_id= ? and student_id=? and time=? and status=0";
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, course_table_name);
+		st.setInt(2, 1);
+		st.setString(3, teacher_id);
+		st.setString(4, student_id);
+		st.setDate(5, course_time);
+		int r = st.executeUpdate();
+		jdbcUtil.release(st, conn);
+		if (r >= 1) {
+			logger.info(String.format("teacher[ %s ]  student[ %s ] time[ %s ] is set course pass successfully -> %s",
+					teacher_id, student_id, df.format(course_time), df.format(new java.util.Date())));
+			return true;
+		} else {
+			logger.info(String.format("teacher[ %s ]  student[ %s ] time[ %s ] is set course pass failed -> %s",
+					teacher_id, student_id, df.format(course_time), df.format(new java.util.Date())));
+			return false;
+		}
+
+		
 	}
 
 	@Override

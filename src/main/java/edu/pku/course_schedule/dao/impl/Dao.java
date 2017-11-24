@@ -31,13 +31,13 @@ public Object login(String userId,String password,int identify) throws SQLExcept
 	
 	public Object getUserByIdentityId(String identifyId,int identify)throws SQLException;//根据身份证号查找用户
 	
-	public Course getCourse(int course_id)throws SQLException;//通过课程号查找课程详细信息
+	public Course getCourse(int course_id) throws SQLException;//通过课程号查找课程详细信息
 	
-	public ArrayList<Course> getCoursesByTime(Date startDate,Date endDate)throws SQLException;//查找指定时间段的所有课程
+	public ArrayList<Course> getCoursesByTime(Date startDate,Date endDate) throws SQLException;//查找指定时间段的所有课程
 	
-	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus)throws SQLException;//查找用户的课程(0已排，1未排)
+	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus) throws SQLException;//查找用户的课程(0已排，1未排)
 	
-	public void setSatification(int course_id,int score)throws SQLException;//学生进行课程满意度打分
+	public void setSatification(int course_id,int score) throws SQLException;//学生进行课程满意度打分
 	
 	public void setEvaluate(int course_id,String evaluate)throws SQLException;//老师进行课程评价内容
 	
@@ -46,6 +46,8 @@ public Object login(String userId,String password,int identify) throws SQLExcept
 	public boolean addCourse(Course course)throws SQLException;//添加课程
 	
 	public boolean delCourse(int course_id)throws SQLException;//根据课程号删除课程
+	
+	public ArrayList<Course> waitSatisCourses(String student_id)throws SQLException;//得到学生已上未评价课程
 	
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id)throws SQLException;//得到老师已上未评价课程
 	

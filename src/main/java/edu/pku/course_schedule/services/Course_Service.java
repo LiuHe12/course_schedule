@@ -30,6 +30,8 @@ public interface Course_Service {
 	
 	public boolean delCourse(int course_id);//根据课程号删除课程
 	
+	public ArrayList<Course> waitSatisCourses(String student_id);//得到学生已上未评价课程
+	
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id);//得到老师已上未评价课程
 	
 	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
