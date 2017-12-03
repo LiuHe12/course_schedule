@@ -36,6 +36,7 @@ public class JdbcUtil {
 			Connection conn;
 			try {
 				conn = DriverManager.getConnection(jdbcPool.getUrl(), jdbcPool.getUsername(), jdbcPool.getPassword());
+				
 				jdbcPool.getListConnections().add(conn);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

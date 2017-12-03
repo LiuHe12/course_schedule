@@ -1,6 +1,6 @@
 package edu.pku.course_schedule.dao.entity;
 
-import java.sql.Date;
+import java.sql.*;
 
 
 public class Student {

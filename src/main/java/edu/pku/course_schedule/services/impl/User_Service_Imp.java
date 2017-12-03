@@ -19,8 +19,11 @@ import edu.pku.course_schedule.services.User_Service;
 public class User_Service_Imp implements User_Service {
 	private Logger logger = Logger.getLogger(User_Service_Imp.class);
 	private static JdbcDao dao = new JdbcDao();
-	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// ‰z¸m¤é´Á®æ¦¡
+	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// ï¿½zï¿½mï¿½ï¿½ï¿½ï¿½æ¦¡
 
+	public void test() throws SQLException {
+		dao.test();
+	}
 	@Override
 	public Object login(String userId, String password, int identify) {
 		Object obj = null;
