@@ -1,5 +1,7 @@
 package edu.pku.course_schedule.dao.entity;
 
+import java.sql.Date;
+
 public class Teacher {
 
 	private String id; // pk
@@ -14,9 +16,14 @@ public class Teacher {
 	
 	private String identify_id;
 
+	private int incumbency;
+	
+	private Date entertime;
 	
 	
 	
+
+
 	/**********Getter and Setter**********/
 	
 	public String getId() {
@@ -67,7 +74,21 @@ public class Teacher {
 		this.identify_id = identify_id;
 	}
 	
-	
+	public int getIncumbency() {
+		return incumbency;
+	}
+
+	public void setIncumbency(int incumbency) {
+		this.incumbency = incumbency;
+	}
+
+	public Date getEntertime() {
+		return entertime;
+	}
+
+	public void setEntertime(Date entertime) {
+		this.entertime = entertime;
+	}
 	
 	
 }

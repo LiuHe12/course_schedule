@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Course {
 	
 	
-	private int course_ID; // pk
+	private String course_ID; // pk
 	
 	private String student_ID;// fk
 	
@@ -30,11 +30,11 @@ public class Course {
 	
 	/**********Getter and Setter**********/
 
-	public int getCourse_ID() {
+	public String getCourse_ID() {
 		return course_ID;
 	}
 
-	public void setCourse_ID(int course_ID) {
+	public void setCourse_ID(String course_ID) {
 		this.course_ID = course_ID;
 	}
 

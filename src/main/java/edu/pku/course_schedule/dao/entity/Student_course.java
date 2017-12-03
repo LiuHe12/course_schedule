@@ -10,9 +10,12 @@ public class Student_course {
 	
 	private int price;
 	
+	private int num;
 	
 	
 	
+
+
 	/**********Getter and Setter**********/
 
 	public String getCourse_name() {
@@ -47,6 +50,12 @@ public class Student_course {
 		this.price = price;
 	}
 	
-	
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
 	
 }
