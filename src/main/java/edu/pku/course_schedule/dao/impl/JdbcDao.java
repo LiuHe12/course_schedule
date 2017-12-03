@@ -22,6 +22,7 @@ import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.dao.entity.Teacher_salary;
 import edu.pku.course_schedule.util.JdbcUtil;
 import edu.pku.course_schedule.util.MD5Util;
+import junit.framework.Test;
 
 @SuppressWarnings("all")
 public class JdbcDao implements Dao {
@@ -37,7 +38,7 @@ public class JdbcDao implements Dao {
 	public static final int administrator_identify = 0;
 	public static final int teacher_identify = 1;
 	public static final int student_identity = 2;
-	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+	public static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 
 	@Override
 	public Object login(String userId, String password, int identify) throws SQLException {
@@ -97,24 +98,24 @@ public class JdbcDao implements Dao {
 		Connection conn = jdbcUtil.getConnection();
 		String sql = null;
 		PreparedStatement st;
-		if (student.getEmail() != null) {
-			sql = "insert into ? values (?,?,?,?,?)";
-			st = (PreparedStatement) conn.prepareStatement(sql);
-			st.setString(2, student.getName());
-			st.setDate(3, student.getEnroll_time());
-			st.setString(4, student.getEmail());
-			st.setString(5, student.getIdentify_id());
-		} else {
-			sql = "insert into ? (name,enroll_time,password,identify_id) values (?,?,?,?)";
-			st = (PreparedStatement) conn.prepareStatement(sql);
-			st.setString(2, student.getName());
-			st.setDate(3, student.getEnroll_time());
-			st.setString(4, student.getIdentify_id());
+		if (student.getEmail() == null) {
+			student.setEmail("null");
 		}
-		st.setString(1, student_table_name);
-		boolean r = st.execute();
+		if (student.getPassword() == null) {
+			student.setPassword("123456");
+		}
+		sql = "insert into " + student_table_name + "(name,enroll_time,email,password,identify_id) values (?,?,?,?,?)";
+		st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, student.getName());
+		st.setDate(2, student.getEnroll_time());
+		st.setString(3, student.getEmail());
+		st.setString(4, MD5Util.getMD5(student.getPassword()));
+		st.setString(5, student.getIdentify_id());
+
+		st.execute();
+		int rs = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (!r) {
+		if (rs <= 0) {
 			logger.debug(String.format("插入学生[ %s] 失败", student.getName()));
 			return false;
 		}
@@ -125,24 +126,27 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean addTeacher(Teacher teacher) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = "insert into ? values (?,?,?,?,?)";
+		String sql = "insert into " + teacher_table_name + " (name,kind,base_salary,password,identify_id,entertime)values (?,?,?,?,?,?)";
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-
-		st.setString(1, teacher_table_name);
-		st.setString(2, teacher.getName());
-		st.setInt(3, teacher.getKind());
-		st.setInt(4, teacher.getBase_salary());
-		st.setString(5, MD5Util.getMD5(teacher.getPassword()));
-		st.setString(6, teacher.getIdentify_id());
-		boolean r = st.execute();
+		if(teacher.getPassword()==null) {
+			teacher.setPassword("123456");
+		}
+		st.setString(1, teacher.getName());
+		st.setInt(2, teacher.getKind());
+		st.setInt(3, teacher.getBase_salary());
+		st.setString(4, MD5Util.getMD5(teacher.getPassword()));
+		st.setString(5, teacher.getIdentify_id());
+		st.setDate(6, teacher.getEntertime());
+		st.execute();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (!r) {
+		if (r <= 0) {
 			logger.debug(String.format("插入教师[ %s] 失败", teacher.getName()));
+			return false;
 		} else {
 			logger.debug(String.format("插入教师 [ %s ]成功", teacher.getName()));
+			return true;
 		}
-
-		return r;
 	}
 
 	@Override
@@ -377,7 +381,7 @@ public class JdbcDao implements Dao {
 		Course course = null;
 		while (rs.next()) {
 			course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setStudent_ID(rs.getString("student_id"));
 			course.setTeacher_ID(rs.getString("teacher_id"));
 			course.setTime(rs.getDate("time"));
@@ -407,7 +411,7 @@ public class JdbcDao implements Dao {
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			Course course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setStudent_ID(rs.getString("student_id"));
 			course.setTeacher_ID(rs.getString("teacher_id"));
 			course.setTime(rs.getDate("time"));
@@ -439,7 +443,7 @@ public class JdbcDao implements Dao {
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			Course course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setStudent_ID(rs.getString("student_id"));
 			course.setTeacher_ID(rs.getString("teacher_id"));
 			course.setTime(rs.getDate("time"));
@@ -509,7 +513,7 @@ public class JdbcDao implements Dao {
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			Course course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setStudent_ID(rs.getString("student_id"));
 			course.setTeacher_ID(rs.getString("teacher_id"));
 			course.setTime(rs.getDate("time"));
@@ -581,7 +585,7 @@ public class JdbcDao implements Dao {
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			Course course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setTeacher_ID(rs.getString("teacher_id"));
 			course.setTime(rs.getDate("time"));
 			course.setRest_time(rs.getDate("rest_time"));
@@ -603,7 +607,7 @@ public class JdbcDao implements Dao {
 		ResultSet rs = st.executeQuery();
 		while (rs.next()) {
 			Course course = new Course();
-			course.setCourse_ID(rs.getInt("course_id"));
+			course.setCourse_ID(rs.getString("course_id"));
 			course.setStudent_ID(rs.getString("student_id"));
 			course.setTime(rs.getDate("time"));
 			course.setRest_time(rs.getDate("rest_time"));
@@ -658,7 +662,6 @@ public class JdbcDao implements Dao {
 			return false;
 		}
 
-		
 	}
 
 	@Override
@@ -769,11 +772,16 @@ public class JdbcDao implements Dao {
 		return r;
 	}
 
-	// @Override
-	// public int calSalary(String teacher_id, String salary_time) throws
-	// SQLException {
-	// // TODO Auto-generated method stub
-	// return 0;
-	// }
+	public void test() throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = "select * from student";
+		PreparedStatement st = (PreparedStatement) conn.prepareCall(sql);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			System.out.println(rs.toString());
+
+		}
+		jdbcUtil.release(st, conn);
+	}
 
 }
