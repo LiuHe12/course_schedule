@@ -21,18 +21,32 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/jsp/" />
+		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
 	<context:component-scan base-package="edu.pku.course_schedule.controller" />
 	
 	<mvc:default-servlet-handler/>
-	<!--  -->
+	
+	<!-- Init Version -->
+	<mvc:resources location="/WEB-INF/views/" mapping="/*.html"/>  
+	<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/views/font-awesome/" mapping="/font-awesome/**"/>  
+	<mvc:resources location="/WEB-INF/views/img/" mapping="/img/**"/>  
+	<mvc:resources location="/WEB-INF/views/js/" mapping="/js/**"/>  
+	<mvc:resources location="/WEB-INF/views/lib/" mapping="/lib/**"/>  
+	
+	
+	<!--  YH Version -->
+	<!-- 
 	<mvc:resources location="/WEB-INF/views/" mapping="/*.html"/>  
 	<mvc:resources location="/WEB-INF/views/js/" mapping="/js/**"/>  
-	<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>  
-	<mvc:resources location="/WEB-INF/views/img/" mapping="/img/**"/> 
-	<mvc:resources location="/WEB-INF/views/font-awesome/" mapping="/font-awesome/**"/>
-	
+	<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/views/webpack/" mapping="/webpack/**"/>    
+	<mvc:resources location="/WEB-INF/views/images/" mapping="/images/**"/> 
+	<mvc:resources location="/WEB-INF/views/assets/" mapping="/assets/**"/>  
+	<mvc:resources location="/WEB-INF/views/icons/" mapping="/icons/**"/>  
+	<mvc:resources location="/WEB-INF/views/fonts/" mapping="/fonts/**"/>
+	-->
 </beans:beans>
