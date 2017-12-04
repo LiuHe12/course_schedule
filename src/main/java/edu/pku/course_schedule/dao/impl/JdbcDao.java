@@ -392,7 +392,7 @@ public class JdbcDao implements Dao {
 				course.setSatisfaction(Integer.parseInt(satisfactionStr));
 			}
 			course.setEvaluate(rs.getString("evaluate"));
-			course.setCourse_price(rs.getInt("price"));
+			course.setPrice(rs.getInt("price"));
 			course.setStatus(rs.getInt("status"));
 		}
 		jdbcUtil.release(st, rs, conn);
@@ -422,7 +422,7 @@ public class JdbcDao implements Dao {
 				course.setSatisfaction(Integer.parseInt(satisfactionStr));
 			}
 			course.setEvaluate(rs.getString("evaluate"));
-			course.setCourse_price(rs.getInt("price"));
+			course.setPrice(rs.getInt("price"));
 			course.setStatus(rs.getInt("status"));
 			courses.add(course);
 		}
@@ -454,7 +454,7 @@ public class JdbcDao implements Dao {
 				course.setSatisfaction(Integer.parseInt(satisfactionStr));
 			}
 			course.setEvaluate(rs.getString("evaluate"));
-			course.setCourse_price(rs.getInt("price"));
+			course.setPrice(rs.getInt("price"));
 			course.setStatus(rs.getInt("status"));
 			courses.add(course);
 		}
@@ -524,7 +524,7 @@ public class JdbcDao implements Dao {
 				course.setSatisfaction(Integer.parseInt(satisfactionStr));
 			}
 			course.setEvaluate(rs.getString("evaluate"));
-			course.setCourse_price(rs.getInt("price"));
+			course.setPrice(rs.getInt("price"));
 			course.setStatus(rs.getInt("status"));
 			courses.add(course);
 		}

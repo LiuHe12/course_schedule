@@ -21,7 +21,7 @@ public class Course {
 	
 	private String evaluate;
 	
-	private int course_price;
+	private int price;
 	
 	private int status;
 	
@@ -95,12 +95,12 @@ public class Course {
 			this.evaluate = evaluate;
 	}
 
-	public int getCourse_price() {
-		return course_price;
+	public int getPrice() {
+		return price;
 	}
 
-	public void setCourse_price(int course_price) {
-		this.course_price = course_price;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 	public int getStatus() {
