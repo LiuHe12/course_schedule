@@ -1,6 +1,7 @@
 package edu.pku.course_schedule.services.impl;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class Course_Service_Imp implements Course_Service {
 	private static JdbcDao dao=new JdbcDao();
 	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// �z�m����榡
 	@Override
-	public Course getCourse(int course_id) {
+	public Course getCourse(String course_id) {
 		Course course=null;
 		try {
 			course=dao.getCourse(course_id);
@@ -28,7 +29,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public ArrayList<Course> getCoursesByTime(Date startDate, Date endDate) {
+	public ArrayList<Course> getCoursesByTime(Timestamp startDate, Timestamp endDate) {
 		ArrayList<Course> courses=null;
 		try {
 			courses=dao.getCoursesByTime(startDate, endDate);
@@ -56,7 +57,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public void setSatification(int course_id, int score) {
+	public void setSatification(String course_id, int score) {
 		try {
 			dao.setSatification(course_id, score);
 		} catch (SQLException e) {
@@ -67,7 +68,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public void setEvaluate(int course_id, String evaluate) {
+	public void setEvaluate(String course_id, String evaluate) {
 		try {
 			dao.setEvaluate(course_id, evaluate);
 		} catch (SQLException e) {
@@ -78,7 +79,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public ArrayList<Course> getAllCoursePasses(Date startDate, Date endDate) {
+	public ArrayList<Course> getAllCoursePasses(Timestamp startDate, Timestamp endDate) {
 		ArrayList<Course> courses=null;
 		try {
 			courses=dao.getAllCoursePasses(startDate, endDate);
@@ -105,7 +106,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public boolean delCourse(int course_id) {
+	public boolean delCourse(String course_id) {
 		boolean r=false;
 		try {
 			r=dao.delCourse(course_id);
@@ -131,7 +132,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public boolean setCoursePass(int course_id) {
+	public boolean setCoursePass(String course_id) {
 		boolean r=false;
 		try {
 			r=dao.setCoursePass(course_id);
@@ -145,7 +146,7 @@ public class Course_Service_Imp implements Course_Service {
 	}
 
 	@Override
-	public boolean setCoursePass(String teacher_id, String student_id, Date course_time) {
+	public boolean setCoursePass(String teacher_id, String student_id, Timestamp course_time) {
 		boolean r=false;
 		try {
 			r=dao.setCoursePass(teacher_id, student_id, course_time);

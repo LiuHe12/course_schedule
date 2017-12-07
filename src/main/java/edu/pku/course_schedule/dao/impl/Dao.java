@@ -2,6 +2,7 @@ package edu.pku.course_schedule.dao.impl;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,63 +12,63 @@ import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.dao.entity.Teacher_salary;
 
 public interface Dao {
-public Object login(String userId,String password,int identify) throws SQLException;//用户登录
+	public Object login(String userId,String password,int identify) throws SQLException;//�û���¼
 	
-	public boolean modifyPassword(String userId,int identify,String newPassword) throws SQLException;//修改密码
+	public boolean modifyPassword(String userId,int identify,String newPassword) throws SQLException;//�޸�����
 	
-	public boolean addStudent(Student student)throws SQLException;//添加学生
+	public boolean addStudent(Student student)throws SQLException;//���ѧ��
 	
-	public boolean addTeacher(Teacher teacher)throws SQLException;//添加老师
+	public boolean addTeacher(Teacher teacher)throws SQLException;//�����ʦ
 	
-	public boolean modifyStudent(String student_id,Student student)throws SQLException;//修改学生信息
+	public boolean modifyStudent(String student_id,Student student)throws SQLException;//�޸�ѧ����Ϣ
 	
-	public boolean modifyTeacher(String teacher_id,Teacher teacher)throws SQLException;//修改老师信息
+	public boolean modifyTeacher(String teacher_id,Teacher teacher)throws SQLException;//�޸���ʦ��Ϣ
 	
-	public boolean delUser(String user_id,int identify)throws SQLException;//删除用户
+	public boolean delUser(String user_id,int identify)throws SQLException;//ɾ���û�
 	
-	public Object getUser(String user_id,int identify)throws SQLException;//获取用户信息
+	public Object getUser(String user_id,int identify)throws SQLException;//��ȡ�û���Ϣ
 	
-	public ArrayList<Object> getAllUser(int identify)throws SQLException;//获取所有指定身份用户信息
+	public ArrayList<Object> getAllUser(int identify)throws SQLException;//��ȡ����ָ������û���Ϣ
 	
-	public Object getUserByIdentityId(String identifyId,int identify)throws SQLException;//根据身份证号查找用户
+	public Object getUserByIdentityId(String identifyId,int identify)throws SQLException;//�������֤�Ų����û�
 	
-	public Course getCourse(int course_id) throws SQLException;//通过课程号查找课程详细信息
+	public Course getCourse(String course_id) throws SQLException;//ͨ���γ̺Ų��ҿγ���ϸ��Ϣ
 	
-	public ArrayList<Course> getCoursesByTime(Date startDate,Date endDate) throws SQLException;//查找指定时间段的所有课程
+	public ArrayList<Course> getCoursesByTime(Timestamp startDate,Timestamp endDate) throws SQLException;//����ָ��ʱ��ε����пγ�
 	
-	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus) throws SQLException;//查找用户的课程(0已排，1未排)
+	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus) throws SQLException;//�����û��Ŀγ�(0���ţ�1δ��)
 	
-	public void setSatification(int course_id,int score) throws SQLException;//学生进行课程满意度打分
+	public void setSatification(String course_id,int score) throws SQLException;//ѧ�����пγ�����ȴ��
 	
-	public void setEvaluate(int course_id,String evaluate)throws SQLException;//老师进行课程评价内容
+	public void setEvaluate(String course_id,String evaluate)throws SQLException;//��ʦ���пγ���������
 	
-	public ArrayList<Course> getAllCoursePasses(Date startDate,Date endDate)throws SQLException;//查找所有已经上过的课
+	public ArrayList<Course> getAllCoursePasses(Timestamp startDate,Timestamp endDate)throws SQLException;//���������Ѿ��Ϲ��Ŀ�
 	
-	public boolean addCourse(Course course)throws SQLException;//添加课程
+	public boolean addCourse(Course course)throws SQLException;//��ӿγ�
 	
-	public boolean delCourse(int course_id)throws SQLException;//根据课程号删除课程
+	public boolean delCourse(String course_id)throws SQLException;//���ݿγ̺�ɾ���γ�
 	
-	public ArrayList<Course> waitSatisCourses(String student_id)throws SQLException;//得到学生已上未评价课程
+	public ArrayList<Course> waitSatisCourses(String student_id)throws SQLException;//�õ�ѧ������δ���ۿγ�
 	
-	public ArrayList<Course> waitEvaluateCourses(String teacher_id)throws SQLException;//得到老师已上未评价课程
+	public ArrayList<Course> waitEvaluateCourses(String teacher_id)throws SQLException;//�õ���ʦ����δ���ۿγ�
 	
-	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
+	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//���ݽ�ʦid,ѧ��id���Ͽ�ʱ��ɾ���γ�
 	
-	public boolean setCoursePass(int course_id)throws SQLException;//通过课程号设置课程已上
+	public boolean setCoursePass(String course_id)throws SQLException;//ͨ���γ̺����ÿγ�����
 	
-	public boolean setCoursePass(String teacher_id,String student_id,Date course_time)throws SQLException;//根据老师id，学生id和上课时间标记已上课
+	public boolean setCoursePass(String teacher_id,String student_id,Timestamp course_time)throws SQLException;//������ʦid��ѧ��id���Ͽ�ʱ�������Ͽ�
 
-	public Teacher_salary getSalary(String teacher_id,String salary_time)throws SQLException;//查找指定时间老师的工资明细
+	public Teacher_salary getSalary(String teacher_id,String salary_time)throws SQLException;//����ָ��ʱ����ʦ�Ĺ�����ϸ
 	
-	//获取老师指定时间段的工资明细
+	//��ȡ��ʦָ��ʱ��εĹ�����ϸ
 	public ArrayList<Teacher_salary> getSalaries(String teacher_id,String startTime,String endTime)throws SQLException;
 	
-	public List<Teacher_salary> getAllSalaries(String time)throws SQLException;////查找指定时间所有老师的工资明细
+	public List<Teacher_salary> getAllSalaries(String time)throws SQLException;////����ָ��ʱ��������ʦ�Ĺ�����ϸ
 	
-	//获取所有老师指定时间段的工资明细
+	//��ȡ������ʦָ��ʱ��εĹ�����ϸ
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime,String endTime)throws SQLException;
 	
-	public boolean setBonus(String teacher_id,String salary_time,int bonus)throws SQLException;;//设定老师指定时间的奖金
+	public boolean setBonus(String teacher_id,String salary_time,int bonus)throws SQLException;;//�趨��ʦָ��ʱ��Ľ���
 	
-	//public int calSalary(String teacher_id,String salary_time)throws SQLException;//计算老师指定时间的工资
+	//public int calSalary(String teacher_id,String salary_time)throws SQLException;//������ʦָ��ʱ��Ĺ���
 }

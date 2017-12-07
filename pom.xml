@@ -159,6 +159,14 @@
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
             </plugin>
+            <!-- 打包跳过maven Test -->
+            <plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-surefire-plugin</artifactId>
+        		<configuration>
+         		 <skip>true</skip>
+        		</configuration>
+      </plugin>
         </plugins>
     </build>
 </project>

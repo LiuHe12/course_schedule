@@ -1,6 +1,7 @@
 package edu.pku.course_schedule.dao.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Course {
 	
@@ -11,9 +12,9 @@ public class Course {
 	
 	private String teacher_ID;// fk
 	
-	private Date time; 
+	private Timestamp time; 
 	
-	private Date rest_time;
+	private Timestamp rest_time;
 	
 	private String name; 
 	
@@ -54,19 +55,19 @@ public class Course {
 		this.teacher_ID = teacher_ID;
 	}
 
-	public Date getTime() {
+	public Timestamp getTime() {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(Timestamp time) {
 		this.time = time;
 	}
 
-	public Date getRest_time() {
+	public Timestamp getRest_time() {
 		return rest_time;
 	}
 
-	public void setRest_time(Date rest_time) {
+	public void setRest_time(Timestamp rest_time) {
 		this.rest_time = rest_time;
 	}
 
