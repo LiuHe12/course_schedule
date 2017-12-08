@@ -1,3 +1,6 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -32,7 +35,7 @@
                 <div class="control-group">
                 	<div class="controls">
                 		<div class="main_input_box">
-                			<span class="add-on bg_ly"><i class="icon-user"> </i></span>
+                			<span class="add-on bg_lb"><i class="icon-reorder"> </i></span>
                 			<select name="identity">
   								<option selected="selected" value="0">admin</option>
   								<option value="1">teacher</option>
