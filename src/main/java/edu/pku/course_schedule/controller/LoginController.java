@@ -6,8 +6,9 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
+import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import edu.pku.course_schedule.services.impl.User_Service_Imp;
  */
 @Controller
 public class LoginController {
-
+	private Logger logger=Logger.getLogger(LoginController.class);
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(LoginController.class);
 
@@ -35,37 +36,55 @@ public class LoginController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 
-	@RequestMapping(value="/login",method=RequestMethod.GET)
-	public String getlogin(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/")
+	public String getlogin(HttpServletRequest request, HttpServletResponse response,HttpSession httpSession) {
 		return "login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String postlogin(HttpServletRequest request, HttpServletResponse response) {
-		
-//		System.out.println(request);
-//		System.out.println(request.getParameter("userID"));
+	public ModelAndView postlogin(HttpServletRequest request, HttpServletResponse response,HttpSession httpSession) {
+
 		String userId = request.getParameter("userID");
 		String password = request.getParameter("password");
 		int identify = Integer.parseInt(request.getParameter("identity"));
 		try {
 			User_Service us = new User_Service_Imp();
-		}catch(Exception e) {
-			e.printStackTrace();
+			Object object = us.login(userId, password, identify);
+			ModelAndView mav = null;
+			if (object != null) {
+				
+				if (identify == 0) {
+					Administrator admin = (Administrator) object;
+					httpSession.setAttribute("user", admin);
+					httpSession.setAttribute("identity", 0);
+					mav=new ModelAndView("admin");
+					mav.addObject("admain",admin);
+					
+				} else if (identify == 1) {
+					Teacher teacher = (Teacher) object;
+					httpSession.setAttribute("user", teacher);
+					httpSession.setAttribute("identity",1);
+					mav=new ModelAndView("teacher");
+					mav.addObject("teacher",teacher);
+				} else if (identify == 2) {
+					Student student = (Student) object;
+					httpSession.setAttribute("user", student);
+					httpSession.setAttribute("identity",2);	
+					mav=new ModelAndView("student");
+					mav.addObject("student",student);
+				}
+			}else {
+				mav=new ModelAndView("login");
+				mav.addObject("error","密码或用户名错误！");
+			}
+			return mav;
+		} catch (Exception e) {
+			ModelAndView mav=new ModelAndView("login");
+			mav.addObject("error","系统异常！");
+			return new ModelAndView("login");
 		}
+
 		
-//		Object object = us.login(userId, password, identify);
-//		if (object != null) {
-//			if (identify == 0) {
-//				Administrator admin = (Administrator) object;
-//				System.out.println(admin.toString());
-//			} else if (identify == 1) {
-//				Teacher teacher = (Teacher) object;
-//			} else if (identify == 2) {
-//				Student student = (Student) object;
-//			}
-//		}
-		return "index";
 	}
 
 }

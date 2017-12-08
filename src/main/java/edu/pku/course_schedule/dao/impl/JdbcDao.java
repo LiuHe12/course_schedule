@@ -30,7 +30,7 @@ public class JdbcDao implements Dao {
 
 	private Logger logger = Logger.getLogger(JdbcDao.class);
 	private static JdbcUtil jdbcUtil = new JdbcUtil();
-	private static String administrator_table_name = "administrator";
+	private static String administrator_table_name = "adminstrator";
 	private static String teacher_table_name = "teacher";
 	private static String student_table_name = "student";
 	private static String studentCourse_table_name = "student_course";

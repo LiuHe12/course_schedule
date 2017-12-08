@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.Properties;
+
 
 import org.apache.log4j.Logger;
-import org.apache.taglibs.standard.tag.common.xml.IfTag;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+
 
 /**   
 * @Title:  JdbcUtil
@@ -22,10 +22,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 * @version V1.0   
 */
 public class JdbcUtil {
-	static JdbcPool jdbcPool=new JdbcPool();
+	static JdbcPool jdbcPool=null;
 	private static Logger logger=Logger.getLogger(JdbcUtil.class);
 	static {
-		init();
+		//System.out.println(Thread.currentThread().getContextClassLoader().getResource(""));
+		ApplicationContext ac = new ClassPathXmlApplicationContext("../spring/root-context.xml"); 
+		jdbcPool=(JdbcPool) ac.getBean("jdbcPool");
+		//System.out.println(jdbcPool.getDriver());
+		if(jdbcPool==null) {
+			logger.error("读取数据库配置文件失败！");;
+		}
 		try {
 			Class.forName(jdbcPool.getDriver());
 		} catch (ClassNotFoundException e) {
@@ -48,8 +54,14 @@ public class JdbcUtil {
 		
 	}
 	public static void init() {
-		boolean loaddb=jdbcPool.loadDBconf("db.properties");
-		if(!loaddb) {
+//		boolean loaddb=jdbcPool.loadDBconf("db.properties");
+//		if(!loaddb) {
+//			logger.error("读取数据库配置文件失败！");;
+//		}
+		ApplicationContext ac = new FileSystemXmlApplicationContext("/WEB-INF/spring/root-context.xml"); 
+		jdbcPool=(JdbcPool) ac.getBean("jdbcPool");
+		System.out.println(jdbcPool.getDriver());
+		if(jdbcPool==null) {
 			logger.error("读取数据库配置文件失败！");;
 		}
 	}
