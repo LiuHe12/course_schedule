@@ -10,14 +10,19 @@
 		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="css/matrix-login.css" />
+        <link rel="stylesheet" href="css/select2.css" />
         <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-
+        <style type="text/css"> 
+            input,select { height:30px; vertical-align:top; border:0px; display:inline-block; width:75%; line-height:22px;  margin-bottom:3px; box-sizing: content-box;line-height: 22px}
+         
+        
+        </style>        
     </head>
     <body>
         <div id="loginbox">            
             <form id="loginform" class="form-vertical" action="login" method="post">
-				 <div class="control-group normal_text"> <h3><img src="img/logo.png" alt="Logo" /></h3></div>
+				<div class="control-group normal_text"> <h3><img src="img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">
@@ -32,6 +37,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="control-group">
                 	<div class="controls">
                 		<div class="main_input_box">
@@ -64,7 +70,7 @@
                 </div>
             </form>
         </div>
-        
+        <script src="js/select2.min.js"></script> 
         <script src="js/jquery.min.js"></script>  
         <script src="js/matrix.login.js"></script> 
     </body>
