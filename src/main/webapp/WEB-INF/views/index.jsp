@@ -1,3 +1,5 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -18,7 +20,7 @@
 
 <!--Header-part-->
 <div id="header">
-  <h1><a href="dashboard.html">Matrix Admin</a></h1>
+  <h1><a href="dashboard">Matrix Admin</a></h1>
 </div>
 <!--close-Header-part--> 
 

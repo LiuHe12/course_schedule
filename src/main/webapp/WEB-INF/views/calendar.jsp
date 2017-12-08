@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
@@ -12,16 +13,12 @@
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
-<!-- new calendar -->
-<link href='css/fullcalendar.min.css' rel='stylesheet' />
-<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link href='fullcalendar.min.css' rel='stylesheet' />
+<link href='fullcalendar.print.min.css' rel='stylesheet' media='print' />
 <script src='lib/moment.min.js'></script>
 <script src='lib/jquery.min.js'></script>
-<script src='js/fullcalendar.min.js'></script>
-
-
+<script src='fullcalendar.min.js'></script>
 <script>
-
 	$(document).ready(function() {
 		
 		$('#calendar').fullCalendar({
@@ -97,7 +94,11 @@
 </script>
 <script>
 	$(function(){ 
-    //展示层 
+    //隐藏层 
+    function hideLayer(){ 
+        $('.hw-overlay').fadeOut(); 
+    } 
+     //展示层 =
     function showLayer(id){ 
         var layer = $('#'+id), 
             layerwrap = layer.find('.hw-layer-wrap'); 
@@ -107,18 +108,12 @@
             'margin-top': -layerwrap.outerHeight()/2 
         }); 
     } 
- 
-    //隐藏层 
-    function hideLayer(){ 
-        $('.hw-overlay').fadeOut(); 
-    } 
- 
     $('.hwLayer-ok,.hwLayer-cancel,.hwLayer-close').on('click', function() { 
         hideLayer(); 
     }); 
  
     //触发弹出层 
-    $('.show-layer').on('click',  function() {         
+    $('.show-layer').on('click',  function() {  
         var layerid = $(this).data('show-layer'); 
         showLayer(layerid); 
     }); 
@@ -138,12 +133,27 @@
     }); 
 }); 
 </script>
-
+<!--//===========================新增課表彈出式畫面Css===================-->
+<style type="text/css"> 
+	.hw-overlay{display:none; position: fixed; top:0;left:0;width:100%;height:100%; background-color: rgba(0,0,0,0.3);z-index:10;} 
+	.hw-layer-wrap{box-sizing:border-box; width:570px; position:absolute;left:50%;top:50%; margin-left:-285px; border-radius:3px; background-color:#fff; box-shadow:1px 2px 4px 0 rgba(0,0,0,0.12); padding:45px 50px;} 
+	.hwLayer-close{position:absolute; right:20px; top:20px; width:20px; height:20px; cursor:pointer; font-size:20px; color:#ccc;} 
+	.hw-layer-wrap .hw-icon{color:#b4d8f3;font-size:86px;text-align:center;} 
+	.hw-layer-wrap h4{margin:5px 0 30px; font-size:24px; color:#383c3e;} 
+	.hw-layer-wrap p{margin:30px 0; line-height:22px; color:#595d60; text-align:left;} 
+ 
+@media (max-width:768px){ 
+    .hw-layer-wrap{width:350px; margin-left:-175px; margin-top:-200px; padding:45px 50px; text-align:center;} 
+} 
+@media (max-width:400px){ 
+    .hw-layer-wrap{width:250px; margin-left:-125px;padding:25px 30px;} 
+} 
+</style>
+<!--//===========================新增課表彈出式畫面Css===================-->
 </head>
 
 
 <body>
-
 <!--Header-part-->
 <div id="header">
   <h1><a href="dashboard.html">Matrix Admin</a></h1>
@@ -158,7 +168,7 @@
         <li class="divider"></li>
         <li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
         <li class="divider"></li>
-        <li><a href="login"><i class="icon-key"></i> Log Out</a></li>
+        <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
       </ul>
     </li>
     <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Messages</span> <span class="label label-important">5</span> <b class="caret"></b></a>
@@ -173,7 +183,7 @@
       </ul>
     </li>
     <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li>
-    <li class=""><a title="" href="login"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+    <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
   </ul>
 </div>
 
@@ -184,61 +194,64 @@
 </div>
 <!--close-top-serch--> 
 
-<div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
-  <ul>
-    <li><a href="index"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
-    <li><a href="charts"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>
-    <li><a href="widgets"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>
-    <li><a href="tables"><i class="icon icon-th"></i> <span>Tables</span></a></li>
-    <li class="active"><a href="calendar"><i class="icon icon-file"></i> <span>Calendar</span></a></li>
-    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
-      <ul>
-        <li><a href="form-common">Basic Form</a></li>
-        <li><a href="form-validation">Form with Validation</a></li>
-        <li><a href="form-wizard">Form with Wizard</a></li>
-      </ul>
-    </li>
-
-    <li class="content"> <span>Java 項目進度</span>
-      <div class="progress progress-mini progress-danger active progress-striped">
-        <div style="width: 10%;" class="bar"></div>
-      </div>
-      <span class="percent">10%</span>
-    </li>
-    <!--<li class="content"> <span>Disk Space Usage</span>
-      <div class="progress progress-mini active progress-striped">
-        <div style="width: 87%;" class="bar"></div>
-      </div>
-      <span class="percent">87%</span>
-      <div class="stat">604.44 / 4000 MB</div>
-    </li>-->
-  </ul>
-</div>
 <!--sidebar-menu-->
 
-
+<div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-file"></i>Addons</a>
+  <ul>
+    <li><a href="index.html"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+    <li> <a href="charts.html"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>
+    <li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>
+    <li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>
+   <li><a href="calendar.html"><i class="icon icon-file"></i> <span>Calendar</span></a></li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
+      <ul>
+        <li><a href="form-common.html">Basic Form</a></li>
+        <li><a href="form-validation.html">Form with Validation</a></li>
+        <li><a href="form-wizard.html">Form with Wizard</a></li>
+      </ul>
+    </li>
+ 
+  </ul>
+</div>
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"><a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Calendar</a></div>
-<!--	 <input type="button" onclick="alert('test')" value="新增課表" style="width:120px;height:40px;font-size:20px;">-->
-	 <a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer" role="button">点击弹出层</a> 
-	 
+<!--//==============新增課堂按鈕-->
+
+ <a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer" role="button">新增課堂</a>
+
+<!--//==============新增課堂按鈕-->
   </div>
     
-  <div class="hw-overlay" id="hw-layer"> 
+  <div class="hw-overlay" id="hw-layer" style="display:none"> 
     <div class="hw-layer-wrap"> 
         <span class="glyphicon glyphicon-remove hwLayer-close"></span> 
         <div class="row"> 
             <div class="col-md-3 col-sm-12 hw-icon"> 
                 <i class="glyphicon glyphicon-info-sign"></i> 
             </div> 
+  <!--          //=================顯示內容===================-->
+  
             <div class="col-md-9 col-sm-12"> 
-                <h4>你确定吗？</h4> 
-                <p>这是HTML+CSS+Javascript实现的一个弹出层效果，它是响应式的，它可以在所有现代浏览器上工作（包括PC和移动端）。</p> 
- 
+                <form>Course_ID:<br>
+                <input type="text" name="course_id"><br>
+                <form>Student_ID:<br>
+                <input type="text" name="student_id">
+                </form>
+                <p>選擇上課年份:</p> 
+                <select onchange="window.open(this.options[this.selectedIndex].value)">
+                	<optgroup selected="true" label="年份"> 		<!--//還需修改-->
+                		<option value = "time"> 2017 </option>
+                		<option value = "time"> 2018 </option>
+                		<option value = "time"> 2019 </option>
+                		<option value = "time"> 2020 </option>
+ 				</select><br>
+ 			
+                	
                 <button class="btn btn-success hwLayer-ok">确 定</button> 
                 <button class="btn btn-warning hwLayer-cancel">取 消</button> 
             </div> 
+    <!--       //=================顯示內容===================-->
         </div> 
     </div> 
 </div> 

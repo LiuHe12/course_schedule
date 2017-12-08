@@ -25,12 +25,15 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	
+	
 	<context:component-scan base-package="edu.pku.course_schedule.controller" />
 	
 	<mvc:default-servlet-handler/>
 	
 	<!-- Init Version -->
 	<mvc:resources location="/WEB-INF/views/" mapping="/*.html"/>  
+	<mvc:resources location="/WEB-INF/views/" mapping="/*.jsp"/>  
 	<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>
 	<mvc:resources location="/WEB-INF/views/font-awesome/" mapping="/font-awesome/**"/>  
 	<mvc:resources location="/WEB-INF/views/img/" mapping="/img/**"/>  
