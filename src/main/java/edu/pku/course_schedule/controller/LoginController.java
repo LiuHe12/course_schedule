@@ -36,7 +36,7 @@ public class LoginController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 
-	@RequestMapping(value = "/")
+	@RequestMapping(value = {"/" , "/login"}, method = RequestMethod.GET)
 	public String getlogin(HttpServletRequest request, HttpServletResponse response,HttpSession httpSession) {
 		return "login";
 	}

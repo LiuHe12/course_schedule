@@ -21,7 +21,7 @@
     </head>
     <body>
         <div id="loginbox">            
-            <form id="loginform" class="form-vertical" action="login" method="post">
+            <form id="loginform" class="form-vertical" action="login" method="POST">
 				<div class="control-group normal_text"> <h3><img src="img/logo.png" alt="Logo" /></h3></div>
                 <div class="control-group">
                     <div class="controls">

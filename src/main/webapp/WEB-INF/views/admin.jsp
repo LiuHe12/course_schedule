@@ -28,7 +28,7 @@
 <script src='lib/jquery.min.js'></script>
 <script src='js/fullcalendar.min.js'></script>
 
-<!-- Datepicker -->
+<!-- DatePicker -->
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
@@ -38,18 +38,19 @@
 <link rel="stylesheet" href="css/context.bootstrap.css" />
 <script src='js/context.js'></script>
 
-
-<script>
-	$(function() {
-		$("#datepicker").datepicker();
-	});
-</script>
+<!-- mytimepicker -->
+<link rel="stylesheet" href="css/timepicker.css" />
+<script src='js/jquery.timepicker.js'></script>
 
 
 
 <script>
 	$(document).ready(function() {
 		
+		$("#datepicker").datepicker();
+		$("#timePicker").hunterTimePicker();
+		$(".timePicker").hunterTimePicker();
+
 		//fullCalendar
 		$('#calendar').fullCalendar({
 			header : {
@@ -72,20 +73,30 @@
 				color : 'red'
 			} ]
 		});
-		
+
 		// contextJS
 		context.init({
-		    fadeSpeed: 100,
-		    filter: function ($obj){},
-		    above: 'auto',
-		    preventDoubleContext: true,
-		    compress: false
+			fadeSpeed : 100,
+			filter : function($obj) {
+			},
+			above : 'auto',
+			preventDoubleContext : true,
+			compress : false
+		});
+
+		context.attach('.fc-event', [ {
+			text : '修改',
+			action: function(e){
+				alert('Do Something');
+			}
+		}, {
+			text : '删除'
+		} ]);
+
+		$("#datepicker").datepicker({
+			dateFormat : 'yyyy-mm-dd'
 		});
 		
-		context.attach('.fc-event', [
-			{text: '修改'},
-			{text: '删除'}
-		]);
 		
 
 	});
@@ -186,6 +197,10 @@
 	text-align: left;
 }
 
+.hw-layer-wrap {
+	z-index: 999;
+}
+
 @media ( max-width :768px) {
 	.hw-layer-wrap {
 		width: 350px;
@@ -263,12 +278,10 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li class="active"><a href="#"><i class="icon icon-home"></i>
-					<span>查看课表</span></a></li>
-			<li><a href="#"><i class="icon icon-signal"></i> <span>查看薪资报表</span></a>
-			</li>
-			<li><a href="#"><i class="icon icon-inbox"></i> <span>修改个人资料</span></a>
-			</li>
+			<li class="active"><a href="#"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li><a href="#"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
+			<li><a href="#"><i class="icon icon-inbox"></i><span>修改个人资料</span></a></li>
+			<li><a href="#"><i class="icon icon-lock"></i><span>修改用户密码</span></a></li>
 		</ul>
 	</div>
 
@@ -297,16 +310,20 @@
 
 					<div class="col-md-9 col-sm-12">
 						<form>
-							Teacher_ID:<br> <input type="text" name="course_id"><br>
-							<form>
-								Student_ID:<br> <input type="text" name="student_id">
-							</form>
+							Course_ID:<br> <input type="text" name="course_id"><br>
+							Student_ID:<br> <input type="text" name="student_id"><br>
 							<p>
-								上课时间:<br> <input type="text" id="datepicker">
+								上课日期:<br> <input type="text" id="datepicker"><br>
+								上课时间:<br> <input type="text" id="timePicker"><br>
 							</p>
-							<button class="btn btn-success hwLayer-ok" type="submit">确
-								定</button>
+							
+							<!-- <div>							
+							<span>点</span><br><input type="text" name="timepicker" class="timepicker" /> 
+							<span>分</span><br><input type="text" name="timepicker2" class="timepicker2" /> 
+							</div>-->
+							<button class="btn btn-success hwLayer-ok">确 定</button>
 							<button class="btn btn-warning hwLayer-cancel">取 消</button>
+						</form>
 					</div>
 					<!--       //=================顯示內容===================-->
 				</div>

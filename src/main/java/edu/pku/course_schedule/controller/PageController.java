@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class TestController {
+public class PageController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 	
 	@RequestMapping(value = "/charts", method = RequestMethod.GET)
 	public String charts(Locale locale, Model model) {
@@ -59,11 +59,7 @@ public class TestController {
 		logger.info("in form-wizard function");
 		return "form-wizard";
 	}
-	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public String admin(Locale locale, Model model) {
-		logger.info("in admin function");
-		return "admin";
-	}
+	
 	@RequestMapping(value = "/student", method = RequestMethod.GET)
 	public String student(Locale locale, Model model) {
 		logger.info("in student function");
