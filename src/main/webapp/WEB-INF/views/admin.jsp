@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +47,7 @@
 
 <script>
 	$(document).ready(function() {
-		
+
 		$("#datepicker").datepicker();
 		$("#timePicker").hunterTimePicker();
 		$(".timePicker").hunterTimePicker();
@@ -62,16 +63,7 @@
 			navLinks : true, // can click day/week names to navigate views
 			editable : true,
 			eventLimit : true, // allow "more" link when too many events
-			events : [ {
-				title : 'All Day Event',
-				start : '2017-11-01',
-				color : 'blue'
-			}, {
-				title : 'Long Event',
-				start : '2017-11-07',
-				end : '2017-11-10',
-				color : 'red'
-			} ]
+			events : []
 		});
 
 		// contextJS
@@ -86,7 +78,7 @@
 
 		context.attach('.fc-event', [ {
 			text : '修改',
-			action: function(e){
+			action : function(e) {
 				alert('Do Something');
 			}
 		}, {
@@ -96,8 +88,6 @@
 		$("#datepicker").datepicker({
 			dateFormat : 'yyyy-mm-dd'
 		});
-		
-		
 
 	});
 </script>
@@ -310,17 +300,23 @@
 
 					<div class="col-md-9 col-sm-12">
 						<form>
-							Course_ID:<br> <input type="text" name="course_id"><br>
-							Student_ID:<br> <input type="text" name="student_id"><br>
+							Teacher_ID:<br>
+							<select name="teacher_id">
+								<c:forEach var="teacher" items="${teachers}">
+									<option>${teacher.name}</option>
+								</c:forEach>
+							</select><br>
+							Student_ID:<br>
+							<select name="student_id">
+								<c:forEach var="student" items="${students}">
+									<option>${student.name}</option>
+								</c:forEach>
+							</select><br>
 							<p>
 								上课日期:<br> <input type="text" id="datepicker"><br>
 								上课时间:<br> <input type="text" id="timePicker"><br>
 							</p>
-							
-							<!-- <div>							
-							<span>点</span><br><input type="text" name="timepicker" class="timepicker" /> 
-							<span>分</span><br><input type="text" name="timepicker2" class="timepicker2" /> 
-							</div>-->
+
 							<button class="btn btn-success hwLayer-ok">确 定</button>
 							<button class="btn btn-warning hwLayer-cancel">取 消</button>
 						</form>
