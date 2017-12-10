@@ -70,7 +70,7 @@ public class LoginController {
 					Student student = (Student) object;
 					request.getSession().setAttribute("user", student);
 					request.getSession().setAttribute("identity",2);	
-					mav=new ModelAndView("redirect:/admin");
+					mav=new ModelAndView("redirect:/student");
 					mav.addObject("student",student);
 				}
 			}else {
