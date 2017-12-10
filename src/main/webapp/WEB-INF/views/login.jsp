@@ -50,6 +50,9 @@
                 		</div>
                 	</div>
                 </div>
+               <div style="text-align: center">
+               		${error}
+               	</div>
                 <div class="form-actions">
                     <span class="pull-left"><a class="flip-link btn btn-info" id="to-recover">Lost password?</a></span>
                     <span class="pull-right"><button type="submit" class="btn btn-success" /> Login</button></span>

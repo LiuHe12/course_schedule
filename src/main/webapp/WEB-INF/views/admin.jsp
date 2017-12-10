@@ -63,7 +63,11 @@
 			navLinks : true, // can click day/week names to navigate views
 			editable : true,
 			eventLimit : true, // allow "more" link when too many events
-			events : []
+			events : [ 
+				//<c:forEach var="course" items="${courses}">
+				//${course.value}
+				//</c:forEach> 
+				]
 		});
 
 		// contextJS
@@ -300,16 +304,14 @@
 
 					<div class="col-md-9 col-sm-12">
 						<form>
-							Teacher_ID:<br>
-							<select name="teacher_id">
+							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
-									<option>${teacher.name}</option>
+									<option>${teacher.name}/${teacher.id}</option>
 								</c:forEach>
-							</select><br>
-							Student_ID:<br>
-							<select name="student_id">
+							</select><br> 
+							学生名称/ID:<br> <select name="student_id">
 								<c:forEach var="student" items="${students}">
-									<option>${student.name}</option>
+									<option>${student.name}/${student.id}</option>
 								</c:forEach>
 							</select><br>
 							<p>
