@@ -42,7 +42,7 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView postlogin(HttpServletRequest request, HttpServletResponse response,HttpSession httpSession) {
+	public ModelAndView postlogin(HttpServletRequest request, HttpServletResponse response) {
 
 		String userId = request.getParameter("userID");
 		String password = request.getParameter("password");
@@ -55,22 +55,22 @@ public class LoginController {
 				
 				if (identify == 0) {
 					Administrator admin = (Administrator) object;
-					httpSession.setAttribute("user", admin);
-					httpSession.setAttribute("identity", 0);
-					mav=new ModelAndView("admin");
+					request.getSession().setAttribute("user", admin);
+					request.getSession().setAttribute("identity", 0);
+					mav=new ModelAndView("redirect:/admin");
 					mav.addObject("admain",admin);
 					
 				} else if (identify == 1) {
 					Teacher teacher = (Teacher) object;
-					httpSession.setAttribute("user", teacher);
-					httpSession.setAttribute("identity",1);
-					mav=new ModelAndView("teacher");
+					request.getSession().setAttribute("user", teacher);
+					request.getSession().setAttribute("identity",1);
+					mav=new ModelAndView("redirect:/teacher");
 					mav.addObject("teacher",teacher);
 				} else if (identify == 2) {
 					Student student = (Student) object;
-					httpSession.setAttribute("user", student);
-					httpSession.setAttribute("identity",2);	
-					mav=new ModelAndView("student");
+					request.getSession().setAttribute("user", student);
+					request.getSession().setAttribute("identity",2);	
+					mav=new ModelAndView("redirect:/admin");
 					mav.addObject("student",student);
 				}
 			}else {
