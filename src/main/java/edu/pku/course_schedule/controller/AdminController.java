@@ -20,7 +20,7 @@ public class AdminController {
 	@RequestMapping(value = "/admin", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView setAdminHome(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
-				|| Integer.parseInt((String) (request.getSession().getAttribute("identity"))) != 0) {
+				|| (Integer)(request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
 			mav.setViewName("forward:/login");
 			return mav;
