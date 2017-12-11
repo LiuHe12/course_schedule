@@ -39,7 +39,7 @@
 <link rel="stylesheet" href="css/context.bootstrap.css" />
 <script src='js/context.js'></script>
 
-<!-- mytimepicker -->
+<!-- timepicker -->
 <link rel="stylesheet" href="css/timepicker.css" />
 <script src='js/jquery.timepicker.js'></script>
 
@@ -63,13 +63,19 @@
 			navLinks : true, // can click day/week names to navigate views
 			editable : true,
 			eventLimit : true, // allow "more" link when too many events
-			events : [ 
-				//<c:forEach var="course" items="${courses}">
-				//${course.value}
-				//</c:forEach> 
-				]
+			events : [${courses}]
 		});
 
+		/*{
+			title : 'All Day Event',
+			start : '2017-11-01',
+			color : 'blue'
+		}, {
+			title : 'Long Event',
+			start : '2017-11-07',
+			end : '2017-11-10',
+			color : 'red'
+		}*/
 		// contextJS
 		context.init({
 			fadeSpeed : 100,
@@ -82,8 +88,8 @@
 
 		context.attach('.fc-event', [ {
 			text : '修改',
-			action : function(e) {
-				alert('Do Something');
+			action : function() {
+				showLayer('hw-layer-edit');
 			}
 		}, {
 			text : '删除'
@@ -103,13 +109,14 @@
 		}
 		//展示层 =
 		function showLayer(id) {
-			var layer = $('#' + id), layerwrap = layer.find('.hw-layer-wrap');
+			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
 			layer.fadeIn();
 			//屏幕居中 
 			layerwrap.css({
 				'margin-top' : -layerwrap.outerHeight() / 2
 			});
 		}
+		
 		$('.hwLayer-ok,.hwLayer-cancel,.hwLayer-close').on('click', function() {
 			hideLayer();
 		});
@@ -293,6 +300,7 @@
 			<!--//==============新增課堂按鈕-->
 		</div>
 
+		<!--=================新增課程===================-->
 		<div class="hw-overlay" id="hw-layer" style="display: none">
 			<div class="hw-layer-wrap">
 				<span class="glyphicon glyphicon-remove hwLayer-close"></span>
@@ -300,16 +308,47 @@
 					<div class="col-md-3 col-sm-12 hw-icon">
 						<i class="glyphicon glyphicon-info-sign"></i>
 					</div>
-					<!--          //=================顯示內容===================-->
+					<div class="col-md-9 col-sm-12">
+						<form>
+							教师名称/ID:<br> <select name="teacher_id">
+								<c:forEach var="teacher" items="${teachers}">
+									<option>${teacher.name} / ${teacher.id}</option>
+								</c:forEach>
+							</select><br> 学生名称/ID:<br> <select name="student_id">
+								<c:forEach var="student" items="${students}">
+									<option>${student.name} / ${student.id}</option>
+								</c:forEach>
+							</select><br>
+							<p>
+								上课日期:<br> <input type="text" id="datepicker"><br>
+								上课时间:<br> <input type="text" id="timePicker"><br>
+							</p>
 
+							<button class="btn btn-success hwLayer-ok">确 定</button>
+							<button class="btn btn-warning hwLayer-cancel">取 消</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--=================新增課程===================-->
+
+
+		<!--=================修改課程===================-->
+		<div class="hw-overlay" id="hw-layer-edit" style="display: none">
+			<div class="hw-layer-wrap">
+				<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+				<div class="row">
+					<div class="col-md-3 col-sm-12 hw-icon">
+						<i class="glyphicon glyphicon-info-sign"></i>
+					</div>
 					<div class="col-md-9 col-sm-12">
 						<form>
 							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
 									<option>${teacher.name}/${teacher.id}</option>
 								</c:forEach>
-							</select><br> 
-							学生名称/ID:<br> <select name="student_id">
+							</select><br> 学生名称/ID:<br> <select name="student_id">
 								<c:forEach var="student" items="${students}">
 									<option>${student.name}/${student.id}</option>
 								</c:forEach>
@@ -323,10 +362,11 @@
 							<button class="btn btn-warning hwLayer-cancel">取 消</button>
 						</form>
 					</div>
-					<!--       //=================顯示內容===================-->
+
 				</div>
 			</div>
 		</div>
+		<!--=================修改課程===================-->
 
 		<div class="container-fluid">
 			<hr>
