@@ -5,7 +5,7 @@
  */
 
 var context = context || (function () {
-    
+	
 	var options = {
 		fadeSpeed: 100,
 		filter: function ($obj) {
@@ -16,6 +16,7 @@ var context = context || (function () {
 		compress: false
 	};
 
+		
 	function initialize(opts) {
 		
 		options = $.extend({}, options, opts);
@@ -98,7 +99,9 @@ var context = context || (function () {
 		$('body').append($menu);
 		
 		
-		$(document).on('contextmenu', selector, function (e) {
+		
+		$(document).on('contextmenu', selector, function (e) { // Right click event
+			
 			e.preventDefault();
 			e.stopPropagation();
 			

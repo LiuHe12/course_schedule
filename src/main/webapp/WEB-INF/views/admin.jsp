@@ -7,6 +7,8 @@
 <head>
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
+
+
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,8 +53,13 @@
 		$("#datepicker").datepicker();
 		$("#timePicker").hunterTimePicker();
 		$(".timePicker").hunterTimePicker();
+		
+		// datepicker
+		$("#datepicker").datepicker({
+			dateFormat : 'yyyy-mm-dd'
+		});
 
-		//fullCalendar
+		// fullCalendar
 		$('#calendar').fullCalendar({
 			header : {
 				left : 'prev,next today',
@@ -66,16 +73,8 @@
 			events : [${courses}]
 		});
 
-		/*{
-			title : 'All Day Event',
-			start : '2017-11-01',
-			color : 'blue'
-		}, {
-			title : 'Long Event',
-			start : '2017-11-07',
-			end : '2017-11-10',
-			color : 'red'
-		}*/
+		
+		  
 		// contextJS
 		context.init({
 			fadeSpeed : 100,
@@ -85,29 +84,41 @@
 			preventDoubleContext : true,
 			compress : false
 		});
-
-		context.attach('.fc-event', [ {
-			text : '修改',
-			action : function() {
-				showLayer('hw-layer-edit');
-			}
-		}, {
-			text : '删除'
-		} ]);
-
-		$("#datepicker").datepicker({
-			dateFormat : 'yyyy-mm-dd'
-		});
-
+		
+		
 	});
 </script>
 <script>
+
 	$(function() {
-		//隐藏层 
+		
+		// Control ContextJS
+		$(".fc-event").each(function(e) {
+		    //var id = $(this).prop("id");
+		    alert($(this).prop("innerHTML"));
+		    attachContext('.fc-event');
+		})		
+		function attachContext(selector) {
+			context.attach('.fc-event', [ {
+				text : '修改',
+				action : function(e){
+					e.preventDefault();
+					showLayer('hw-layer-edit');
+					//alert($(this).parent().html());
+				}
+				
+			}, {
+				text : '删除'
+			} ]);
+		}
+
+		
+		
+		
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
 		}
-		//展示层 =
+		
 		function showLayer(id) {
 			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
 			layer.fadeIn();
@@ -295,8 +306,7 @@
 			<!--//==============新增課堂按鈕-->
 
 			<a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer"
-				role="button">新增课堂</a>
-
+				role="button">新增课程</a>
 			<!--//==============新增課堂按鈕-->
 		</div>
 
@@ -309,14 +319,15 @@
 						<i class="glyphicon glyphicon-info-sign"></i>
 					</div>
 					<div class="col-md-9 col-sm-12">
-						<form>
+					<h3>新增课程</h3>
+						<form id="addCourse" action="" method="post">
 							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
-									<option>${teacher.name} / ${teacher.id}</option>
+									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
 								</c:forEach>
 							</select><br> 学生名称/ID:<br> <select name="student_id">
 								<c:forEach var="student" items="${students}">
-									<option>${student.name} / ${student.id}</option>
+									<option id="${student.id}">${student.name}/${student.id}</option>
 								</c:forEach>
 							</select><br>
 							<p>
@@ -343,14 +354,15 @@
 						<i class="glyphicon glyphicon-info-sign"></i>
 					</div>
 					<div class="col-md-9 col-sm-12">
-						<form>
+						<h3>修改课程</h3>
+						<form id="editCourse" action="" method="post">
 							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
-									<option>${teacher.name}/${teacher.id}</option>
+									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
 								</c:forEach>
 							</select><br> 学生名称/ID:<br> <select name="student_id">
 								<c:forEach var="student" items="${students}">
-									<option>${student.name}/${student.id}</option>
+									<option id="${student.id}">${student.name}/${student.id}</option>
 								</c:forEach>
 							</select><br>
 							<p>
