@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import edu.pku.course_schedule.dao.entity.Course;
+import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.impl.JdbcDao;
 import edu.pku.course_schedule.services.Course_Service;
 @SuppressWarnings("all")
@@ -91,17 +92,42 @@ public class Course_Service_Imp implements Course_Service {
 		}
 		
 	}
-
 	@Override
-	public boolean addCourse(Course course) {
+	public boolean addCourse(Student_course student_course) {
 		boolean r=false;
 		try {
-			r=dao.addCourse(course);
+			r=dao.addCourse(student_course);
 		} catch (SQLException e) {
 			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
 			e.printStackTrace();
 		}finally {
 			return r;
+		}
+		
+	}
+	
+	@Override
+	public boolean arrangeCourse(Course course) {
+		boolean r=false;
+		try {
+			r=dao.arrangeCourse(course);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}finally {
+			return r;
+		}
+	}
+	@Override
+	public ArrayList<Student_course> getStudentCourse(String teacher_id,String student_id ){
+		ArrayList<Student_course> student_courses=null;
+		try {
+			student_courses=dao.getCourse(teacher_id, student_id);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}finally {
+			return student_courses;
 		}
 	}
 

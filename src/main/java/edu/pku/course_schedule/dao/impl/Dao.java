@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
+import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.dao.entity.Teacher_salary;
 
@@ -44,7 +45,9 @@ public interface Dao {
 	
 	public ArrayList<Course> getAllCoursePasses(Timestamp startDate,Timestamp endDate)throws SQLException;//���������Ѿ��Ϲ��Ŀ�
 	
-	public boolean addCourse(Course course)throws SQLException;//��ӿγ�
+	public boolean arrangeCourse(Course course)throws SQLException;//��ӿγ�
+	
+	public boolean addCourse(Student_course student_course) throws SQLException;
 	
 	public boolean delCourse(String course_id)throws SQLException;//���ݿγ̺�ɾ���γ�
 	
@@ -52,6 +55,7 @@ public interface Dao {
 	
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id)throws SQLException;//�õ���ʦ����δ���ۿγ�
 	
+	public ArrayList<Student_course> getCourse(String teacher_id,String student_id) throws SQLException;;
 	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//���ݽ�ʦid,ѧ��id���Ͽ�ʱ��ɾ���γ�
 	
 	public boolean setCoursePass(String course_id)throws SQLException;//ͨ���γ̺����ÿγ�����
@@ -70,5 +74,6 @@ public interface Dao {
 	
 	public boolean setBonus(String teacher_id,String salary_time,int bonus)throws SQLException;;//�趨��ʦָ��ʱ��Ľ���
 	
+	public ArrayList<Teacher_salary> getSalariesById(String teacher_id) throws SQLException;
 	//public int calSalary(String teacher_id,String salary_time)throws SQLException;//������ʦָ��ʱ��Ĺ���
 }

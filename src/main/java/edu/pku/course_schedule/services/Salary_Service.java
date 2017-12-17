@@ -15,6 +15,8 @@ import edu.pku.course_schedule.dao.entity.Teacher_salary;
 public interface Salary_Service {
 
 	public Teacher_salary getSalary(String teacher_id, String salary_time);// 查找指定时间老师的工资明细
+	
+	public ArrayList<Teacher_salary> getSalariesById(String teacher_id);//查看老师所有的工资 根据时间排序（新的在前）
 
 	// 获取老师指定时间段的工资明细
 	public ArrayList<Teacher_salary> getSalaries(String teacher_id, String startTime, String endTime);

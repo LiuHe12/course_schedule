@@ -1,9 +1,11 @@
 package edu.pku.course_schedule.services;
 
+import java.awt.List;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import edu.pku.course_schedule.dao.entity.Course;
+import edu.pku.course_schedule.dao.entity.Student_course;
 //import edu.pku.course_schedule.dao.entity.Course_pass;
 /**   
 * @Title:  Course_Service
@@ -27,8 +29,9 @@ public interface Course_Service {
 	
 	public ArrayList<Course> getAllCoursePasses(Timestamp startDate,Timestamp endDate);//查找所有已经上过的课
 	
-	public boolean addCourse(Course course);//添加课程
+	public boolean addCourse(Student_course student_course);//添加课程
 	
+	public boolean arrangeCourse(Course course);//添加课程
 	public boolean delCourse(String course_id);//根据课程号删除课程
 	
 	public ArrayList<Course> waitSatisCourses(String student_id);//得到学生已上未评价课程
@@ -36,6 +39,7 @@ public interface Course_Service {
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id);//得到老师已上未评价课程
 	
 	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
+	public ArrayList<Student_course> getStudentCourse(String teacher_id,String student_id );
 	
 	public boolean setCoursePass(String course_id);//通过课程号设置课程已上
 	
