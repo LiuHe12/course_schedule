@@ -81,7 +81,7 @@ public class AdminController {
 	    	}
 	    	//TODO 删除注释
 	    	mav.addObject("courses", sb.toString());
-	    	logger.info(sb.toString());
+	    	//logger.info(sb.toString());
 	    } catch (ParseException e) {
 			logger.info(e.toString());
 			e.printStackTrace();

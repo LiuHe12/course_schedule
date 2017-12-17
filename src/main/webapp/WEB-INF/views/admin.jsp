@@ -73,7 +73,7 @@
 			events : [${courses}]
 		});
 
-		
+		//alert(context.getClickedEle);
 		  
 		// contextJS
 		context.init({
@@ -95,7 +95,7 @@
 		// Control ContextJS
 		$(".fc-event").each(function(e) {
 		    //var id = $(this).prop("id");
-		    alert($(this).prop("innerHTML"));
+		    //alert($(this).prop("innerHTML"));
 		    attachContext('.fc-event');
 		})		
 		function attachContext(selector) {
@@ -104,16 +104,14 @@
 				action : function(e){
 					e.preventDefault();
 					showLayer('hw-layer-edit');
-					//alert($(this).parent().html());
+					var x = context.clickedEle;
+					alert(x);
+					
 				}
-				
 			}, {
 				text : '删除'
 			} ]);
 		}
-
-		
-		
 		
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
@@ -320,7 +318,7 @@
 					</div>
 					<div class="col-md-9 col-sm-12">
 					<h3>新增课程</h3>
-						<form id="addCourse" action="" method="post">
+						<form id="addCourse" action="addCourse" method="post">
 							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
 									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
@@ -335,7 +333,7 @@
 								上课时间:<br> <input type="text" id="timePicker"><br>
 							</p>
 
-							<button class="btn btn-success hwLayer-ok">确 定</button>
+							<button class="btn btn-success hwLayer-ok" type="submit">确 定</button>
 							<button class="btn btn-warning hwLayer-cancel">取 消</button>
 						</form>
 					</div>
@@ -355,7 +353,7 @@
 					</div>
 					<div class="col-md-9 col-sm-12">
 						<h3>修改课程</h3>
-						<form id="editCourse" action="" method="post">
+						<form id="editCourse" action="editCourse" method="post">
 							教师名称/ID:<br> <select name="teacher_id">
 								<c:forEach var="teacher" items="${teachers}">
 									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
@@ -370,7 +368,7 @@
 								上课时间:<br> <input type="text" id="timePicker"><br>
 							</p>
 
-							<button class="btn btn-success hwLayer-ok">确 定</button>
+							<button class="btn btn-success hwLayer-ok" type="submit">确 定</button>
 							<button class="btn btn-warning hwLayer-cancel">取 消</button>
 						</form>
 					</div>
