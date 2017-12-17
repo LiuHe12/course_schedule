@@ -50,8 +50,8 @@
 <script>
 	$(document).ready(function() {
 
-		$("#datepicker").datepicker();
-		$("#timePicker").hunterTimePicker();
+		$(".datepicker").datepicker();
+		//$("#timePicker").hunterTimePicker();
 		$(".timePicker").hunterTimePicker();
 		
 		// datepicker
@@ -153,6 +153,16 @@
 </script>
 <!--//===========================新增課表彈出式畫面Css===================-->
 <style type="text/css">
+.aboveCal { #
+	padding-bottom: 0px;
+}
+
+.btn-info {
+	float: left;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
 .hw-overlay {
 	display: none;
 	position: fixed;
@@ -171,6 +181,7 @@
 	left: 50%;
 	top: 50%;
 	margin-left: -285px;
+	margin-top: -180.8px;
 	border-radius: 3px;
 	background-color: #fff;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
@@ -302,89 +313,95 @@
 					class="icon-home"></i> Home</a> <a href="#" class="current">Calendar</a>
 			</div>
 			<!--//==============新增課堂按鈕-->
+			<div class="aboveCal">
+				<a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer"
+					role="button">排课</a>
+				<!--//==============新增課堂按鈕-->
 
-			<a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer"
-				role="button">新增课程</a>
-			<!--//==============新增課堂按鈕-->
-		</div>
 
-		<!--=================新增課程===================-->
-		<div class="hw-overlay" id="hw-layer" style="display: none">
-			<div class="hw-layer-wrap">
-				<span class="glyphicon glyphicon-remove hwLayer-close"></span>
-				<div class="row">
-					<div class="col-md-3 col-sm-12 hw-icon">
-						<i class="glyphicon glyphicon-info-sign"></i>
+				<!--=================新增課程===================-->
+				<div class="hw-overlay" id="hw-layer" style="display: none">
+					<div class="hw-layer-wrap">
+						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+						<div class="row">
+							<div class="col-md-3 col-sm-12 hw-icon">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</div>
+							<div class="col-md-9 col-sm-12">
+
+								<form id="addCourse" action="addCourse" method="post">
+									
+											教师名称/ID:<br><select name="teacher_id">
+													<c:forEach var="teacher" items="${teachers}">
+														<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
+													</c:forEach>
+											</select><br>
+											
+											学生名称/ID:<br> <select name="student_id">
+													<c:forEach var="student" items="${students}">
+														<option id="${student.id}">${student.name}/${student.id}</option>
+													</c:forEach>
+											</select><br>
+											
+											选择课程:<br> <select name="course_id"></select><br>
+											
+											上课日期:<br> <input type="text" class="datepicker"><br>
+											上课时间:<br> <input type="text" class="timePicker"><br>
+											下课时间:<br> <input type="text" class="timePicker"><br>
+											
+									<button class="btn btn-success hwLayer-ok" type="submit">确
+										定</button>
+									<button class="btn btn-warning hwLayer-cancel">取 消</button>
+								</form>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-9 col-sm-12">
-					<h3>新增课程</h3>
-						<form id="addCourse" action="addCourse" method="post">
-							教师名称/ID:<br> <select name="teacher_id">
-								<c:forEach var="teacher" items="${teachers}">
-									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
-								</c:forEach>
-							</select><br> 学生名称/ID:<br> <select name="student_id">
-								<c:forEach var="student" items="${students}">
-									<option id="${student.id}">${student.name}/${student.id}</option>
-								</c:forEach>
-							</select><br>
-							<p>
-								上课日期:<br> <input type="text" id="datepicker"><br>
-								上课时间:<br> <input type="text" id="timePicker"><br>
-							</p>
+				</div>
+				<!--=================新增課程===================-->
+				<!--=================修改課程===================-->
+				<div class="hw-overlay" id="hw-layer-edit" style="display: none">
+					<div class="hw-layer-wrap">
+						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+						<div class="row">
+							<div class="col-md-3 col-sm-12 hw-icon">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</div>
+							<div class="col-md-9 col-sm-12">
+								<h3>修改课程</h3>
+								<form id="editCourse" action="editCourse" method="post">
+									教师名称/ID:<br> <select name="teacher_id">
+										<c:forEach var="teacher" items="${teachers}">
+											<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
+										</c:forEach>
+									</select><br> 学生名称/ID:<br> <select name="student_id">
+										<c:forEach var="student" items="${students}">
+											<option id="${student.id}">${student.name}/${student.id}</option>
+										</c:forEach>
+									</select><br>
+									选择课程:<br> <select name="course_id"></select><br>
+									<p>
+										上课日期:<br> <input type="text" class="datepicker"><br>
+										上课时间:<br> <input type="text" class="timePicker"><br>
+										下课时间:<br> <input type="text" class="timePicker"><br>
+									</p>
 
-							<button class="btn btn-success hwLayer-ok" type="submit">确 定</button>
-							<button class="btn btn-warning hwLayer-cancel">取 消</button>
-						</form>
+									<button class="btn btn-success hwLayer-ok" type="submit">确
+										定</button>
+									<button class="btn btn-warning hwLayer-cancel">取 消</button>
+								</form>
+							</div>
+
+						</div>
 					</div>
 				</div>
 			</div>
+			<!--=================修改課程===================-->
+			<div id='calendar'></div>
 		</div>
-		<!--=================新增課程===================-->
+		<!-- end content-header -->
 
-
-		<!--=================修改課程===================-->
-		<div class="hw-overlay" id="hw-layer-edit" style="display: none">
-			<div class="hw-layer-wrap">
-				<span class="glyphicon glyphicon-remove hwLayer-close"></span>
-				<div class="row">
-					<div class="col-md-3 col-sm-12 hw-icon">
-						<i class="glyphicon glyphicon-info-sign"></i>
-					</div>
-					<div class="col-md-9 col-sm-12">
-						<h3>修改课程</h3>
-						<form id="editCourse" action="editCourse" method="post">
-							教师名称/ID:<br> <select name="teacher_id">
-								<c:forEach var="teacher" items="${teachers}">
-									<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
-								</c:forEach>
-							</select><br> 学生名称/ID:<br> <select name="student_id">
-								<c:forEach var="student" items="${students}">
-									<option id="${student.id}">${student.name}/${student.id}</option>
-								</c:forEach>
-							</select><br>
-							<p>
-								上课日期:<br> <input type="text" id="datepicker"><br>
-								上课时间:<br> <input type="text" id="timePicker"><br>
-							</p>
-
-							<button class="btn btn-success hwLayer-ok" type="submit">确 定</button>
-							<button class="btn btn-warning hwLayer-cancel">取 消</button>
-						</form>
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!--=================修改課程===================-->
-
-		<div class="container-fluid">
-			<hr>
-
-		</div>
-		<div id='calendar'></div>
 	</div>
-
+	<!-- end content -->
 </body>
 
 </html>
