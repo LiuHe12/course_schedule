@@ -19,6 +19,7 @@ import com.mysql.jdbc.PreparedStatement;
 import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
+import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.dao.entity.Teacher_salary;
 import edu.pku.course_schedule.util.JdbcUtil;
@@ -516,7 +517,28 @@ public class JdbcDao implements Dao {
 		jdbcUtil.release(st, conn);
 
 	}
-
+	@Override
+	public ArrayList<Student_course> getCourse(String teacher_id,String student_id) throws SQLException{
+		ArrayList<Student_course> student_courses=new ArrayList<Student_course>();
+		Connection conn=jdbcUtil.getConnection();
+		String sql=String.format("select * from %s where teacher_id=? and student_id=?",studentCourse_table_name);
+		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacher_id);
+		st.setString(2, student_id);
+		
+		ResultSet rs=st.executeQuery();
+		while(rs.next()) {
+			Student_course student_course=new Student_course();
+			student_course.setCourse_name(rs.getString("course_name"));
+			student_course.setStudent_id(rs.getString("student_id"));
+			student_course.setTeacher_id(rs.getString("teacher_id"));
+			student_course.setPrice(rs.getInt("price"));
+			student_course.setNum(rs.getInt("num"));
+			student_courses.add(student_course);	
+		}
+		jdbcUtil.release(st, rs, conn);
+		return student_courses;
+	}
 	@Override
 	public ArrayList<Course> getAllCoursePasses(Timestamp startDate, Timestamp endDate) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
@@ -548,7 +570,30 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public boolean addCourse(Course course) throws SQLException {
+	public boolean addCourse(Student_course student_course) throws SQLException{
+		Connection conn=jdbcUtil.getConnection();
+		String sql=String.format("insert into %s (course_name,teacher_id,student_id,price,num)values(?,?,?,?,?)", studentCourse_table_name);
+		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, student_course.getCourse_name());
+		st.setString(2, student_course.getTeacher_id());
+		st.setString(3, student_course.getStudent_id());
+		st.setInt(4, student_course.getPrice());
+		st.setInt(5, student_course.getNum());
+		st.execute();
+		int r=st.getUpdateCount();
+		jdbcUtil.release(st, conn);
+		if(r<=0) {
+			logger.info(String.format("add student_course [ %s ] failed -> %s", student_course.getCourse_name(),
+					df.format(new java.util.Date())));
+			return false;
+		}else {
+			logger.info(String.format("add student_course [ %s ] successfully -> %s", student_course.getCourse_name(),
+					df.format(new java.util.Date())));
+			return true;
+		}
+	}
+	@Override
+	public boolean arrangeCourse(Course course) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		String sql =String.format( "insert into %s (student_id,teacher_id,time,rest_time,name,price) values (?,?,?,?,?,?)",course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
@@ -694,8 +739,10 @@ public class JdbcDao implements Dao {
 			teacher_salary.setTime(rs.getString("time"));
 			teacher_salary.setBonus(rs.getInt("bonus"));
 			teacher_salary.setSalary(rs.getInt("salary"));
+			jdbcUtil.release(st, rs, conn);
 			return teacher_salary;
 		}
+		jdbcUtil.release(st, rs, conn);
 		return null;
 	}
 
@@ -798,6 +845,26 @@ public class JdbcDao implements Dao {
 
 		}
 		jdbcUtil.release(st, conn);
+	}
+
+	@Override
+	public ArrayList<Teacher_salary> getSalariesById(String teacher_id) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("select * from %s where teacher_id=?",teacherSalary_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacher_id);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			teacher_salaries.add(teacher_salary);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return teacher_salaries;
 	}
 
 }

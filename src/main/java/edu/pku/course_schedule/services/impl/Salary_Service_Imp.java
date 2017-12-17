@@ -17,7 +17,7 @@ public class Salary_Service_Imp implements Salary_Service {
 
 	private Logger logger = Logger.getLogger(Salary_Service_Imp.class);
 	private static JdbcDao dao = new JdbcDao();
-	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// ‰z¸m¤é´Á®æ¦¡
+	private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// ï¿½zï¿½mï¿½ï¿½ï¿½ï¿½æ¦¡
 
 	@Override
 	public Teacher_salary getSalary(String teacher_id, String salary_time) {
@@ -83,6 +83,20 @@ public class Salary_Service_Imp implements Salary_Service {
 		} finally {
 			return r;
 		}
+	}
+
+	@Override
+	public ArrayList<Teacher_salary> getSalariesById(String teacher_id) {
+		 ArrayList<Teacher_salary> teacher_salaries=null;
+		 try {
+			teacher_salaries=dao.getSalariesById(teacher_id);
+		} catch (SQLException e) {
+			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
+			e.printStackTrace();
+		}finally {
+			return teacher_salaries;
+		}
+		 
 	}
 
 }
