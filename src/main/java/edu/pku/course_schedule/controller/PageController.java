@@ -71,10 +71,28 @@ public class PageController {
 //		return "teacher";
 //	}
 	
-	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+	@RequestMapping(value = "/add-user", method = RequestMethod.GET)
 	public String addUser(Locale locale, Model model) {
-		logger.info("in addUser function");
-		return "addUser";
+		logger.info("in add-user function");
+		return "add-user";
+	}
+	
+	@RequestMapping(value = "/comment", method = RequestMethod.GET)
+	public String comment(Locale locale, Model model) {
+		logger.info("in comment function");
+		return "comment";
+	}
+	
+	@RequestMapping(value = "/change-password", method = RequestMethod.GET)
+	public String changePassword(Locale locale, Model model) {
+		logger.info("in change-password function");
+		return "change-password";
+	}
+	
+	@RequestMapping(value = "/add-course", method = {RequestMethod.GET,RequestMethod.POST})
+	public String addCourse(Locale locale, Model model) {
+		logger.info("in add-course function");
+		return "add-course";
 	}
 	
 }

@@ -35,8 +35,11 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#number_validate").validate({
+	$("#my_validate").validate({
 		rules:{
+			required:{
+				required:true
+			},
 			min:{
 				required: true,
 				min:10
