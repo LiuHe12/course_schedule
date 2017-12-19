@@ -304,22 +304,26 @@
 							</div>
 							<div class="col-md-9 col-sm-12">
 
-								<form id="addCourse" action="addCourse" method="post">
+								<form id="addCourse" action="arrangeCourse" method="post">
 
 									教师名称/ID:<br>
 									<select name="teacher_id">
 										<c:forEach var="teacher" items="${teachers}">
-											<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
+											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
 									</select><br> 学生名称/ID:<br> <select name="student_id">
 										<c:forEach var="student" items="${students}">
-											<option id="${student.id}">${student.name}/${student.id}</option>
+											<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
 										</c:forEach>
-									</select><br> 选择课程:<br> <select name="course_id"></select><br>
+									</select><br> 选择课程:<br> <select name="course_id">
+									<c:forEach var="student_course" items="${student_courses}">
+											<option id="${student_course.course_name}" value="${student_course.course_name}">${student_course.course_name}</option>
+										</c:forEach>
+									</select><br>
 
-									上课日期:<br> <input type="text" class="datepicker"><br>
-									上课时间:<br> <input type="text" class="timePicker"><br>
-									下课时间:<br> <input type="text" class="timePicker"><br>
+									上课日期:<br> <input type="text" class="datepicker" id="classDate" name="classDate"><br>
+									上课时间:<br> <input type="text" class="timePicker" id="classDate" name="time"><br>
+									下课时间:<br> <input type="text" class="timePicker" id="rest_time" name="rest_time"><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>

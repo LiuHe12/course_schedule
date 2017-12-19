@@ -1,4 +1,6 @@
 package edu.pku.course_schedule.services.impl;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -197,6 +199,30 @@ public class Course_Service_Imp implements Course_Service {
 			return courses;
 		}
 		
+	}
+
+	@Override
+	public Student_course getStudentCourse(String teacher_id, String student_id, String name) {
+		Student_course student_course=null;
+		try {
+			student_course=dao.getStudentCourse(teacher_id, student_id, name);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}
+		return student_course;
+	}
+
+	@Override
+	public ArrayList<Student_course> getStudentCourses() {
+		ArrayList<Student_course> student_courses=null;
+		try {
+			student_courses=dao.getStudentCourses();
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}
+		return student_courses;
 	}
 
 }

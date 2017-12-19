@@ -41,9 +41,12 @@ public interface Course_Service {
 	//public boolean delCourse(String teacher_id,String student_id,Date course_time);//根据教师id,学生id和上课时间删除课程
 	public ArrayList<Student_course> getStudentCourse(String teacher_id,String student_id );
 	
+	public Student_course getStudentCourse(String teacher_id,String student_id,String name);
+	
 	public boolean setCoursePass(String course_id);//通过课程号设置课程已上
 	
 	public boolean setCoursePass(String teacher_id,String student_id,Timestamp course_time);//根据老师id，学生id和上课时间标记已上课
 
+	public ArrayList<Student_course> getStudentCourses();
 	//TODO邮件提醒上课功能
 }

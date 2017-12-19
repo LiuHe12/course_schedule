@@ -595,6 +595,10 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean arrangeCourse(Course course) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
+//		Student_course student_course=getStudentCourse(course.getTeacher_ID(),course.getStudent_ID(),course.getName());
+//		if(student_course==null) {
+//			return false;
+//		}
 		String sql =String.format( "insert into %s (student_id,teacher_id,time,rest_time,name,price) values (?,?,?,?,?,?)",course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, course.getStudent_ID());
@@ -865,6 +869,50 @@ public class JdbcDao implements Dao {
 		}
 		jdbcUtil.release(st, rs, conn);
 		return teacher_salaries;
+	}
+
+	@Override
+	public Student_course getStudentCourse(String teacher_id, String student_id, String name) throws SQLException {
+		
+		Connection conn=jdbcUtil.getConnection();
+		String sql=String.format("select * from %s where teacher_id=? and student_id=?,course_name=?",studentCourse_table_name);
+		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, teacher_id);
+		st.setString(2, student_id);
+		st.setString(3, name);
+		ResultSet rs=st.executeQuery();
+		Student_course student_course=null;
+		while(rs.next()) {
+			student_course=new Student_course();
+			student_course.setCourse_name(rs.getString("course_name"));
+			student_course.setStudent_id(rs.getString("student_id"));
+			student_course.setTeacher_id(rs.getString("teacher_id"));
+			student_course.setPrice(rs.getInt("price"));
+			student_course.setNum(rs.getInt("num"));
+			break;
+		}
+		jdbcUtil.release(st, rs, conn);
+		return student_course;
+	}
+
+	@Override
+	public ArrayList<Student_course> getStudentCourses() throws SQLException{
+		ArrayList<Student_course> student_courses=new ArrayList<Student_course>();
+		Connection conn=jdbcUtil.getConnection();
+		String sql=String.format("select * from %s",studentCourse_table_name);
+		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);	
+		ResultSet rs=st.executeQuery();
+		while(rs.next()) {
+			Student_course student_course=new Student_course();
+			student_course.setCourse_name(rs.getString("course_name"));
+			student_course.setStudent_id(rs.getString("student_id"));
+			student_course.setTeacher_id(rs.getString("teacher_id"));
+			student_course.setPrice(rs.getInt("price"));
+			student_course.setNum(rs.getInt("num"));
+			student_courses.add(student_course);	
+		}
+		jdbcUtil.release(st, rs, conn);
+		return student_courses;
 	}
 
 }

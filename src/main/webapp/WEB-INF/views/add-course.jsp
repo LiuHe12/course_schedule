@@ -80,21 +80,21 @@
 							<h5>新增课程</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form class="form-horizontal" method="POST" action="#" id="my_validate">
+							<form class="form-horizontal" method="POST" action="addCourse" id="my_validate">
 								<!-- Validate by #my_validate, see matrix.form_validation -->
 
 								<div class="control-group">
 									<label class="control-label">课程名称 :</label>
 									<div class="controls">
-										<input type="text" name="required" id="course_id" />
+										<input type="text" name="course_name" id="course_name" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">教师名称/ID :</label>
 									<div class="controls">
-										<select name="required" id="teacher_id">
+										<select name="teacher_id" id="teacher_id">
 										<c:forEach var="teacher" items="${teachers}">
-											<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
+											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
 									</select>
 									</div>
@@ -102,9 +102,9 @@
 								<div class="control-group">
 									<label class="control-label">学生名称/ID :</label>
 									<div class="controls">
-										<select name="required" id="student_id">
+										<select name="student_id" id="student_id">
 										<c:forEach var="student" items="${students}">
-											<option id="${student.id}">${student.name}/${student.id}</option>
+											<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
 										</c:forEach>
 									</select>
 									</div>
@@ -112,14 +112,14 @@
 								<div class="control-group">
 									<label class="control-label">课程价格 :</label>
 									<div class="controls">
-										<input type="text" name="number" id="price" class="span11"
+										<input type="text" name="price" id="price" class="span11"
 											placeholder="每堂课的价格" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">课程数量 :</label>
 									<div class="controls">
-										<input type="text" name="number" id="num" class="span11" />
+										<input type="text" name="number" id="number" class="span11" />
 									</div>
 								</div>
 								<div class="form-actions">
