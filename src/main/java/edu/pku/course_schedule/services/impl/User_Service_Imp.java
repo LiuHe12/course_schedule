@@ -44,12 +44,15 @@ public class User_Service_Imp implements User_Service {
 	}
 
 	@Override
-	public void modifyPassword(String userId, int identify, String newPassword) {
+	public boolean modifyPassword(String userId, int identify, String newPassword) {
+		boolean r=false;
 		try {
-			dao.modifyPassword(userId, identify, newPassword);
+			r=dao.modifyPassword(userId, identify, newPassword);
 		} catch (SQLException e) {
 			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
 			e.printStackTrace();
+		}finally {
+			return r;
 		}
 	}
 

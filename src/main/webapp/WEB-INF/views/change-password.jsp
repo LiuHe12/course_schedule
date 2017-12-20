@@ -101,7 +101,7 @@
 							<h5>修改密码</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form id="form-wizard" class="form-horizontal" action="changePwd" method="post">
+							<form id="form-wizard" class="form-horizontal" action="change-my-pwd" method="post">
 								<div id="form-wizard-1" class="step">
 									<div class="control-group">
 										<label class="control-label">当前密码</label>

@@ -105,7 +105,15 @@
 									<div class="control-group">
 										<label class="control-label">用户ID</label>
 										<div class="controls">
-											<input id="username" type="text" name="username" />
+											<select id="username" type="text" name="username" >
+												<c:forEach var="student" items="${students}">
+													<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
+												</c:forEach>
+												<c:forEach var="teacher" items="${teachers}">
+													<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
+												</c:forEach>
+											</select>
+											
 										</div>
 									</div>
 									<div class="control-group">

@@ -58,7 +58,7 @@ public class AdminController {
 			}
 			request.getSession().setAttribute("students", students);
 		}
-
+		
 		mav.addObject("teachers", request.getSession().getAttribute("teachers"));
 
 		mav.addObject("students", request.getSession().getAttribute("students"));
@@ -202,5 +202,31 @@ public class AdminController {
 		request.getSession().setMaxInactiveInterval(20*60);
 		return mav;
 	}
-
+	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET,RequestMethod.POST})
+	private ModelAndView changePwd(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/login");
+			return mav;
+		}
+		String userId=request.getParameter("username");
+		String newPassword=request.getParameter("password");
+		int identity = 0;
+		if(userId.substring(0, 1).equals("S")) {
+			identity=2;
+		}else if(userId.substring(0, 1).equals("T")) {
+			identity=1;
+		}
+		User_Service us=new User_Service_Imp();
+		boolean r=us.modifyPassword(userId, identity, newPassword);
+		if(!r) {
+			//mav.addObject("error","修改密码失败！");
+			mav.setViewName("redirect:/change-user-password");
+		}else {
+			//mav.addObject("error","修改密码成功！");
+			mav.setViewName("redirect:/admin");
+		}	
+		return mav;
+	}
 }
