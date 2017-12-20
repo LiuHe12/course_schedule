@@ -1,7 +1,14 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<!-- 
+*
+*
+*注意：此页面为“加课”，并非“排课”
+*排课功能在admin页面
+*
+*
+ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>

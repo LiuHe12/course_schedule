@@ -34,7 +34,7 @@
 <!-- DatePicker -->
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
+<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- ContextJS -->
@@ -45,36 +45,10 @@
 <link rel="stylesheet" href="css/timepicker.css" />
 <script src='js/jquery.timepicker.js'></script>
 
-
-
 <script>
-	$(document).ready(function() {
 
-		$(".datepicker").datepicker();
-		//$("#timePicker").hunterTimePicker();
-		$(".timePicker").hunterTimePicker();
+	$(function() {
 		
-		// datepicker
-		$(".datepicker").datepicker({
-			dateFormat : 'yy-mm-dd'
-		});
-
-		// fullCalendar
-		$('#calendar').fullCalendar({
-			header : {
-				left : 'prev,next today',
-				center : 'title',
-				right : 'month,agendaWeek,agendaDay,listWeek'
-			},
-			defaultDate : '2017-11-12',
-			navLinks : true, // can click day/week names to navigate views
-			editable : true,
-			eventLimit : true, // allow "more" link when too many events
-			events : [${courses}]
-		});
-
-		//alert(context.getClickedEle);
-		  
 		// contextJS
 		context.init({
 			fadeSpeed : 100,
@@ -85,14 +59,6 @@
 			compress : false
 		});
 		
-		
-	});
-</script>
-<script>
-
-	$(function() {
-		
-		// Control ContextJS
 		$(".fc-event").each(function(e) {
 		    //var id = $(this).prop("id");
 		    //alert($(this).prop("innerHTML"));
@@ -113,6 +79,17 @@
 			} ]);
 		}
 		
+		
+		// DatePicker and TimePicker
+		$(".timePicker").hunterTimePicker();
+		$(".datepicker").datepicker();
+		
+		$(".datepicker").datepicker({
+			dateFormat : 'yy-mm-dd'
+		});
+
+		
+		// 隱藏選單相關
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
 		}
@@ -120,7 +97,6 @@
 		function showLayer(id) {
 			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
 			layer.fadeIn();
-			//屏幕居中 
 			layerwrap.css({
 				'margin-top' : -layerwrap.outerHeight() / 2
 			});
@@ -130,7 +106,7 @@
 			hideLayer();
 		});
 
-		//触发弹出层 
+		
 		$('.show-layer').on('click', function() {
 			var layerid = $(this).data('show-layer');
 			showLayer(layerid);
@@ -149,6 +125,33 @@
 				hideLayer();
 			}
 		});
+		
+
+		
+		// fullCalendar
+		$('#calendar').fullCalendar({
+			header : {
+				left : 'prev,next today',
+				center : 'title',
+				right : 'month,agendaWeek,agendaDay,listWeek'
+			},
+			defaultDate : '2017-11-12',
+			navLinks : true, // can click day/week names to navigate views
+			editable : false,
+			eventLimit : true, // allow "more" link when too many events
+			events : [${courses}]
+		});
+		
+		
+		//排课相关
+		function getStudent(){
+			
+		}
+		function getCourse(){
+			
+		}
+		
+		
 	});
 </script>
 <!--//===========================新增課表彈出式畫面Css===================-->
@@ -281,21 +284,21 @@
 			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
-
+	
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="#" title="Go to Home" class="tip-bottom"><i
 					class="icon-home current"></i> Home</a>
 			</div>
-			<!--//==============新增課堂按鈕-->
+			<!--//==============排课按鈕-->
 			<div class="aboveCal">
 				<a class="btn btn-info btn-lg show-layer" data-show-layer="hw-layer"
 					role="button">排课</a>
-				<!--//==============新增課堂按鈕-->
+				<!--//==============排课按鈕-->
 
 
-				<!--=================新增課程===================-->
+				<!--=================排课===================-->
 				<div class="hw-overlay" id="hw-layer" style="display: none">
 					<div class="hw-layer-wrap">
 						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
@@ -308,18 +311,14 @@
 								<form id="addCourse" action="arrangeCourse" method="post">
 
 									教师名称/ID:<br>
-									<select name="teacher_id">
+									<select name="teacher_id" id="teacher-add" onchange="getStudent(this)">
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
-									</select><br> 学生名称/ID:<br> <select name="student_id">
-										<c:forEach var="student" items="${students}">
-											<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
-										</c:forEach>
-									</select><br> 选择课程:<br> <select name="course_id">
-									<c:forEach var="student_course" items="${student_courses}">
-											<option id="${student_course.course_name}" value="${student_course.course_name}">${student_course.course_name}</option>
-										</c:forEach>
+									</select><br> 学生名称/ID:<br> <select name="student_id" id="student-add" onchange="getCourse(this)">
+										
+									</select><br> 选择课程:<br> <select name="course_id" id="course-add">
+										
 									</select><br>
 
 									上课日期:<br> <input type="text" class="datepicker" id="classDate" name="classDate"><br>
@@ -334,7 +333,7 @@
 						</div>
 					</div>
 				</div>
-				<!--=================新增課程===================-->
+				<!--=================排课===================-->
 				<!--=================修改課程===================-->
 				<div class="hw-overlay" id="hw-layer-edit" style="display: none">
 					<div class="hw-layer-wrap">
@@ -345,6 +344,8 @@
 							</div>
 							<div class="col-md-9 col-sm-12">
 								<h3>修改课程</h3>
+								
+								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
 									教师名称/ID:<br> <select name="teacher_id">
 										<c:forEach var="teacher" items="${teachers}">
@@ -381,3 +382,4 @@
 </body>
 
 </html>
+	
