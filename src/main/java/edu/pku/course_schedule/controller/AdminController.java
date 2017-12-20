@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.security.interfaces.RSAKey;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -122,15 +123,22 @@ public class AdminController {
 			mav.setViewName("forward:/login");
 			return mav;
 		}
-		// try {
-		// request.setCharacterEncoding("utf-8");
-		// } catch (UnsupportedEncodingException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		
+		// Handle ISO-8859-1 to UTF-8
+		String cname = "";
+		String utf_name = "";
+		try {
+			request.setCharacterEncoding("utf-8");
+			cname = request.getParameter("course_name");
+			utf_name = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Student_course student_course = new Student_course();
 		student_course.setStudent_id(request.getParameter("student_id"));
-		student_course.setCourse_name(request.getParameter("course_name"));
+		student_course.setCourse_name(utf_name);
 		student_course.setTeacher_id(request.getParameter("teacher_id"));
 		student_course.setNum(Integer.parseInt(request.getParameter("number")));
 		student_course.setPrice(Integer.parseInt(request.getParameter("price")));

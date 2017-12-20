@@ -28,6 +28,11 @@
 </head>
 <body>
 
+	<%
+		request.setCharacterEncoding("utf-8");
+		String s = request.getParameter("course_name");
+		out.print(s);
+	%>
 	<!--Header-part-->
 	<div id="header">
 		<h1>
