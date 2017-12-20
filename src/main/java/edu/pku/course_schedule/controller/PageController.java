@@ -103,7 +103,7 @@ public class PageController {
 	@RequestMapping(value = "/all-salary", method = {RequestMethod.GET,RequestMethod.POST})
 	public String allSalary(Locale locale, Model model) {
 		logger.info("in all-salary function");
-		return "add-salary";
+		return "all-salary";
 	}
 	
 	@RequestMapping(value = "/salary", method = {RequestMethod.GET,RequestMethod.POST})
