@@ -273,10 +273,11 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li class="active"><a href="#"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>			
-			<li><a href="#"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li><a href="#"><i class="icon icon-inbox"></i><span>查看用户资料</span></a></li>
+			<li class="active"><a href="admin"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
+			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
+			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
+			<li><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
 			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
@@ -285,7 +286,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="#" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current">Calendar</a>
+					class="icon-home current"></i> Home</a>
 			</div>
 			<!--//==============新增課堂按鈕-->
 			<div class="aboveCal">

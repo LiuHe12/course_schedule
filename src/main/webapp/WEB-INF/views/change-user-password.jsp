@@ -77,18 +77,17 @@
 			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
 			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
 			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
-			<li><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li class="active"><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
+			<li class="active"><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
-
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="#" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current"> 修改密码</a>
+					class="icon-home"></i> Home</a> <a href="#" class="current"> 修改用户密码</a>
 			</div>
-			<h1>修改密码</h1>
+			<h1>修改用户密码</h1>
 		</div>
 		<div class="container-fluid">
 			<hr>
@@ -98,15 +97,15 @@
 						<div class="widget-title">
 							<span class="icon"> <i class="icon-pencil"></i>
 							</span>
-							<h5>修改密码</h5>
+							<h5>修改用户密码</h5>
 						</div>
 						<div class="widget-content nopadding">
 							<form id="form-wizard" class="form-horizontal" action="changePwd" method="post">
 								<div id="form-wizard-1" class="step">
 									<div class="control-group">
-										<label class="control-label">当前密码</label>
+										<label class="control-label">用户ID</label>
 										<div class="controls">
-											<input id="oldpassword" type="password" name="oldpassword" />
+											<input id="username" type="text" name="username" />
 										</div>
 									</div>
 									<div class="control-group">

@@ -83,16 +83,32 @@ public class PageController {
 		return "comment";
 	}
 	
-	@RequestMapping(value = "/change-password", method = RequestMethod.GET)
-	public String changePassword(Locale locale, Model model) {
-		logger.info("in change-password function");
-		return "change-password";
-	}
-	
 	@RequestMapping(value = "/add-course", method = {RequestMethod.GET,RequestMethod.POST})
 	public String addCourse(Locale locale, Model model) {
 		logger.info("in add-course function");
 		return "add-course";
 	}
 	
+	@RequestMapping(value = "/change-password", method = RequestMethod.GET)
+	public String changePassword(Locale locale, Model model) {
+		logger.info("in change-password function");
+		return "change-password";
+	}	
+	@RequestMapping(value = "/change-user-password", method = {RequestMethod.GET,RequestMethod.POST})
+	public String changeUserPassword(Locale locale, Model model) {
+		logger.info("in change-user-password function");
+		return "change-user-password";
+	}
+	
+	@RequestMapping(value = "/all-salary", method = {RequestMethod.GET,RequestMethod.POST})
+	public String allSalary(Locale locale, Model model) {
+		logger.info("in all-salary function");
+		return "add-salary";
+	}
+	
+	@RequestMapping(value = "/salary", method = {RequestMethod.GET,RequestMethod.POST})
+	public String salary(Locale locale, Model model) {
+		logger.info("in salary function");
+		return "salary";
+	}
 }
