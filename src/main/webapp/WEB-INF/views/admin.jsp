@@ -34,7 +34,8 @@
 <!-- DatePicker -->
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+<link rel="stylesheet"
+	href="http://jqueryui.com/resources/demos/style.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- ContextJS -->
@@ -142,18 +143,71 @@
 			events : [${courses}]
 		});
 		
-		
-		//排课相关
-		function getStudent(){
-			
-		}
-		function getCourse(){
-			
-		}
-		
-		
+
 	});
 </script>
+
+
+<script>
+
+	//排课相关
+	/*操作流程如下:
+	**	1.選擇老師
+	**	2.選擇學生
+	**	3.選擇課程
+	*/
+	var tid = "";
+	var sid = "";
+	var arrCourse = null;
+	var arrStudent = null;
+	
+	function getStudent(sellectBox){
+		tid = sellectBox.value; // 設定教師ID以便課程檢索
+		
+		arrStudent = new Array();
+		arrCourse = null;
+		
+		<c:forEach var="course" items="${student_courses}"> //從課表中找出這名老師的學生
+			if(sellectBox.value=="${course.teacher_id}"){
+				//console.log("${course.student_id}");
+				<c:forEach var="student" items="${students}"> //用學生id獲得完整學生信息
+					if("${course.student_id}"==("${student.id}")){
+						arrStudent.push("${student.name}/${student.id}");
+					}
+				</c:forEach>
+			} 
+		</c:forEach>
+		
+		//塞进option
+		var str = "<option>---请选择---</option>";
+		for(var i=0;i<arrStudent.length;i++){
+			var sp = new Array();
+			sp = arrStudent[i].split("/");
+			str += "<option id=\""+ sp[1] +"\" value=\""+ sp[1] +"\">"+arrStudent[i]+"</option>"
+		}
+		document.all('student-add').innerHTML = str;
+		document.all('course-add').innerHTML = ""; // 選完課又偷改老師,要清掉唷
+	}
+	
+	function getCourse(sellectBox){
+		arrCourse = new Array();
+		
+		<c:forEach var="course" items="${student_courses}"> // 用老師id&學生id查課表
+			if(sellectBox.value=="${course.student_id}" && tid=="${course.teacher_id}"){
+				arrCourse.push("${course.course_name}");
+			}
+			
+		</c:forEach>
+		
+		//寫回option
+		var str = "";
+		for(var i=0;i<arrStudent.length;i++){
+			str += "<option id=\""+ arrCourse[i] +"\" value=\""+ arrCourse[i] +"\">"+arrCourse[i]+"</option>"
+		}
+		document.all('course-add').innerHTML = str;
+	}
+</script>
+
 <!--//===========================新增課表彈出式畫面Css===================-->
 <style type="text/css">
 .aboveCal { #
@@ -264,8 +318,8 @@
 
 		<ul class="nav">
 			<li class="" id="profile-messages"><a title="" href="#"
-				data-target="#profile-messages"><i class="icon icon-user"></i>
-					<span class="text">Welcome User</span><b class="caret"></b></a></li>
+				data-target="#profile-messages"><i class="icon icon-user"></i> <span
+					class="text">Welcome User</span><b class="caret"></b></a></li>
 
 			<li class=""><a title="" href="login"><i
 					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
@@ -276,15 +330,17 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li class="active"><a href="admin"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="active"><a href="admin"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
 			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
 			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
-			<li><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>
+			<li><a href="change-user-password"><i
+					class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
 			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
-	
+
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
@@ -310,20 +366,23 @@
 
 								<form id="addCourse" action="arrangeCourse" method="post">
 
-									教师名称/ID:<br>
-									<select name="teacher_id" id="teacher-add" onchange="getStudent(this)">
+									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
+										onChange="getStudent(this)">
+										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
-									</select><br> 学生名称/ID:<br> <select name="student_id" id="student-add" onchange="getCourse(this)">
+									</select><br> 学生名称/ID:<br> <select name="student_id"
+										id="student-add" onchange="getCourse(this)">
 										
-									</select><br> 选择课程:<br> <select name="course_id" id="course-add">
+									</select><br> 选择课程:<br> <select name="course_id"
+										id="course-add">
 										
-									</select><br>
-
-									上课日期:<br> <input type="text" class="datepicker" id="classDate" name="classDate"><br>
-									上课时间:<br> <input type="text" class="timePicker" id="time" name="time"><br>
-									下课时间:<br> <input type="text" class="timePicker" id="rest_time" name="rest_time"><br>
+									</select><br> 上课日期:<br> <input type="text" class="datepicker"
+										id="classDate" name="classDate"><br> 上课时间:<br>
+									<input type="text" class="timePicker" id="time" name="time"><br>
+									下课时间:<br> <input type="text" class="timePicker"
+										id="rest_time" name="rest_time"><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>
@@ -344,10 +403,11 @@
 							</div>
 							<div class="col-md-9 col-sm-12">
 								<h3>修改课程</h3>
-								
+
 								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
 									教师名称/ID:<br> <select name="teacher_id">
+										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
@@ -382,4 +442,3 @@
 </body>
 
 </html>
-	
