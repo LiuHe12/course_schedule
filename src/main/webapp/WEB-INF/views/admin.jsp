@@ -323,7 +323,7 @@
 									</select><br>
 
 									上课日期:<br> <input type="text" class="datepicker" id="classDate" name="classDate"><br>
-									上课时间:<br> <input type="text" class="timePicker" id="classDate" name="time"><br>
+									上课时间:<br> <input type="text" class="timePicker" id="time" name="time"><br>
 									下课时间:<br> <input type="text" class="timePicker" id="rest_time" name="rest_time"><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确

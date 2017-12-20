@@ -212,7 +212,7 @@
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
   <ul>
     <li class="active"><a href="#"><i class="icon icon-home"></i> <span>查看课表</span></a> </li>
-    <li> <a href="#"><i class="icon icon-signal"></i> <span>查看薪资报表</span></a> </li>
+    <li> <a href="salary"><i class="icon icon-signal"></i> <span>查看薪资报表</span></a> </li>
     <li> <a href="#"><i class="icon icon-inbox"></i> <span>修改个人资料</span></a> </li>
   </ul>
 </div>

@@ -69,6 +69,8 @@ public interface Dao {
 	
 	public List<Teacher_salary> getAllSalaries(String time)throws SQLException;////����ָ��ʱ��������ʦ�Ĺ�����ϸ
 	
+	public List<Teacher_salary> getAllSalaries() throws SQLException;
+	
 	//��ȡ������ʦָ��ʱ��εĹ�����ϸ
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime,String endTime)throws SQLException;
 	

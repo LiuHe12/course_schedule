@@ -82,6 +82,8 @@ public class JdbcDao implements Dao {
 
 			} else if (identify == student_identity) {
 				sql = String.format(sql, student_table_name);
+			}else if(identify==administrator_identify) {
+				sql=String.format(sql, administrator_table_name);
 			}
 			PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
 			preparedStatement.setString(1, MD5Util.getMD5(newPassword));
@@ -102,6 +104,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean addStudent(Student student) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
+		
 		String sql = null;
 		PreparedStatement st;
 		if (student.getEmail() == null) {
@@ -611,11 +614,11 @@ public class JdbcDao implements Dao {
 		int r=st.getUpdateCount();
 		jdbcUtil.release(st, conn);
 		if (r<=0) {
-			logger.info(String.format("add course [ %s ] failed -> %s", course.getCourse_ID(),
+			logger.info(String.format("add course [ %s ] failed -> %s", course.getName(),
 					df.format(new java.util.Date())));
 			return false;
 		} else {
-			logger.info(String.format("add course [ %s ] successfully -> %s", course.getCourse_ID(),
+			logger.info(String.format("add course [ %s ] successfully -> %s", course.getName(),
 					df.format(new java.util.Date())));
 			return true;
 		}
@@ -913,6 +916,25 @@ public class JdbcDao implements Dao {
 		}
 		jdbcUtil.release(st, rs, conn);
 		return student_courses;
+	}
+
+	@Override
+	public ArrayList<Teacher_salary> getAllSalaries() throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("select * from %s ",teacherSalary_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
+		while (rs.next()) {
+			Teacher_salary teacher_salary = new Teacher_salary();
+			teacher_salary.setTeacher_id(rs.getString("teacher_id"));
+			teacher_salary.setTime(rs.getString("time"));
+			teacher_salary.setBonus(rs.getInt("bonus"));
+			teacher_salary.setSalary(rs.getInt("salary"));
+			teacher_salaries.add(teacher_salary);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return teacher_salaries;
 	}
 
 }

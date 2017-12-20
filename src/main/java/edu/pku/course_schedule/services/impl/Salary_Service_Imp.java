@@ -99,4 +99,17 @@ public class Salary_Service_Imp implements Salary_Service {
 		 
 	}
 
+	@Override
+	public ArrayList<Teacher_salary> getAllSalaries() {
+		 ArrayList<Teacher_salary> teacher_salaries=null;
+		 try {
+			teacher_salaries=dao.getAllSalaries();
+		} catch (SQLException e) {
+			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
+			e.printStackTrace();
+		}finally {
+			return teacher_salaries;
+		}
+	}
+
 }

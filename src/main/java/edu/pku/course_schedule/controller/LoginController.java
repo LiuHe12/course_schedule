@@ -43,10 +43,15 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView postlogin(HttpServletRequest request, HttpServletResponse response) {
-
+		
 		String userId = request.getParameter("userID");
 		String password = request.getParameter("password");
-		int identify = Integer.parseInt(request.getParameter("identity"));
+		String iden=request.getParameter("identity");
+		int identify=0;
+		if(iden!=null) {
+			identify = Integer.parseInt(iden);
+		}
+		
 		try {
 			User_Service us = new User_Service_Imp();
 			Object object = us.login(userId, password, identify);

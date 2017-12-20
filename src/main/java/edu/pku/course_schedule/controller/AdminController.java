@@ -1,14 +1,15 @@
 package edu.pku.course_schedule.controller;
 
+import java.security.interfaces.RSAKey;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.CSS;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,12 @@ import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
+import edu.pku.course_schedule.dao.entity.Teacher_salary;
 import edu.pku.course_schedule.services.Course_Service;
+import edu.pku.course_schedule.services.Salary_Service;
 import edu.pku.course_schedule.services.User_Service;
 import edu.pku.course_schedule.services.impl.Course_Service_Imp;
+import edu.pku.course_schedule.services.impl.Salary_Service_Imp;
 import edu.pku.course_schedule.services.impl.User_Service_Imp;
 
 @Controller
@@ -41,7 +45,6 @@ public class AdminController {
 
 		User_Service us = new User_Service_Imp();
 		if (request.getSession().getAttribute("teachers") == null) {
-			logger.info("teachers null");
 			ArrayList<Object> object_t = us.getAllUser(1);
 			ArrayList<Teacher> teachers = new ArrayList<Teacher>();
 			for (Object obj : object_t) {
@@ -50,7 +53,6 @@ public class AdminController {
 			request.getSession().setAttribute("teachers", teachers);
 		}
 		if (request.getSession().getAttribute("students") == null) {
-			logger.info("students null");
 			ArrayList<Object> object_s = us.getAllUser(2);
 			ArrayList<Student> students = new ArrayList<Student>();
 			for (Object obj : object_s) {
@@ -58,21 +60,19 @@ public class AdminController {
 			}
 			request.getSession().setAttribute("students", students);
 		}
-		
+
 		mav.addObject("teachers", request.getSession().getAttribute("teachers"));
 
 		mav.addObject("students", request.getSession().getAttribute("students"));
 
 		Course_Service cs = new Course_Service_Imp();
 		if (request.getSession().getAttribute("student_courses") == null) {
-			logger.info("student_courses null");
 			List<Student_course> student_courses = cs.getStudentCourses();
-			
+
 			request.getSession().setAttribute("student_courses", student_courses);
 		}
 		mav.addObject("student_courses", request.getSession().getAttribute("student_courses"));
 		if (request.getSession().getAttribute("courses") == null) {
-			logger.info("courses null");
 			Calendar c1 = Calendar.getInstance();
 			Calendar c2 = Calendar.getInstance();
 			c1.add(Calendar.MONTH, -1); // 得到前一个月
@@ -88,7 +88,7 @@ public class AdminController {
 				logger.error(e.toString());
 				e.printStackTrace();
 			}
-			
+
 		}
 		ArrayList<Course> courses = (ArrayList<Course>) request.getSession().getAttribute("courses");
 		StringBuilder sb = new StringBuilder();
@@ -110,25 +110,24 @@ public class AdminController {
 				sb.append(",");
 		}
 		mav.addObject("courses", sb.toString());
-		
+
 		return mav;
 	}
 
 	@RequestMapping(value = "/addCourse", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addCourse(ModelAndView mav, HttpServletRequest request) {
-		logger.info("enter addCourse");
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
 			mav.setViewName("forward:/login");
 			return mav;
 		}
-//		try {
-//			request.setCharacterEncoding("utf-8");
-//		} catch (UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// request.setCharacterEncoding("utf-8");
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		Student_course student_course = new Student_course();
 		student_course.setStudent_id(request.getParameter("student_id"));
 		student_course.setCourse_name(request.getParameter("course_name"));
@@ -148,7 +147,6 @@ public class AdminController {
 
 	@RequestMapping(value = "/arrangeCourse", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView arrangeCourse(ModelAndView mav, HttpServletRequest request) {
-		logger.info("enter /arrangeCourse");
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
@@ -159,28 +157,29 @@ public class AdminController {
 		course.setStudent_ID(request.getParameter("student_id"));
 		course.setTeacher_ID(request.getParameter("teacher_id"));
 		// TODO coursename
-		logger.info("classDate"+request.getParameter("classDate"));
-		String classDate = request.getParameter("classDate").replace("/", "-");
+
+		String classDate = request.getParameter("classDate");
+		String[] temp = classDate.split("/");
+		String date = temp[2] + "-" + temp[0] + "-" + temp[1];
 		String time = request.getParameter("time") + ":00";
 		String rest_time = request.getParameter("rest_time") + ":00";
 		course.setName(request.getParameter("course_id"));
-
 		try {
-			course.setTime(new Timestamp(df.parse(classDate + " " + time).getTime()));
-			course.setRest_time(new Timestamp(df.parse(classDate + " " + rest_time).getTime()));
+			course.setTime(new Timestamp(df.parse(date + " " + time).getTime()));
+			course.setRest_time(new Timestamp(df.parse(date + " " + rest_time).getTime()));
 		} catch (ParseException e) {
 			logger.error("时间解析错误！" + e.toString());
 			e.printStackTrace();
 		}
 		Course_Service cs = new Course_Service_Imp();
-		ArrayList<Student_course> student_courses=null;
-		if(request.getSession().getAttribute("student_courses")==null) {
-			student_courses=cs.getStudentCourses();
+		ArrayList<Student_course> student_courses = null;
+		if (request.getSession().getAttribute("student_courses") == null) {
+			student_courses = cs.getStudentCourses();
 			request.getSession().setAttribute("student_courses", student_courses);
-		}else{
+		} else {
 			student_courses = (ArrayList<Student_course>) request.getSession().getAttribute("student_courses");
 		}
-				
+
 		for (Student_course student_course : student_courses) {
 			if (student_course.getTeacher_id().equals(course.getStudent_ID())
 					&& student_course.getStudent_id().equals(course.getStudent_ID())
@@ -190,19 +189,22 @@ public class AdminController {
 				continue;
 			}
 		}
-		
+
 		boolean r = cs.arrangeCourse(course);
-		
+
 		if (!r) {
-			mav.addObject("error", "排课失败！");
+			// mav.addObject("error", "排课失败！");
+			mav.addObject("error", "schedule course failed！");
 		} else {
-			mav.addObject("error", "排课成功！");
+			// mav.addObject("error", "排课成功！");
+			mav.addObject("error", "schedule course success！");
 		}
 		mav.setViewName("redirect:/admin");
-		request.getSession().setMaxInactiveInterval(20*60);
+		//request.getSession().setMaxInactiveInterval(20 * 60);
 		return mav;
 	}
-	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET,RequestMethod.POST})
+
+	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView changePwd(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
@@ -210,23 +212,91 @@ public class AdminController {
 			mav.setViewName("forward:/login");
 			return mav;
 		}
-		String userId=request.getParameter("username");
-		String newPassword=request.getParameter("password");
+		String userId = request.getParameter("username");
+		String newPassword = request.getParameter("password");
 		int identity = 0;
-		if(userId.substring(0, 1).equals("S")) {
-			identity=2;
-		}else if(userId.substring(0, 1).equals("T")) {
-			identity=1;
+		if (userId.substring(0, 1).equals("S")) {
+			identity = 2;
+		} else if (userId.substring(0, 1).equals("T")) {
+			identity = 1;
 		}
-		User_Service us=new User_Service_Imp();
-		boolean r=us.modifyPassword(userId, identity, newPassword);
-		if(!r) {
-			//mav.addObject("error","修改密码失败！");
+		User_Service us = new User_Service_Imp();
+		boolean r = us.modifyPassword(userId, identity, newPassword);
+		if (!r) {
+			// mav.addObject("error","修改密码失败！");
 			mav.setViewName("redirect:/change-user-password");
-		}else {
-			//mav.addObject("error","修改密码成功！");
+		} else {
+			// mav.addObject("error","修改密码成功！");
 			mav.setViewName("redirect:/admin");
-		}	
+		}
 		return mav;
 	}
+
+	@RequestMapping(value = "/all-salary", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView allSalary(ModelAndView mav, HttpServletRequest request) {
+		Salary_Service ss = new Salary_Service_Imp();
+		if ((Integer) request.getSession().getAttribute("identity") == 0) {
+			ArrayList<Teacher_salary> teacher_salaries = ss.getAllSalaries();
+			mav.addObject("teacher_salaries", teacher_salaries);
+		} else {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/login");
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/addUser", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView addTeacher(ModelAndView mav, HttpServletRequest request) {
+
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/login");
+			return mav;
+		}
+		DateFormat ps = new SimpleDateFormat("yyyy-MM-dd");
+		User_Service_Imp us = new User_Service_Imp();
+		boolean r = false;
+		if (request.getParameter("select_one").equals("add_student")) {
+			Student student = new Student();
+			student.setName(request.getParameter("student_name"));
+			String[] enroll_timeArry = request.getParameter("enroll_time").split("/");
+			try {
+				student.setEnroll_time(new java.sql.Date(
+						ps.parse(enroll_timeArry[2] + "-" + enroll_timeArry[0] + "-" + enroll_timeArry[1]).getTime()));
+				// student.setEnroll_time((java.sql.Date)ps.parse(enroll_timeArry[2] + "-" +
+				// enroll_timeArry[0] + "-" + enroll_timeArry[1]));
+			} catch (ParseException e) {
+				logger.error(e.toString());
+				e.printStackTrace();
+			}
+			student.setEmail(request.getParameter("email"));
+			student.setPassword(request.getParameter("student_passwd"));
+			student.setIdentify_id(request.getParameter("student_identify_id"));
+			r = us.addStudent(student);
+		} else if (request.getParameter("select_one").equals("add_teacher")) {
+			Teacher teacher = new Teacher();
+			teacher.setName(request.getParameter("teacher_name"));
+			// TODO
+			teacher.setKind(Integer.parseInt(request.getParameter("kind")));// 最好设计成select
+			teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));// 前端检查
+			teacher.setPassword(request.getParameter("teacher_passwd"));
+			teacher.setIdentify_id(request.getParameter("teacher_identify_id"));
+			String[] enroll_timeArry = request.getParameter("entertime").split("/");
+			try {
+				teacher.setEntertime(new java.sql.Date(
+						ps.parse(enroll_timeArry[2] + "-" + enroll_timeArry[0] + "-" + enroll_timeArry[1]).getTime()));
+			} catch (ParseException e) {
+				logger.error(e.toString());
+				e.printStackTrace();
+			}
+			r = us.addTeacher(teacher);
+		}
+		if (!r) {
+			mav.addObject("error", "add user failed");
+		}
+		mav.setViewName("redirect:/admin");
+		return mav;
+	}
+
 }

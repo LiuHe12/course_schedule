@@ -28,6 +28,7 @@ public interface Salary_Service {
 
 	public boolean setBonus(String teacher_id, String salary_time, int bonus);// 设定老师指定时间的奖金
 
+	public ArrayList<Teacher_salary> getAllSalaries();
 	// public int calSalary(String teacher_id,String salary_time);//计算老师指定时间的工资
 
 }

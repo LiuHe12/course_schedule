@@ -115,7 +115,7 @@
 							<h5>新增用户</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form id="form-wizard" class="form-horizontal" method="post">
+							<form id="form-wizard" class="form-horizontal" action="addUser" method="POST">
 								<div id="form-wizard-1" class="step">
 
 
@@ -125,12 +125,11 @@
 										onchange="chselect()">
 										<option value="">请选择创建帐号种类</option>
 										<optgroup selected="true" label="学生">
-											<option value="add_student">新增学生帐号</option>
-											<optgroup label="教师">
-												<option value="add_teacher">新增教师帐号</option>
-												>
-												<optgroup label="管理员">
-													<option value="add_admin">新增管理员帐号</option>
+										<option  value="add_student">新增学生帐号</option>
+										<optgroup label="教师" />
+										<option value="add_teacher">新增教师帐号</option>
+										<optgroup label="管理员">
+										<option value="add_admin">新增管理员帐号</option>
 									</select>
 									<!--//選擇創建哪個角色的帳號  ！！目前只有寫學生跟教師！！-->
 
@@ -140,7 +139,7 @@
 										<div class="control-group">
 											<label class="control-label">student_name</label>
 											<div class="controls">
-												<input type="text" name="name" />
+												<input type="text" name="student_name" />
 											</div>
 										</div>
 
@@ -159,14 +158,14 @@
 										<div class="control-group">
 											<label class="control-label">student_password</label>
 											<div class="controls">
-												<input type="text" name="password" />
+												<input type="text" name="student_passwd" />
 											</div>
 										</div>
 
 										<div class="control-group">
 											<label class="control-label">student_identify_id</label>
 											<div class="controls">
-												<input type="text" name="identify_id" />
+												<input type="text" name="student_identify_id" />
 											</div>
 										</div>
 									</div>
@@ -176,7 +175,7 @@
 										<div class="control-group">
 											<label class="control-label">teacher_name</label>
 											<div class="controls">
-												<input type="text" name="name" />
+												<input type="text" name="teacher_name" />
 											</div>
 										</div>
 
@@ -197,14 +196,14 @@
 										<div class="control-group">
 											<label class="control-label">teacher_passwd</label>
 											<div class="controls">
-												<input type="text" name="passwd" />
+												<input type="text" name="teacher_passwd" />
 											</div>
 										</div>
 
 										<div class="control-group">
 											<label class="control-label">teacher_identify</label>
 											<div class="controls">
-												<input type="text" name="identify" />
+												<input type="text" name="teacher_identify_id" />
 											</div>
 										</div>
 
@@ -231,7 +230,8 @@
               </div>-->
 									<div class="form-actions">
 										<input id="back" class="btn btn-primary" type="reset"
-											value="Back" /> <input id="next" class="btn btn-primary"
+											value="Back" /> 
+											<input id="next" class="btn btn-primary"
 											type="submit" value="Next" />
 										<div id="status"></div>
 									</div>

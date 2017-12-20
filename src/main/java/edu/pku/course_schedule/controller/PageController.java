@@ -100,15 +100,15 @@ public class PageController {
 		return "change-user-password";
 	}
 	
-	@RequestMapping(value = "/all-salary", method = {RequestMethod.GET,RequestMethod.POST})
-	public String allSalary(Locale locale, Model model) {
-		logger.info("in all-salary function");
-		return "all-salary";
-	}
+//	@RequestMapping(value = "/all-salary", method = {RequestMethod.GET,RequestMethod.POST})
+//	public String allSalary(Locale locale, Model model) {
+//		logger.info("in all-salary function");
+//		return "all-salary";
+//	}
 	
-	@RequestMapping(value = "/salary", method = {RequestMethod.GET,RequestMethod.POST})
-	public String salary(Locale locale, Model model) {
-		logger.info("in salary function");
-		return "salary";
-	}
+//	@RequestMapping(value = "/salary", method = {RequestMethod.GET,RequestMethod.POST})
+//	public String salary(Locale locale, Model model) {
+//		logger.info("in salary function");
+//		return "salary";
+//	}
 }
