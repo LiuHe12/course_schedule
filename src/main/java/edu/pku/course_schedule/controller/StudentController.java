@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +20,33 @@ import edu.pku.course_schedule.services.Course_Service;
 import edu.pku.course_schedule.services.impl.Course_Service_Imp;
 @Controller
 public class StudentController {
+	private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private Logger logger=Logger.getLogger(StudentController.class);
 	@RequestMapping(value = "/student", method = { RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView getAdmin(ModelAndView mav,HttpServletRequest request) {
 		Course_Service cs=new Course_Service_Imp();
-		Student student=(Student) request.getSession().getAttribute("user");
-		 ArrayList<Course> courses=cs.getCoursesByUserId(student.getId());
-		 mav.addObject("courses",courses);
+		Student stdeunt=(Student) request.getSession().getAttribute("user");
+		 ArrayList<Course> courses=cs.getCoursesByUserId(stdeunt.getId());
+		 StringBuilder sb = new StringBuilder();
+		int index = 0;
+		 for (Course course : courses) {
+				String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
+				String start = df.format(course.getTime()).replace(' ', 'T');
+				String end = df.format(course.getRest_time()).replace(' ', 'T');
+				String color = null;
+				if (course.getStatus() > 0) {
+					color = "red";
+				} else {
+					color = "blue";
+				}
+				forAdminshow ads = new forAdminshow(title, start, end, color);
+				sb.append(ads.toString());
+				index++;
+				if (index != courses.size())
+					sb.append(",");
+			}
+		 mav.addObject("courses", sb.toString());
+		 request.getSession().setAttribute("courses", courses);
 		 return mav;
 	}
 
