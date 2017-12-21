@@ -210,12 +210,10 @@ public class AdminController {
 		String classDate = request.getParameter("classDate");
 		
 		try {
-			String[] temp = classDate.split("/");
-			String date = temp[2] + "-" + temp[0] + "-" + temp[1];
 			String time = request.getParameter("time") + ":00";
 			String rest_time = request.getParameter("rest_time") + ":00";
-			course.setTime(new Timestamp(df.parse(date + " " + time).getTime()));
-			course.setRest_time(new Timestamp(df.parse(date + " " + rest_time).getTime()));
+			course.setTime(new Timestamp(df.parse(classDate + " " + time).getTime()));
+			course.setRest_time(new Timestamp(df.parse(classDate + " " + rest_time).getTime()));
 		} catch (Exception e) {
 			logger.error( e.toString());
 			e.printStackTrace();
@@ -289,18 +287,7 @@ public class AdminController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/all-salary", method = { RequestMethod.GET, RequestMethod.POST })
-	private ModelAndView allSalary(ModelAndView mav, HttpServletRequest request) {
-		Salary_Service ss = new Salary_Service_Imp();
-		if ((Integer) request.getSession().getAttribute("identity") == 0) {
-			ArrayList<Teacher_salary> teacher_salaries = ss.getAllSalaries();
-			mav.addObject("teacher_salaries", teacher_salaries);
-		} else {
-			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
-		}
-		return mav;
-	}
+	
 
 	@RequestMapping(value = "/addUser", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addTeacher(ModelAndView mav, HttpServletRequest request) {
@@ -324,12 +311,9 @@ public class AdminController {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			String[] enroll_timeArry = request.getParameter("enroll_time").split("/");
+			String date=request.getParameter("enroll_time");
 			try {
-				student.setEnroll_time(new java.sql.Date(
-						ps.parse(enroll_timeArry[2] + "-" + enroll_timeArry[0] + "-" + enroll_timeArry[1]).getTime()));
-				// student.setEnroll_time((java.sql.Date)ps.parse(enroll_timeArry[2] + "-" +
-				// enroll_timeArry[0] + "-" + enroll_timeArry[1]));
+				student.setEnroll_time(new java.sql.Date(ps.parse(date).getTime()));
 			} catch (ParseException e) {
 				logger.error(e.toString());
 				e.printStackTrace();
@@ -351,10 +335,9 @@ public class AdminController {
 			teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));// 前端检查
 			teacher.setPassword(request.getParameter("teacher_passwd"));
 			teacher.setIdentify_id(request.getParameter("teacher_identify_id"));
-			String[] enroll_timeArry = request.getParameter("entertime").split("/");
+			String enroll_time = request.getParameter("entertime");
 			try {
-				teacher.setEntertime(new java.sql.Date(
-						ps.parse(enroll_timeArry[2] + "-" + enroll_timeArry[0] + "-" + enroll_timeArry[1]).getTime()));
+				teacher.setEntertime(new java.sql.Date(ps.parse(enroll_time).getTime()));
 			} catch (ParseException e) {
 				logger.error(e.toString());
 				e.printStackTrace();

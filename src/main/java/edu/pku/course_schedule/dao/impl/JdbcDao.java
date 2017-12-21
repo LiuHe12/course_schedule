@@ -779,7 +779,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public Teacher_salary getSalary(String teacher_id, String salary_time) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where teacher_id= ? and time= ?", teacher_table_name);
+		String sql = String.format("select * from %s where teacher_id= ? and time= ? order by time DESC", teacher_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 
 		st.setString(1, teacher_id);
@@ -802,7 +802,7 @@ public class JdbcDao implements Dao {
 	public ArrayList<Teacher_salary> getSalaries(String teacher_id, String startTime, String endTime)
 			throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where time between ? and ?", teacherSalary_table_name);
+		String sql = String.format("select * from %s where time between ? and ? order by time DESC", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		// st.setString(1, teacherSalary_table_name);
 		st.setString(1, startTime);
@@ -845,7 +845,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime, String endTime) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where time between ? and ?", teacherSalary_table_name);
+		String sql = String.format("select * from %s where time between ? and ? order by time DESC", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		// st.setString(1, teacherSalary_table_name);
 		st.setString(1, startTime);
@@ -902,7 +902,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getSalariesById(String teacher_id) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where teacher_id=?", teacherSalary_table_name);
+		String sql = String.format("select * from %s where teacher_id=? order by time DESC", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher_id);
 		ResultSet rs = st.executeQuery();
@@ -967,7 +967,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getAllSalaries() throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s ", teacherSalary_table_name);
+		String sql = String.format("select * from %s order by time DESC", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
 		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
@@ -981,6 +981,36 @@ public class JdbcDao implements Dao {
 		}
 		jdbcUtil.release(st, rs, conn);
 		return teacher_salaries;
+	}
+
+	@Override
+	public ArrayList<Course> getCoursesByUserId(String user_id) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		ArrayList<Course> courses = new ArrayList<Course>();
+		String sql = String.format("select * from %s where (student_id =? or teacher_id=?)",course_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, user_id);
+		st.setString(2, user_id);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Course course = new Course();
+			course.setCourse_ID(rs.getString("course_id"));
+			course.setStudent_ID(rs.getString("student_id"));
+			course.setTeacher_ID(rs.getString("teacher_id"));
+			course.setTime(rs.getTimestamp("time"));
+			course.setRest_time(rs.getTimestamp("rest_time"));
+			course.setName(rs.getString("name"));
+			String satisfactionStr = rs.getString("satisfaction");
+			if (satisfactionStr != null) {
+				course.setSatisfaction(Integer.parseInt(satisfactionStr));
+			}
+			course.setEvaluate(rs.getString("evaluate"));
+			course.setPrice(rs.getInt("price"));
+			course.setStatus(rs.getInt("status"));
+			courses.add(course);
+		}
+		jdbcUtil.release(st, rs, conn);
+		return courses;
 	}
 
 }

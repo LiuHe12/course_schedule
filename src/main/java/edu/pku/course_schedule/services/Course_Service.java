@@ -23,6 +23,7 @@ public interface Course_Service {
 	
 	public ArrayList<Course> getCoursesByUserId(String user_id,int courseStatus);//查找用户的课程(0已排，1未排)
 	
+	public ArrayList<Course> getCoursesByUserId(String user_id);
 	public void setSatification(String course_id,int score);//学生进行课程满意度打分
 	
 	public void setEvaluate(String course_id,String evaluate);//老师进行课程评价内容

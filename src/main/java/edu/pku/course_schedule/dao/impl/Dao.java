@@ -80,5 +80,7 @@ public interface Dao {
 	//public int calSalary(String teacher_id,String salary_time)throws SQLException;//������ʦָ��ʱ��Ĺ���
 	public Student_course getStudentCourse(String teacher_id,String student_id,String name)  throws SQLException;
 
-	public ArrayList<Student_course> getStudentCourses() throws SQLException;; 
+	public ArrayList<Student_course> getStudentCourses() throws SQLException;
+	
+	public ArrayList<Course> getCoursesByUserId(String user_id)throws SQLException;
 }

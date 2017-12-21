@@ -363,7 +363,7 @@
 					class="icon icon-lock"></i><span>新增用户</span></a></li>
 			<li class="admin-bar" style="display: none"><a
 				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li class="active admin-bar teacher-bar student-bar"><a
+			<li class="admin-bar teacher-bar student-bar"><a
 				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>

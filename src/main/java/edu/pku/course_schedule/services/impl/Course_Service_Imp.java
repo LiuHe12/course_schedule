@@ -225,4 +225,16 @@ public class Course_Service_Imp implements Course_Service {
 		return student_courses;
 	}
 
+	@Override
+	public ArrayList<Course> getCoursesByUserId(String user_id) {
+		ArrayList<Course> courses=null;
+		try {
+			courses=dao.getCoursesByUserId(user_id);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}
+		return courses;
+	}
+
 }

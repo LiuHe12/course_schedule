@@ -73,6 +73,21 @@ public class CommonController {
 		}
 		return mav;
 	}
-	
+	@RequestMapping(value = "/salary", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView allSalary(ModelAndView mav, HttpServletRequest request) {
+		Salary_Service ss = new Salary_Service_Imp();
+		if ((Integer) request.getSession().getAttribute("identity") == 0) {
+			ArrayList<Teacher_salary> teacher_salaries = ss.getAllSalaries();
+			mav.addObject("teacher_salaries", teacher_salaries);
+		} else if((Integer) request.getSession().getAttribute("identity") == 1){
+			Teacher teacher = (Teacher) request.getSession().getAttribute("user");
+			ArrayList<Teacher_salary> teacher_salaries = ss.getSalariesById(teacher.getId());
+			mav.addObject("teacher_salaries", teacher_salaries);
+		}else {
+			mav.addObject("error", "请先登录！");
+			mav.setViewName("forward:/login");
+		}
+		return mav;
+	}
 
 }
