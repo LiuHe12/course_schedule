@@ -14,9 +14,7 @@
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
+
 
 <!-- Full calendar -->
 <link href='css/fullcalendar.min.css' rel='stylesheet' />
@@ -45,18 +43,19 @@
 
 			}
 			
-		$('#calendar').fullCalendar({
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay,listWeek'
-			},
-			defaultDate: getNowFormatDate(),
-			navLinks: true, // can click day/week names to navigate views
-			editable: false,
-			eventLimit: true, // allow "more" link when too many events
-			events: [${courses}]
-		});
+			// fullCalendar
+			$('#calendar').fullCalendar({
+				header : {
+					left : 'prev,next today',
+					center : 'title',
+					right : 'month,agendaWeek,agendaDay,listWeek'
+				},
+				defaultDate : getNowFormatDate(),
+				navLinks : true, // can click day/week names to navigate views
+				editable : false,
+				eventLimit : true, // allow "more" link when too many events
+				events : [${courses}]
+			});
 		
 	});
 
@@ -122,7 +121,7 @@
 					class="icon icon-lock"></i><span>新增用户</span></a></li>
 			<li class="admin-bar" style="display: none"><a
 				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li class="admin-bar teacher-bar student-bar"><a
+			<li class="admin-bar teacher-bar student-bar" style="display: none"><a
 				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
