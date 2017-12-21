@@ -44,10 +44,10 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Object login(String userId, String password, int identify) throws SQLException {
-		
+
 		if (identify == teacher_identify) {
 			Teacher teacher = (Teacher) getUser(userId, identify);
-			
+
 			if (MD5Util.getMD5(password).equals(teacher.getPassword())) {
 				return teacher;
 			}
@@ -69,21 +69,21 @@ public class JdbcDao implements Dao {
 	public boolean modifyPassword(String userId, int identify, String newPassword) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		String sql = "update %s set password=? where id=?";
-	
+
 		Object obj = getUser(userId, identify);
 		if (obj == null) {
 			jdbcUtil.releaseConn(conn);
 			logger.info(String.format("[ %s ]账户不存在！！", userId));
 			return false;
 		} else {
-			
+
 			if (identify == teacher_identify) {
 				sql = String.format(sql, teacher_table_name);
 
 			} else if (identify == student_identity) {
 				sql = String.format(sql, student_table_name);
-			}else if(identify==administrator_identify) {
-				sql=String.format(sql, administrator_table_name);
+			} else if (identify == administrator_identify) {
+				sql = String.format(sql, administrator_table_name);
 			}
 			PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
 			preparedStatement.setString(1, MD5Util.getMD5(newPassword));
@@ -104,7 +104,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean addStudent(Student student) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		
+
 		String sql = null;
 		PreparedStatement st;
 		if (student.getEmail() == null) {
@@ -198,7 +198,9 @@ public class JdbcDao implements Dao {
 			return false;
 		}
 		Connection conn = jdbcUtil.getConnection();
-		String sql =String.format("update %s set name=?,kind=?,base_salary=?,identify_id=?,incumbency=?,entertime=? where id=?",teacher_table_name);
+		String sql = String.format(
+				"update %s set name=?,kind=?,base_salary=?,identify_id=?,incumbency=?,entertime=? where id=?",
+				teacher_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher.getName());
 		st.setInt(2, teacher.getKind());
@@ -207,9 +209,9 @@ public class JdbcDao implements Dao {
 		st.setInt(5, teacher.getIncumbency());
 		st.setDate(6, teacher.getEntertime());
 		st.setString(7, teacher_id);
-		int r=st.executeUpdate();
+		int r = st.executeUpdate();
 		jdbcUtil.release(st, conn);
-		if (r<=0) {
+		if (r <= 0) {
 			logger.info(String.format("更新教师[ %s ]信息 失败！", teacher_id));
 			return false;
 		} else {
@@ -227,18 +229,18 @@ public class JdbcDao implements Dao {
 		}
 		Connection conn = jdbcUtil.getConnection();
 		String sql = "delete from %s where id=?";
-		
+
 		if (identify == teacher_identify) {
-			sql=String.format(sql, teacher_table_name);
+			sql = String.format(sql, teacher_table_name);
 		} else if (identify == student_identity) {
-			sql=String.format(sql, student_table_name);
+			sql = String.format(sql, student_table_name);
 		}
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, user_id);
 		st.execute();
-		int r=st.getUpdateCount();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (r<=0) {
+		if (r <= 0) {
 			logger.info(String.format("删除用户[ %s ] 失败！", user_id));
 			return false;
 
@@ -253,14 +255,13 @@ public class JdbcDao implements Dao {
 	public Object getUser(String user_id, int identify) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		String sql = "select * from %s where id= ?";
-		
 
 		if (identify == administrator_identify) {
-			sql=String.format(sql, administrator_table_name);
+			sql = String.format(sql, administrator_table_name);
 		} else if (identify == teacher_identify) {
-			sql=String.format(sql, teacher_table_name);
+			sql = String.format(sql, teacher_table_name);
 		} else if (identify == student_identity) {
-			sql=String.format(sql, student_table_name);
+			sql = String.format(sql, student_table_name);
 		}
 		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
 		pStatement.setString(1, user_id);
@@ -304,17 +305,17 @@ public class JdbcDao implements Dao {
 	public ArrayList<Object> getAllUser(int identify) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		String sql = "select * from %s";
-		
+
 		ArrayList users = null;
 		if (identify == administrator_identify) {
 			users = new ArrayList<Administrator>();
-			sql=String.format(sql, administrator_table_name);
+			sql = String.format(sql, administrator_table_name);
 		} else if (identify == teacher_identify) {
 			users = new ArrayList<Teacher>();
-			sql=String.format(sql, teacher_table_name);
+			sql = String.format(sql, teacher_table_name);
 		} else if (identify == student_identity) {
 			users = new ArrayList<Student>();
-			sql=String.format(sql, student_table_name);
+			sql = String.format(sql, student_table_name);
 		}
 		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
 		ResultSet rs = pStatement.executeQuery();
@@ -353,13 +354,13 @@ public class JdbcDao implements Dao {
 	public Object getUserByIdentityId(String identifyId, int identify) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		String sql = "select * from %s where identify_id= ?";
-		
+
 		if (identify == administrator_identify) {
-			sql=String.format(sql, administrator_table_name);
+			sql = String.format(sql, administrator_table_name);
 		} else if (identify == teacher_identify) {
-			sql=String.format(sql, teacher_table_name);
+			sql = String.format(sql, teacher_table_name);
 		} else if (identify == student_identity) {
-			sql=String.format(sql, student_table_name);
+			sql = String.format(sql, student_table_name);
 		}
 		PreparedStatement pStatement = (PreparedStatement) conn.prepareStatement(sql);
 		pStatement.setString(1, identifyId);
@@ -398,7 +399,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public Course getCourse(String course_id) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where course_id=?",course_table_name);
+		String sql = String.format("select * from %s where course_id=?", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, course_id);
 		ResultSet rs = st.executeQuery();
@@ -427,7 +428,7 @@ public class JdbcDao implements Dao {
 	public ArrayList<Course> getCoursesByTime(Timestamp startDate, Timestamp endDate) throws SQLException {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where time>= ? and rest_time<= ? ",course_table_name);
+		String sql = String.format("select * from %s where time>= ? and rest_time<= ? ", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setTimestamp(1, startDate);
 		st.setTimestamp(2, endDate);
@@ -457,7 +458,8 @@ public class JdbcDao implements Dao {
 	public ArrayList<Course> getCoursesByUserId(String user_id, int courseStatus) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		ArrayList<Course> courses = new ArrayList<Course>();
-		String sql = String.format("select * from %s where (student_id =? or teacher_id=?) and status =?",course_table_name);
+		String sql = String.format("select * from %s where (student_id =? or teacher_id=?) and status =?",
+				course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, user_id);
 		st.setString(2, user_id);
@@ -487,7 +489,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public void setSatification(String course_id, int score) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set satisfaction = ? where course_id= ? ",course_table_name);
+		String sql = String.format("update %s set satisfaction = ? where course_id= ? ", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setInt(1, score);
 		st.setString(2, course_id);
@@ -505,7 +507,8 @@ public class JdbcDao implements Dao {
 	@Override
 	public void setEvaluate(String course_id, String evaluate) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set evaluate=?,status=? where course_id=? and status=1",course_table_name);
+		String sql = String.format("update %s set evaluate=?,status=? where course_id=? and status=1",
+				course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, evaluate);
 		st.setInt(2, 2);
@@ -520,33 +523,35 @@ public class JdbcDao implements Dao {
 		jdbcUtil.release(st, conn);
 
 	}
+
 	@Override
-	public ArrayList<Student_course> getCourse(String teacher_id,String student_id) throws SQLException{
-		ArrayList<Student_course> student_courses=new ArrayList<Student_course>();
-		Connection conn=jdbcUtil.getConnection();
-		String sql=String.format("select * from %s where teacher_id=? and student_id=?",studentCourse_table_name);
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+	public ArrayList<Student_course> getCourse(String teacher_id, String student_id) throws SQLException {
+		ArrayList<Student_course> student_courses = new ArrayList<Student_course>();
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("select * from %s where teacher_id=? and student_id=? and num>0", studentCourse_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher_id);
 		st.setString(2, student_id);
-		
-		ResultSet rs=st.executeQuery();
-		while(rs.next()) {
-			Student_course student_course=new Student_course();
+
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Student_course student_course = new Student_course();
 			student_course.setCourse_name(rs.getString("course_name"));
 			student_course.setStudent_id(rs.getString("student_id"));
 			student_course.setTeacher_id(rs.getString("teacher_id"));
 			student_course.setPrice(rs.getInt("price"));
 			student_course.setNum(rs.getInt("num"));
-			student_courses.add(student_course);	
+			student_courses.add(student_course);
 		}
 		jdbcUtil.release(st, rs, conn);
 		return student_courses;
 	}
+
 	@Override
 	public ArrayList<Course> getAllCoursePasses(Timestamp startDate, Timestamp endDate) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
 		ArrayList<Course> courses = new ArrayList<Course>();
-		String sql = String.format("select * from %s where time>? and rest_time< ? and status >=1",course_table_name);
+		String sql = String.format("select * from %s where time>? and rest_time< ? and status >=1", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setTimestamp(1, startDate);
 		st.setTimestamp(2, endDate);
@@ -573,36 +578,74 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public boolean addCourse(Student_course student_course) throws SQLException{
-		Connection conn=jdbcUtil.getConnection();
-		String sql=String.format("insert into %s (course_name,teacher_id,student_id,price,num)values(?,?,?,?,?)", studentCourse_table_name);
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+	public boolean addCourse(Student_course student_course) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("insert into %s (course_name,teacher_id,student_id,price,num)values(?,?,?,?,?)",
+				studentCourse_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, student_course.getCourse_name());
 		st.setString(2, student_course.getTeacher_id());
 		st.setString(3, student_course.getStudent_id());
 		st.setInt(4, student_course.getPrice());
 		st.setInt(5, student_course.getNum());
 		st.execute();
-		int r=st.getUpdateCount();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if(r<=0) {
+		if (r <= 0) {
 			logger.info(String.format("add student_course [ %s ] failed -> %s", student_course.getCourse_name(),
 					df.format(new java.util.Date())));
 			return false;
-		}else {
+		} else {
 			logger.info(String.format("add student_course [ %s ] successfully -> %s", student_course.getCourse_name(),
 					df.format(new java.util.Date())));
 			return true;
 		}
 	}
+
+	public boolean modifyCourse_number(String teacher_id, String student_id, String course_name) {
+		Connection conn = null;
+		PreparedStatement st = null;
+		boolean r = false;
+		try {
+			conn = jdbcUtil.getConnection();
+			String sql = String.format("update %s set num=num-1 where teacher_id=? and student_id=? and course_name=?",
+					studentCourse_table_name);
+			st = (PreparedStatement) conn.prepareStatement(sql);
+			st.setString(1, teacher_id);
+			st.setString(2, student_id);
+			st.setString(3, course_name);
+			int updateNum = st.executeUpdate();
+			if (updateNum > 0) {
+				logger.info(String.format("student_course num [ %s ] successfully -> %s", course_name,
+						df.format(new java.util.Date())));
+				r = true;
+			}
+		} catch (SQLException e) {
+			logger.error(String.format("student_course num [ %s ] failed -> %s", course_name,
+					df.format(new java.util.Date())));
+			e.printStackTrace();
+		} finally {
+			try {
+				jdbcUtil.release(st, conn);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return r;
+		}
+
+	}
+
 	@Override
 	public boolean arrangeCourse(Course course) throws SQLException {
+		boolean modifyNum = modifyCourse_number(course.getTeacher_ID(), course.getStudent_ID(), course.getName());
+		if(!modifyNum) {
+			return false;
+		}
 		Connection conn = jdbcUtil.getConnection();
-//		Student_course student_course=getStudentCourse(course.getTeacher_ID(),course.getStudent_ID(),course.getName());
-//		if(student_course==null) {
-//			return false;
-//		}
-		String sql =String.format( "insert into %s (student_id,teacher_id,time,rest_time,name,price) values (?,?,?,?,?,?)",course_table_name);
+		String sql = String.format(
+				"insert into %s (student_id,teacher_id,time,rest_time,name,price) values (?,?,?,?,?,?)",
+				course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, course.getStudent_ID());
 		st.setString(2, course.getTeacher_ID());
@@ -611,45 +654,45 @@ public class JdbcDao implements Dao {
 		st.setString(5, course.getName());
 		st.setInt(6, course.getPrice());
 		st.execute();
-		int r=st.getUpdateCount();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (r<=0) {
-			logger.info(String.format("add course [ %s ] failed -> %s", course.getName(),
+		if (r <= 0) {
+			logger.info(String.format("arrange course [ %s ] failed -> %s", course.getName(),
 					df.format(new java.util.Date())));
 			return false;
 		} else {
-			logger.info(String.format("add course [ %s ] successfully -> %s", course.getName(),
+			logger.info(String.format("arrange course [ %s ] successfully -> %s", course.getName(),
 					df.format(new java.util.Date())));
 			return true;
 		}
-		
+
 	}
 
 	@Override
 	public boolean delCourse(String course_id) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("delete from %s where course_id =?",course_table_name);
+		String sql = String.format("delete from %s where course_id =?", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareCall(sql);
 		st.setString(1, course_id);
 		st.execute();
-		int r=st.getUpdateCount();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (r<=0) {
-			logger.info(String.format("delete course [ %s ] failed -> %s", course_id,
-					df.format(new java.util.Date())));
+		if (r <= 0) {
+			logger.info(String.format("delete course [ %s ] failed -> %s", course_id, df.format(new java.util.Date())));
 			return false;
 		} else {
-			logger.info(String.format("delete course [ %s ] successfully -> %s", course_id, df.format(new java.util.Date())));
+			logger.info(String.format("delete course [ %s ] successfully -> %s", course_id,
+					df.format(new java.util.Date())));
 			return true;
 		}
-		
+
 	}
 
 	@Override
 	public ArrayList<Course> waitSatisCourses(String student_id) throws SQLException {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where satisfaction=-1 and student_id=?",course_table_name);
+		String sql = String.format("select * from %s where satisfaction=-1 and student_id=?", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, student_id);
 		ResultSet rs = st.executeQuery();
@@ -670,7 +713,7 @@ public class JdbcDao implements Dao {
 	public ArrayList<Course> waitEvaluateCourses(String teacher_id) throws SQLException {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where status=1 and teacher_id=?",course_table_name);
+		String sql = String.format("select * from %s where status=1 and teacher_id=?", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher_id);
 		ResultSet rs = st.executeQuery();
@@ -690,7 +733,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean setCoursePass(String course_id) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set status = ? where course_id= ? and status=0 ",course_table_name);
+		String sql = String.format("update %s set status = ? where course_id= ? and status=0 ", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setInt(1, 1);// 1
 		st.setString(2, course_id);
@@ -711,7 +754,9 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean setCoursePass(String teacher_id, String student_id, Timestamp course_time) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set status = ? where teacher_id= ? and student_id=? and time=? and status=0",course_table_name);
+		String sql = String.format(
+				"update %s set status = ? where teacher_id= ? and student_id=? and time=? and status=0",
+				course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setInt(1, 1);
 		st.setString(2, teacher_id);
@@ -734,9 +779,9 @@ public class JdbcDao implements Dao {
 	@Override
 	public Teacher_salary getSalary(String teacher_id, String salary_time) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where teacher_id= ? and time= ?",teacher_table_name);
+		String sql = String.format("select * from %s where teacher_id= ? and time= ?", teacher_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-	
+
 		st.setString(1, teacher_id);
 		st.setString(2, salary_time);
 		ResultSet rs = st.executeQuery();
@@ -757,9 +802,9 @@ public class JdbcDao implements Dao {
 	public ArrayList<Teacher_salary> getSalaries(String teacher_id, String startTime, String endTime)
 			throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql =String.format("select * from %s where time between ? and ?",teacherSalary_table_name);
+		String sql = String.format("select * from %s where time between ? and ?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-		//st.setString(1, teacherSalary_table_name);
+		// st.setString(1, teacherSalary_table_name);
 		st.setString(1, startTime);
 		st.setString(2, endTime);
 		ResultSet rs = st.executeQuery();
@@ -779,9 +824,9 @@ public class JdbcDao implements Dao {
 	@Override
 	public List<Teacher_salary> getAllSalaries(String time) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where time=?",teacherSalary_table_name);
+		String sql = String.format("select * from %s where time=?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-		//st.setString(1, teacherSalary_table_name);
+		// st.setString(1, teacherSalary_table_name);
 		st.setString(1, time);
 		ResultSet rs = st.executeQuery();
 		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();
@@ -800,9 +845,9 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getAllSalaries(String startTime, String endTime) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where time between ? and ?",teacherSalary_table_name);
+		String sql = String.format("select * from %s where time between ? and ?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-		//st.setString(1, teacherSalary_table_name);
+		// st.setString(1, teacherSalary_table_name);
 		st.setString(1, startTime);
 		st.setString(2, endTime);
 		ResultSet rs = st.executeQuery();
@@ -822,16 +867,16 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean setBonus(String teacher_id, String salary_time, int bonus) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set bonus=? where teacher_id=?, time=?",teacherSalary_table_name);
+		String sql = String.format("update %s set bonus=? where teacher_id=?, time=?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
-		//st.setString(1, teacherSalary_table_name);
+		// st.setString(1, teacherSalary_table_name);
 		st.setInt(1, bonus);
 		st.setString(2, teacher_id);
 		st.setString(3, salary_time);
 		st.execute();
-		int r=st.getUpdateCount();
+		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
-		if (r<=0) {
+		if (r <= 0) {
 			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 成功 ->%s", teacher_id, salary_time, bonus,
 					df.format(new java.util.Date())));
 			return false;
@@ -857,7 +902,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getSalariesById(String teacher_id) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s where teacher_id=?",teacherSalary_table_name);
+		String sql = String.format("select * from %s where teacher_id=?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher_id);
 		ResultSet rs = st.executeQuery();
@@ -876,17 +921,18 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public Student_course getStudentCourse(String teacher_id, String student_id, String name) throws SQLException {
-		
-		Connection conn=jdbcUtil.getConnection();
-		String sql=String.format("select * from %s where teacher_id=? and student_id=?,course_name=?",studentCourse_table_name);
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);
+
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("select * from %s where teacher_id=? and student_id=?,course_name=?",
+				studentCourse_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher_id);
 		st.setString(2, student_id);
 		st.setString(3, name);
-		ResultSet rs=st.executeQuery();
-		Student_course student_course=null;
-		while(rs.next()) {
-			student_course=new Student_course();
+		ResultSet rs = st.executeQuery();
+		Student_course student_course = null;
+		while (rs.next()) {
+			student_course = new Student_course();
 			student_course.setCourse_name(rs.getString("course_name"));
 			student_course.setStudent_id(rs.getString("student_id"));
 			student_course.setTeacher_id(rs.getString("teacher_id"));
@@ -899,20 +945,20 @@ public class JdbcDao implements Dao {
 	}
 
 	@Override
-	public ArrayList<Student_course> getStudentCourses() throws SQLException{
-		ArrayList<Student_course> student_courses=new ArrayList<Student_course>();
-		Connection conn=jdbcUtil.getConnection();
-		String sql=String.format("select * from %s",studentCourse_table_name);
-		PreparedStatement st=(PreparedStatement) conn.prepareStatement(sql);	
-		ResultSet rs=st.executeQuery();
-		while(rs.next()) {
-			Student_course student_course=new Student_course();
+	public ArrayList<Student_course> getStudentCourses() throws SQLException {
+		ArrayList<Student_course> student_courses = new ArrayList<Student_course>();
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format("select * from %s where num>0", studentCourse_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		ResultSet rs = st.executeQuery();
+		while (rs.next()) {
+			Student_course student_course = new Student_course();
 			student_course.setCourse_name(rs.getString("course_name"));
 			student_course.setStudent_id(rs.getString("student_id"));
 			student_course.setTeacher_id(rs.getString("teacher_id"));
 			student_course.setPrice(rs.getInt("price"));
 			student_course.setNum(rs.getInt("num"));
-			student_courses.add(student_course);	
+			student_courses.add(student_course);
 		}
 		jdbcUtil.release(st, rs, conn);
 		return student_courses;
@@ -921,7 +967,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public ArrayList<Teacher_salary> getAllSalaries() throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("select * from %s ",teacherSalary_table_name);
+		String sql = String.format("select * from %s ", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		ResultSet rs = st.executeQuery();
 		ArrayList<Teacher_salary> teacher_salaries = new ArrayList<Teacher_salary>();

@@ -33,33 +33,42 @@ public class CommonController {
 		
 		String oldPwd=null;
 		String userId=null;
+		String newPwd=request.getParameter("password");
 		if(identity==0) {
 			Administrator adm=(Administrator) user;
 			oldPwd=adm.getPassword();
-			userId=adm.getId();		
+			userId=adm.getId();
+			adm.setPassword(MD5Util.getMD5(newPwd));
+			user=adm;
 			mav.setViewName("redirect:/admin");
 		}else if(identity==1){
 			Teacher teacher=(Teacher)user;
 			oldPwd=teacher.getPassword();
 			userId=teacher.getId();
+			teacher.setPassword(MD5Util.getMD5(newPwd));
+			user=teacher;
 			mav.setViewName("redirect:/teacher");
 		}else if(identity==2){
 			Student student=(Student)user;
 			oldPwd=student.getPassword();
 			userId=student.getId();
+			student.setPassword(MD5Util.getMD5(newPwd));
+			user =student;
 			mav.setViewName("redirect:/student");
 		}
-		logger.info("old" +oldPwd);
-		logger.info("input "+MD5Util.getMD5(request.getParameter("oldpassword")) );
+		//logger.info("old" +oldPwd);
+		//logger.info("input "+MD5Util.getMD5(request.getParameter("oldpassword")) );
 		if(!oldPwd.equals(MD5Util.getMD5(request.getParameter("oldpassword")))) {
 			mav.addObject("error","old password wrong!");
 			mav.setViewName("redirect:/change-password");
 		}else {
-			String newPwd=request.getParameter("password");
+			
 			User_Service us=new User_Service_Imp();
 			boolean r=us.modifyPassword(userId, identity, newPwd);
 			if(!r) {
 				mav.setViewName("redirect:/change-password");
+			}else {
+				request.getSession().setAttribute("user", user);
 			}
 		}
 		return mav;

@@ -386,7 +386,7 @@
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>
-									<button class="btn btn-warning hwLayer-cancel">取 消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取 消</button>
 								</form>
 							</div>
 						</div>
