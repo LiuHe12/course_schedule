@@ -31,21 +31,32 @@
 <script src="js/matrix.js"></script>
 <script src="js/matrix.wizard.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
-<!--//學生日曆-->
-<script>
-	$(function() {
-		$("#datepicker").datepicker();
-	});
-</script>
-<!-- //老師日曆-->
-<script>
-	$(function() {
-		$("#datepicker1").datepicker();
-	});
-</script>
 
-<!-- //onchange 切換角色-->
+
 <script>
+$(document).ready(function() {
+	
+	// left-bar
+	var id = "<%=session.getAttribute("identity")%>";
+		if (id == 0) { // admin
+			$(".admin-bar").show();
+		} else if (id == 1) { //teacher
+			$(".teacher-bar").show();
+		} else if (id == 2) { //student
+			$(".student-bar").show();
+		}
+		
+		$("#datepicker").datepicker();
+		$("#datepicker1").datepicker();
+		
+		
+		
+		
+		
+		
+	});
+	
+	//onchange 切換角色
 	function chselect() {
 		$(".float_area").hide();
 		var val = $("#s1").val();
@@ -54,8 +65,6 @@
 		$("#" + val + "").show();
 	}
 </script>
-
-
 </head>
 <body>
 
@@ -87,12 +96,22 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li><a href="admin"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li class="active"><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
-			<li><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="admin"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="teacher-bar" style="display: none"><a href="teacher"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="student-bar" style="display: none"><a href="student"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="admin-bar teacher-bar" style="display: none"><a
+				href="salary"><i class="icon icon-signal"></i><span>查看薪资</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-course"><i
+					class="icon icon-lock"></i><span>新增课程</span></a></li>
+			<li class="admin-bar active" style="display: none"><a href="add-user"><i
+					class="icon icon-lock"></i><span>新增用户</span></a></li>
+			<li class="admin-bar" style="display: none"><a
+				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li class="admin-bar teacher-bar student-bar"><a
+				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
 
@@ -100,7 +119,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="#" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a>  <a	href="#" class="current">add-user</a>
+					class="icon-home"></i> Home</a>  <a	href="#" class="current">新增用户</a>
 			</div>
 			<h1>新增用户</h1>
 		</div>

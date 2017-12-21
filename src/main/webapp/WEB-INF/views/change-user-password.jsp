@@ -16,6 +16,27 @@
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.ui.custom.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/jquery.wizard.js"></script>
+<script src="js/matrix.js"></script>
+<script src="js/matrix.wizard.js"></script>
+
+<script>
+$(document).ready(function() {
+	// left-bar
+	var id = "<%=session.getAttribute("identity")%>";
+		if (id == 0) { // admin
+			$(".admin-bar").show();
+		} else if (id == 1) { //teacher
+			$(".teacher-bar").show();
+		} else if (id == 2) { //student
+			$(".student-bar").show();
+		}
+	});
+</script>
 </head>
 <body>
 
@@ -30,42 +51,14 @@
 	<!--top-Header-menu-->
 	<div id="user-nav" class="navbar navbar-inverse">
 		<ul class="nav">
-			<li class="dropdown" id="profile-messages"><a title="" href="#"
-				data-toggle="dropdown" data-target="#profile-messages"
-				class="dropdown-toggle"><i class="icon icon-user"></i> <span
-					class="text">Welcome User</span><b class="caret"></b></a>
-				<ul class="dropdown-menu">
-					<li><a href="#"><i class="icon-user"></i> My Profile</a></li>
-					<li class="divider"></li>
-					<li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
-					<li class="divider"></li>
-					<li><a href="login"><i class="icon-key"></i> Log Out</a></li>
-				</ul></li>
-			<li class="dropdown" id="menu-messages"><a href="#"
-				data-toggle="dropdown" data-target="#menu-messages"
-				class="dropdown-toggle"><i class="icon icon-envelope"></i> <span
-					class="text">Messages</span> <span class="label label-important">5</span>
-					<b class="caret"></b></a>
-				<ul class="dropdown-menu">
-					<li><a class="sAdd" title="" href="#"><i class="icon-plus"></i>
-							new message</a></li>
-					<li class="divider"></li>
-					<li><a class="sInbox" title="" href="#"><i
-							class="icon-envelope"></i> inbox</a></li>
-					<li class="divider"></li>
-					<li><a class="sOutbox" title="" href="#"><i
-							class="icon-arrow-up"></i> outbox</a></li>
-					<li class="divider"></li>
-					<li><a class="sTrash" title="" href="#"><i
-							class="icon-trash"></i> trash</a></li>
-				</ul></li>
-			<li class=""><a title="" href="#"><i class="icon icon-cog"></i>
-					<span class="text">Settings</span></a></li>
+			<li class="" id="profile-messages"><a title="" href="#"
+				data-target="#profile-messages"><i class="icon icon-user"></i> <span
+					class="text">Welcome User</span><b class="caret"></b></a></li>
+
 			<li class=""><a title="" href="login"><i
 					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
 		</ul>
 	</div>
-
 
 
 	<!--sidebar-menu-->
@@ -73,12 +66,22 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li><a href="admin"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
-			<li class="active"><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="admin"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="teacher-bar" style="display: none"><a href="teacher"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="student-bar" style="display: none"><a href="student"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="admin-bar teacher-bar" style="display: none"><a
+				href="salary"><i class="icon icon-signal"></i><span>查看薪资</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-course"><i
+					class="icon icon-lock"></i><span>新增课程</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-user"><i
+					class="icon icon-lock"></i><span>新增用户</span></a></li>
+			<li class="admin-bar active" style="display: none"><a
+				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li class="admin-bar teacher-bar student-bar"><a
+				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
 	<div id="content">
@@ -100,12 +103,13 @@
 							<h5>修改用户密码</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form id="form-wizard" class="form-horizontal" action="changePwd" method="post">
+							<form id="form-wizard" class="form-horizontal" action="changePwd"
+								method="post">
 								<div id="form-wizard-1" class="step">
 									<div class="control-group">
 										<label class="control-label">用户ID</label>
 										<div class="controls">
-											<select id="username" type="text" name="username" >
+											<select id="username" type="text" name="username">
 												<c:forEach var="student" items="${students}">
 													<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
 												</c:forEach>
@@ -113,7 +117,7 @@
 													<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 												</c:forEach>
 											</select>
-											
+
 										</div>
 									</div>
 									<div class="control-group">
@@ -131,7 +135,7 @@
 								</div>
 
 								<div class="form-actions">
-									<input id="next" class="btn btn-primary" type="submit"  />
+									<input id="next" class="btn btn-primary" type="submit" />
 									<div id="status"></div>
 								</div>
 								<div id="submitted"></div>
@@ -142,20 +146,7 @@
 			</div>
 		</div>
 	</div>
-	<!--Footer-part-->
-	<div class="row-fluid">
-		<div id="footer" class="span12">
-			2013 &copy; Matrix Admin. Brought to you by <a
-				href="http://themedesigner.in">Themedesigner.in</a>
-		</div>
-	</div>
-	<!--end-Footer-part-->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery.ui.custom.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.validate.js"></script>
-	<script src="js/jquery.wizard.js"></script>
-	<script src="js/matrix.js"></script>
-	<script src="js/matrix.wizard.js"></script>
+
+
 </body>
 </html>

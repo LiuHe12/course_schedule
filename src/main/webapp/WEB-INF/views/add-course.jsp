@@ -43,7 +43,6 @@
 
 	<!--top-Header-menu-->
 	<div id="user-nav" class="navbar navbar-inverse">
-
 		<ul class="nav">
 			<li class="" id="profile-messages"><a title="" href="#"
 				data-target="#profile-messages"><i class="icon icon-user"></i> <span

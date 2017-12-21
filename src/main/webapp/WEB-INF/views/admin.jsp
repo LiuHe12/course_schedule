@@ -7,15 +7,11 @@
 <head>
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
-
-
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
-
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
@@ -47,8 +43,18 @@
 <script src='js/jquery.timepicker.js'></script>
 
 <script>
-
 	$(function() {
+		
+		// left-bar
+		var id = "<%=session.getAttribute("identity")%>";
+		if (id == 0) { // admin
+			$(".admin-bar").show();
+		} else if (id == 1) { //teacher
+			$(".teacher-bar").show();
+		} else if (id == 2) { //student
+			$(".student-bar").show();
+
+		}
 		
 		// contextJS
 		context.init({
@@ -83,8 +89,6 @@
 		
 		// DatePicker and TimePicker
 		$(".timePicker").hunterTimePicker();
-		$(".datepicker").datepicker();
-		
 		$(".datepicker").datepicker({
 			dateFormat : 'yy-mm-dd'
 		});
@@ -136,7 +140,7 @@
 				center : 'title',
 				right : 'month,agendaWeek,agendaDay,listWeek'
 			},
-			defaultDate : '2017-11-12',
+			defaultDate : getNowFormatDate(),
 			navLinks : true, // can click day/week names to navigate views
 			editable : false,
 			eventLimit : true, // allow "more" link when too many events
@@ -145,6 +149,22 @@
 		
 
 	});
+	//获取当前时间，格式YYYY-MM-DD
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
 </script>
 
 
@@ -315,7 +335,6 @@
 
 	<!--top-Header-menu-->
 	<div id="user-nav" class="navbar navbar-inverse">
-
 		<ul class="nav">
 			<li class="" id="profile-messages"><a title="" href="#"
 				data-target="#profile-messages"><i class="icon icon-user"></i> <span
@@ -330,14 +349,22 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li class="active"><a href="admin"><i
+			<li class="admin-bar" style="display: none"><a href="admin"><i
 					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li><a href="all-salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>
-			<li><a href="change-user-password"><i
-					class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
+			<li class="teacher-bar" style="display: none"><a href="teacher"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="student-bar" style="display: none"><a href="student"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="admin-bar teacher-bar" style="display: none"><a href="salary"><i
+					class="icon icon-signal"></i><span>查看薪资</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-course"><i
+					class="icon icon-lock"></i><span>新增课程</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-user"><i
+					class="icon icon-lock"></i><span>新增用户</span></a></li>
+			<li class="admin-bar" style="display: none"><a
+				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li class="active admin-bar teacher-bar student-bar"><a
+				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
 
@@ -374,10 +401,10 @@
 										</c:forEach>
 									</select><br> 学生名称/ID:<br> <select name="student_id"
 										id="student-add" onchange="getCourse(this)">
-										
+
 									</select><br> 选择课程:<br> <select name="course_id"
 										id="course-add">
-										
+
 									</select><br> 上课日期:<br> <input type="text" class="datepicker"
 										id="classDate" name="classDate"><br> 上课时间:<br>
 									<input type="text" class="timePicker" id="time" name="time"><br>
@@ -386,7 +413,8 @@
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset">取 消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取
+										消</button>
 								</form>
 							</div>
 						</div>

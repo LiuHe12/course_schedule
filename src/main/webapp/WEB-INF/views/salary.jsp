@@ -16,6 +16,29 @@
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+
+<script src="js/jquery.min.js"></script> 
+<script src="js/jquery.ui.custom.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/jquery.uniform.js"></script> 
+<script src="js/select2.min.js"></script> 
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/matrix.js"></script> 
+<script src="js/matrix.tables.js"></script>
+
+<script>
+$(document).ready(function() {
+	// left-bar
+	var id = "<%=session.getAttribute("identity")%>";
+		if (id == 0) { // admin
+			$(".admin-bar").show();
+		} else if (id == 1) { //teacher
+			$(".teacher-bar").show();
+		} else if (id == 2) { //student
+			$(".student-bar").show();
+		}
+	});
+</script>
 </head>
 <body>
 
@@ -27,11 +50,10 @@
 
 <!--top-Header-menu-->
 	<div id="user-nav" class="navbar navbar-inverse">
-
 		<ul class="nav">
 			<li class="" id="profile-messages"><a title="" href="#"
-				data-target="#profile-messages"><i class="icon icon-user"></i>
-					<span class="text">Welcome User</span><b class="caret"></b></a></li>
+				data-target="#profile-messages"><i class="icon icon-user"></i> <span
+					class="text">Welcome User</span><b class="caret"></b></a></li>
 
 			<li class=""><a title="" href="login"><i
 					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
@@ -44,9 +66,22 @@
 		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
 			Dashboard</a>
 		<ul>
-			<li><a href="teacher"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="active"><a href="salary"><i class="icon icon-signal"></i><span>查看薪资</span></a></li>
-			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="admin"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="teacher-bar" style="display: none"><a href="teacher"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="student-bar" style="display: none"><a href="student"><i
+					class="icon icon-calendar"></i><span>查看课表</span></a></li>
+			<li class="admin-bar teacher-bar active" style="display: none"><a href="salary"><i
+					class="icon icon-signal"></i><span>查看薪资</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-course"><i
+					class="icon icon-lock"></i><span>新增课程</span></a></li>
+			<li class="admin-bar" style="display: none"><a href="add-user"><i
+					class="icon icon-lock"></i><span>新增用户</span></a></li>
+			<li class="admin-bar" style="display: none"><a
+				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+			<li class="admin-bar teacher-bar student-bar"><a
+				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
 	</div>
 <!--sidebar-menu-->
@@ -114,13 +149,5 @@
 
 
 
-<script src="js/jquery.min.js"></script> 
-<script src="js/jquery.ui.custom.js"></script> 
-<script src="js/bootstrap.min.js"></script> 
-<script src="js/jquery.uniform.js"></script> 
-<script src="js/select2.min.js"></script> 
-<script src="js/jquery.dataTables.min.js"></script> 
-<script src="js/matrix.js"></script> 
-<script src="js/matrix.tables.js"></script>
 </body>
 </html>
