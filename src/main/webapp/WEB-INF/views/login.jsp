@@ -73,9 +73,10 @@
                 </div>
             </form>
         </div>
-        <script src="js/select2.min.js"></script> 
+        
         <script src="js/jquery.min.js"></script>  
         <script src="js/matrix.login.js"></script> 
+        <script src="js/select2.min.js"></script> 
     </body>
 
 </html>

@@ -95,10 +95,15 @@
 				fillEditForm();
 				showLayer('hw-layer-edit');
 			}
+		},{
+			text : '已上课',
+			action : function(){
+				PassedCourse();
+			}			
 		}, {
 			text : '删除',
 			action : function(){
-				deleteCourse(contextEle);
+				deleteCourse();
 			}
 		} ]);
 		
@@ -276,12 +281,27 @@
 	
 	function deleteCourse(){
 		alert(contextEle);
-		// do something
+		$.ajax({
+			type: "post",
+			url: "deleteCourse",
+			data: {"course_id":contextEle},
+			dataType: "json",
+			success: function(e){alert("删除成功");},
+			error: function(e){alert("删除失败");}
+		});
+		
 	}
 	
-	function courseDone(){
+	function PassedCourse(){
 		alert(contextEle);
-		// do something
+		$.ajax({
+			type: "post",
+			url: "PassedCourse",
+			data: {"course_id":contextEle},
+			dataType: "json",
+			success: function(e){alert("修改成功");},
+			error: function(e){alert("修改失败");}
+		});
 	}
 	
 	
@@ -473,8 +493,8 @@
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取
-										消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset"
+										onclick="cleanForm()">取 消</button>
 								</form>
 							</div>
 						</div>
@@ -495,14 +515,17 @@
 								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
 									<p>
-										教师名称/ID:<br> <select name="teacher_id" id="teacher-edit" onchange="getStudent(this)">
+										教师名称/ID:<br> <select name="teacher_id" id="teacher-edit"
+											onchange="getStudent(this)">
 											<option>---请选择---</option>
 											<c:forEach var="teacher" items="${teachers}">
 												<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 											</c:forEach>
-										</select><br> 学生名称/ID:<br> <select name="student_id" id="student-edit" onchange="getCourse(this)">
-											
-										</select><br> 选择课程:<br> <select name="course_name" id="course-edit" ></select><br>
+										</select><br> 学生名称/ID:<br> <select name="student_id"
+											id="student-edit" onchange="getCourse(this)">
+
+										</select><br> 选择课程:<br> <select name="course_name"
+											id="course-edit"></select><br>
 									</p>
 									<p>
 										上课日期:<br> <input type="text" class="datepicker"><br>
@@ -510,10 +533,13 @@
 										下课时间:<br> <input type="text" class="timePicker"><br>
 									</p>
 									<input type="hidden" name="course_id" id="course_id" value="">
-									
+
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset">取 消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取
+										消</button>
 								</form>
+
+
 							</div>
 
 						</div>
@@ -523,7 +549,7 @@
 			<!--=================修改課程===================-->
 			<div id='calendar'></div>
 		</div>
-		
+
 	</div>
 
 </body>
