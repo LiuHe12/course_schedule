@@ -6,7 +6,7 @@
 
 var context = context || (function () {
 	
-	var clickedEle = "123";
+	
 	
 	var options = {
 		fadeSpeed: 100,
@@ -104,8 +104,6 @@ var context = context || (function () {
 		
 		$(document).on('contextmenu', selector, function (e) { // Right click event
 			
-			clickedEle = $(this);
-			
 			e.preventDefault();
 			e.stopPropagation();
 			
@@ -139,15 +137,10 @@ var context = context || (function () {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
 	
-	function getClickedEle(){
-		return clickedEle;
-	}
-	
 	return {
 		init: initialize,
 		settings: updateOptions,
 		attach: addContext,
-		destroy: destroyContext,
-		getClickedEle: getClickedEle
+		destroy: destroyContext
 	};
 })();

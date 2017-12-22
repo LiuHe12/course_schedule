@@ -8,7 +8,8 @@
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
@@ -42,7 +43,12 @@
 <link rel="stylesheet" href="css/timepicker.css" />
 <script src='js/jquery.timepicker.js'></script>
 
+
+
 <script>
+
+	var contextEle = "";
+	
 	$(function() {
 		
 		// left-bar
@@ -56,7 +62,25 @@
 
 		}
 		
-		// contextJS
+		
+
+		/*
+		function attachContext(selector) {
+			context.attach(selector, [ {
+				text : '修改',
+				action : function(e){
+					e.preventDefault();
+					showLayer('hw-layer-edit');
+				}
+			}, {
+				text : '删除'
+			} ]);
+		}
+		$(".fc-event").each(function() {
+		    attachContext('.fc-event');
+		});*/
+		
+		//右鍵選單
 		context.init({
 			fadeSpeed : 100,
 			filter : function($obj) {
@@ -64,28 +88,26 @@
 			above : 'auto',
 			preventDoubleContext : true,
 			compress : false
+		});		
+		context.attach('.fc-content', [ {
+			text : '修改',
+			action : function(){
+				fillEditForm();
+				showLayer('hw-layer-edit');
+			}
+		}, {
+			text : '删除',
+			action : function(){
+				deleteCourse(contextEle);
+			}
+		} ]);
+		
+		// 取得右鍵元素
+		$(document).on('contextmenu', '.fc-content', function (e) {
+			contextEle = $(this).find(".fc-title").text();
 		});
 		
-		$(".fc-event").each(function(e) {
-		    //var id = $(this).prop("id");
-		    //alert($(this).prop("innerHTML"));
-		    attachContext('.fc-event');
-		})		
-		function attachContext(selector) {
-			context.attach('.fc-event', [ {
-				text : '修改',
-				action : function(e){
-					e.preventDefault();
-					showLayer('hw-layer-edit');
-					var x = context.clickedEle;
-					alert(x);
-					
-				}
-			}, {
-				text : '删除'
-			} ]);
-		}
-		
+
 		
 		// DatePicker and TimePicker
 		$(".timePicker").hunterTimePicker();
@@ -93,7 +115,6 @@
 			dateFormat : 'yy-mm-dd'
 		});
 
-		
 		// 隱藏選單相關
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
@@ -111,7 +132,6 @@
 			hideLayer();
 		});
 
-		
 		$('.show-layer').on('click', function() {
 			var layerid = $(this).data('show-layer');
 			showLayer(layerid);
@@ -147,26 +167,25 @@
 			events : [${courses}]
 		});
 		
-
+		//获取当前时间，格式YYYY-MM-DD
+	    function getNowFormatDate() {
+	        var date = new Date();
+	        var seperator1 = "-";
+	        var year = date.getFullYear();
+	        var month = date.getMonth() + 1;
+	        var strDate = date.getDate();
+	        if (month >= 1 && month <= 9) {
+	            month = "0" + month;
+	        }
+	        if (strDate >= 0 && strDate <= 9) {
+	            strDate = "0" + strDate;
+	        }
+	        var currentdate = year + seperator1 + month + seperator1 + strDate;
+	        return currentdate;
+	    }
 	});
-	//获取当前时间，格式YYYY-MM-DD
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
-    }
+	
 </script>
-
 
 <script>
 
@@ -177,13 +196,14 @@
 	**	3.選擇課程
 	*/
 	var tid = "";
-	var sid = "";
 	var arrCourse = null;
 	var arrStudent = null;
 	
 	function getStudent(sellectBox){
+		//console.log("sellectBox: "+sellectBox.outerHTML);
 		tid = sellectBox.value; // 設定教師ID以便課程檢索
-		
+		var formSuffix = $(sellectBox).attr('id').split('-')[1]; // 取得表單後綴,讓function在add或edit都能用
+				
 		arrStudent = new Array();
 		arrCourse = null;
 		
@@ -205,11 +225,12 @@
 			sp = arrStudent[i].split("/");
 			str += "<option id=\""+ sp[1] +"\" value=\""+ sp[1] +"\">"+arrStudent[i]+"</option>"
 		}
-		document.all('student-add').innerHTML = str;
-		document.all('course-add').innerHTML = ""; // 選完課又偷改老師,要清掉唷
+		document.all('student-' + formSuffix).innerHTML = str;
+		document.all('course-' + formSuffix).innerHTML = ""; // 選完課又偷改老師,要清掉唷
 	}
 	
 	function getCourse(sellectBox){
+		var formSuffix = $(sellectBox).attr('id').split('-')[1];
 		arrCourse = new Array();
 		
 		<c:forEach var="course" items="${student_courses}"> // 用老師id&學生id查課表
@@ -220,12 +241,53 @@
 		</c:forEach>
 		
 		//寫回option
-		var str = "";
+		var str = "<option>---请选择---</option>";
 		for(var i=0;i<arrStudent.length;i++){
 			str += "<option id=\""+ arrCourse[i] +"\" value=\""+ arrCourse[i] +"\">"+arrCourse[i]+"</option>"
 		}
-		document.all('course-add').innerHTML = str;
+		document.all('course-' + formSuffix).innerHTML = str;
 	}
+	
+	function cleanForm(){ //按了取消表單清空
+		document.all('student-add').innerHTML = "";
+		document.all('course-add').innerHTML = "";
+	}
+	
+	
+	
+	// 改課相關
+	/* fillEditForm()自動填值
+	** deleteCourse()刪課
+	** courseDone()  課程已上
+	*/ 
+	function fillEditForm(){
+		var course_id = new Array();
+		course_id = contextEle.split("/");
+		
+		//console.log(document.getElementById('teacher-edit').value);
+		$('#teacher-edit').val(course_id[2]);
+		getStudent($('#teacher-edit')[0]);
+		$('#student-edit').val(course_id[1]);
+		getCourse($('#student-edit')[0]);
+		
+		$('#course_id').val(course_id[0]);
+	}
+	
+	
+	function deleteCourse(){
+		alert(contextEle);
+		// do something
+	}
+	
+	function courseDone(){
+		alert(contextEle);
+		// do something
+	}
+	
+	
+	
+	
+	
 </script>
 
 <!--//===========================新增課表彈出式畫面Css===================-->
@@ -355,8 +417,8 @@
 					class="icon icon-calendar"></i><span>查看课表</span></a></li>
 			<li class="student-bar" style="display: none"><a href="student"><i
 					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="admin-bar teacher-bar" style="display: none"><a href="salary"><i
-					class="icon icon-signal"></i><span>查看薪资</span></a></li>
+			<li class="admin-bar teacher-bar" style="display: none"><a
+				href="salary"><i class="icon icon-signal"></i><span>查看薪资</span></a></li>
 			<li class="admin-bar" style="display: none"><a href="add-course"><i
 					class="icon icon-lock"></i><span>新增课程</span></a></li>
 			<li class="admin-bar" style="display: none"><a href="add-user"><i
@@ -394,26 +456,24 @@
 								<form id="addCourse" action="arrangeCourse" method="post">
 
 									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
-										onChange="getStudent(this)">
+										onchange="getStudent(this)">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
 									</select><br> 学生名称/ID:<br> <select name="student_id"
 										id="student-add" onchange="getCourse(this)">
-
-									</select><br> 选择课程:<br> <select name="course_id"
+									</select><br> 选择课程:<br> <select name="course_name"
 										id="course-add">
-
 									</select><br> 上课日期:<br> <input type="text" class="datepicker"
-										id="classDate" name="classDate"><br> 上课时间:<br>
+										id="classDate-add" name="classDate"><br> 上课时间:<br>
 									<input type="text" class="timePicker" id="time" name="time"><br>
 									下课时间:<br> <input type="text" class="timePicker"
 										id="rest_time" name="rest_time"><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确
 										定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset">取
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取
 										消</button>
 								</form>
 							</div>
@@ -434,25 +494,25 @@
 
 								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
-									教师名称/ID:<br> <select name="teacher_id">
-										<option>---请选择---</option>
-										<c:forEach var="teacher" items="${teachers}">
-											<option id="${teacher.id}">${teacher.name}/${teacher.id}</option>
-										</c:forEach>
-									</select><br> 学生名称/ID:<br> <select name="student_id">
-										<c:forEach var="student" items="${students}">
-											<option id="${student.id}">${student.name}/${student.id}</option>
-										</c:forEach>
-									</select><br> 选择课程:<br> <select name="course_id"></select><br>
+									<p>
+										教师名称/ID:<br> <select name="teacher_id" id="teacher-edit" onchange="getStudent(this)">
+											<option>---请选择---</option>
+											<c:forEach var="teacher" items="${teachers}">
+												<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
+											</c:forEach>
+										</select><br> 学生名称/ID:<br> <select name="student_id" id="student-edit" onchange="getCourse(this)">
+											
+										</select><br> 选择课程:<br> <select name="course_name" id="course-edit" ></select><br>
+									</p>
 									<p>
 										上课日期:<br> <input type="text" class="datepicker"><br>
 										上课时间:<br> <input type="text" class="timePicker"><br>
 										下课时间:<br> <input type="text" class="timePicker"><br>
 									</p>
-
-									<button class="btn btn-success hwLayer-ok" type="submit">确
-										定</button>
-									<button class="btn btn-warning hwLayer-cancel">取 消</button>
+									<input type="hidden" name="course_id" id="course_id" value="">
+									
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取 消</button>
 								</form>
 							</div>
 
@@ -463,10 +523,9 @@
 			<!--=================修改課程===================-->
 			<div id='calendar'></div>
 		</div>
-		<!-- end content-header -->
-
+		
 	</div>
-	<!-- end content -->
+
 </body>
 
 </html>
