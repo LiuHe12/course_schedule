@@ -61,24 +61,9 @@
 			$(".student-bar").show();
 
 		}
-		
-		
 
-		/*
-		function attachContext(selector) {
-			context.attach(selector, [ {
-				text : '修改',
-				action : function(e){
-					e.preventDefault();
-					showLayer('hw-layer-edit');
-				}
-			}, {
-				text : '删除'
-			} ]);
-		}
-		$(".fc-event").each(function() {
-		    attachContext('.fc-event');
-		});*/
+		
+		
 		
 		//右鍵選單
 		context.init({
@@ -89,7 +74,7 @@
 			preventDoubleContext : true,
 			compress : false
 		});		
-		context.attach('.fc-content', [ {
+		context.attach('.fc-event,.fc-list-item', [ {
 			text : '修改',
 			action : function(){
 				fillEditForm();
@@ -108,7 +93,7 @@
 		} ]);
 		
 		// 取得右鍵元素
-		$(document).on('contextmenu', '.fc-content', function (e) {
+		$(document).on('contextmenu', '.fc-event', function (e) {
 			contextEle = $(this).find(".fc-title").text();
 		});
 		
@@ -278,7 +263,7 @@
 		$('#course_id').val(course_id[0]);
 	}
 	
-	
+	// 刪課
 	function deleteCourse(){
 		alert(contextEle);
 		$.ajax({
@@ -292,6 +277,7 @@
 		
 	}
 	
+	// 課已上
 	function PassedCourse(){
 		alert(contextEle);
 		$.ajax({
