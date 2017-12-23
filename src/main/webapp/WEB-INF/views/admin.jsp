@@ -59,12 +59,8 @@
 			$(".teacher-bar").show();
 		} else if (id == 2) { //student
 			$(".student-bar").show();
-
 		}
 
-		
-		
-		
 		//右鍵選單
 		context.init({
 			fadeSpeed : 100,
@@ -227,12 +223,11 @@
 			if(sellectBox.value=="${course.student_id}" && tid=="${course.teacher_id}"){
 				arrCourse.push("${course.course_name}");
 			}
-			
 		</c:forEach>
 		
 		//寫回option
 		var str = "<option>---请选择---</option>";
-		for(var i=0;i<arrStudent.length;i++){
+		for(var i=0;i<arrCourse.length;i++){
 			str += "<option id=\""+ arrCourse[i] +"\" value=\""+ arrCourse[i] +"\">"+arrCourse[i]+"</option>"
 		}
 		document.all('course-' + formSuffix).innerHTML = str;
@@ -250,17 +245,18 @@
 	** deleteCourse()刪課
 	** courseDone()  課程已上
 	*/ 
+	//自動填值
 	function fillEditForm(){
 		var course_id = new Array();
 		course_id = contextEle.split("/");
 		
-		//console.log(document.getElementById('teacher-edit').value);
-		$('#teacher-edit').val(course_id[2]);
-		getStudent($('#teacher-edit')[0]);
-		$('#student-edit').val(course_id[1]);
-		getCourse($('#student-edit')[0]);
 		
-		$('#course_id').val(course_id[0]);
+		//console.log(document.getElementById('teacher-edit').value);
+		$('#teacher-edit').val(course_id[3]);
+		getStudent($('#teacher-edit')[0]);
+		$('#student-edit').val(course_id[2]);
+		getCourse($('#student-edit')[0]);
+		$('#course-edit').val(course_id[0]);
 	}
 	
 	// 刪課
@@ -458,7 +454,7 @@
 								<i class="glyphicon glyphicon-info-sign"></i>
 							</div>
 							<div class="col-md-9 col-sm-12">
-
+								<h3>排课</h3>
 								<form id="addCourse" action="arrangeCourse" method="post">
 
 									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
@@ -500,29 +496,25 @@
 
 								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
-									<p>
-										教师名称/ID:<br> <select name="teacher_id" id="teacher-edit"
-											onchange="getStudent(this)">
-											<option>---请选择---</option>
-											<c:forEach var="teacher" items="${teachers}">
-												<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
-											</c:forEach>
-										</select><br> 学生名称/ID:<br> <select name="student_id"
-											id="student-edit" onchange="getCourse(this)">
 
-										</select><br> 选择课程:<br> <select name="course_name"
-											id="course-edit"></select><br>
-									</p>
-									<p>
-										上课日期:<br> <input type="text" class="datepicker"><br>
-										上课时间:<br> <input type="text" class="timePicker"><br>
-										下课时间:<br> <input type="text" class="timePicker"><br>
-									</p>
-									<input type="hidden" name="course_id" id="course_id" value="">
+									教师名称/ID:<br> <select name="teacher_id" id="teacher-edit"
+										onchange="getStudent(this)">
+										<option>---请选择---</option>
+										<c:forEach var="teacher" items="${teachers}">
+											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
+										</c:forEach>
+									</select><br> 学生名称/ID:<br> <select name="student_id"
+										id="student-edit" onchange="getCourse(this)">
+
+									</select><br> 选择课程:<br> <select name="course_name"
+										id="course-edit"></select><br> 上课日期:<br> <input
+										type="text" class="datepicker"><br> 上课时间:<br>
+									<input type="text" class="timePicker"><br> 下课时间:<br>
+									<input type="text" class="timePicker"><br> <input
+										type="hidden" name="course_id" id="course_id" value="">
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset">取
-										消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取消</button>
 								</form>
 
 
