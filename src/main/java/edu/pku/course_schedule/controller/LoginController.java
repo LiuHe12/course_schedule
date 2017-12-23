@@ -62,6 +62,7 @@ public class LoginController {
 					Administrator admin = (Administrator) object;
 					request.getSession().setAttribute("user", admin);
 					request.getSession().setAttribute("identity", 0);
+					request.getSession().setAttribute("userId", admin.getId());
 					mav=new ModelAndView("redirect:/admin");
 					mav.addObject("admain",admin);
 					
@@ -69,12 +70,14 @@ public class LoginController {
 					Teacher teacher = (Teacher) object;
 					request.getSession().setAttribute("user", teacher);
 					request.getSession().setAttribute("identity",1);
+					request.getSession().setAttribute("userId", teacher.getId());
 					mav=new ModelAndView("redirect:/teacher");
 					mav.addObject("teacher",teacher);
 				} else if (identify == 2) {
 					Student student = (Student) object;
 					request.getSession().setAttribute("user", student);
 					request.getSession().setAttribute("identity",2);	
+					request.getSession().setAttribute("userId", student.getId());
 					mav=new ModelAndView("redirect:/student");
 					mav.addObject("student",student);
 				}

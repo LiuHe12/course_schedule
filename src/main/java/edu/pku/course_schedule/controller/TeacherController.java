@@ -27,13 +27,18 @@ public class TeacherController {
 	@RequestMapping(value = { "/teacher" }, method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView teacherHome(HttpServletRequest request, ModelAndView mav) {
 		Course_Service cs=new Course_Service_Imp();
-		Teacher teacher=(Teacher) request.getSession().getAttribute("user");
-		 ArrayList<Course> courses=cs.getCoursesByUserId(teacher.getId());
-		 StringBuilder sb = new StringBuilder();
+		//Teacher teacher=(Teacher) request.getSession().getAttribute("user");
+		String userId=(String) request.getSession().getAttribute("userId");
+		ArrayList<Course> courses=null;
+		if(userId!=null) {
+			courses=cs.getCoursesByUserId(userId);
+		}
+		StringBuilder sb = new StringBuilder();
 		int index = 0;
 		 for (Course course : courses) {
-				String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
-				String start = df.format(course.getTime()).replace(' ', 'T');
+				//String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
+			 String title = course.getName() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();	
+			 String start = df.format(course.getTime()).replace(' ', 'T');
 				String end = df.format(course.getRest_time()).replace(' ', 'T');
 				String color = null;
 				if (course.getStatus() > 0) {
