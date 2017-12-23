@@ -251,12 +251,15 @@
 		course_id = contextEle.split("/");
 		
 		
-		//console.log(document.getElementById('teacher-edit').value);
+		//自動填值
 		$('#teacher-edit').val(course_id[3]);
 		getStudent($('#teacher-edit')[0]);
 		$('#student-edit').val(course_id[2]);
 		getCourse($('#student-edit')[0]);
 		$('#course-edit').val(course_id[0]);
+		
+		//修改的課號
+		$('#course_id').val(course_id[1]);
 	}
 	
 	// 刪課
@@ -511,13 +514,11 @@
 										type="text" class="datepicker"><br> 上课时间:<br>
 									<input type="text" class="timePicker"><br> 下课时间:<br>
 									<input type="text" class="timePicker"><br> <input
-										type="hidden" name="course_id" id="course_id" value="">
+										type="hidden" name="course_id" id="course_id">
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
 									<button class="btn btn-warning hwLayer-cancel" type="reset">取消</button>
 								</form>
-
-
 							</div>
 
 						</div>
