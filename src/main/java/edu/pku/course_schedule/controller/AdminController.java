@@ -46,73 +46,75 @@ public class AdminController {
 
 		User_Service us = new User_Service_Imp();
 		Course_Service cs = new Course_Service_Imp();
-//		if (request.getSession().getAttribute("teachers") == null) {
-//			ArrayList<Object> object_t = us.getAllUser(1);
-//			ArrayList<Teacher> teachers = new ArrayList<Teacher>();
-//			for (Object obj : object_t) {
-//				teachers.add((Teacher) obj);
-//			}
-//			request.getSession().setAttribute("teachers", teachers);
-//		}
-//		if (request.getSession().getAttribute("students") == null) {
-//			ArrayList<Object> object_s = us.getAllUser(2);
-//			ArrayList<Student> students = new ArrayList<Student>();
-//			for (Object obj : object_s) {
-//				students.add((Student) obj);
-//			}
-//			request.getSession().setAttribute("students", students);
-//		}
-//		
-//		mav.addObject("teachers", request.getSession().getAttribute("teachers"));
-//
-//		mav.addObject("students", request.getSession().getAttribute("students"));
+		// if (request.getSession().getAttribute("teachers") == null) {
+		// ArrayList<Object> object_t = us.getAllUser(1);
+		// ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+		// for (Object obj : object_t) {
+		// teachers.add((Teacher) obj);
+		// }
+		// request.getSession().setAttribute("teachers", teachers);
+		// }
+		// if (request.getSession().getAttribute("students") == null) {
+		// ArrayList<Object> object_s = us.getAllUser(2);
+		// ArrayList<Student> students = new ArrayList<Student>();
+		// for (Object obj : object_s) {
+		// students.add((Student) obj);
+		// }
+		// request.getSession().setAttribute("students", students);
+		// }
+		//
+		// mav.addObject("teachers", request.getSession().getAttribute("teachers"));
+		//
+		// mav.addObject("students", request.getSession().getAttribute("students"));
 
-//		
-//		if (request.getSession().getAttribute("student_courses") == null) {
-//			List<Student_course> student_courses = cs.getStudentCourses();
-//
-//			request.getSession().setAttribute("student_courses", student_courses);
-//		}
-//		mav.addObject("student_courses", request.getSession().getAttribute("student_courses"));
-//		if (request.getSession().getAttribute("courses") == null) {
-//			Calendar c1 = Calendar.getInstance();
-//			Calendar c2 = Calendar.getInstance();
-//			c1.add(Calendar.MONTH, -1); // 得到前一个月
-//			String lastmonth = df.format(c1.getTime());
-//			c2.add(Calendar.MONTH, +1); // 得到后一个月
-//			String nextmonth = df.format(c2.getTime());
-//			List<Course> courses;
-//			try {
-//				courses = cs.getCoursesByTime(new Timestamp(df.parse(lastmonth).getTime()),
-//						new Timestamp(df.parse(nextmonth).getTime()));
-//				request.getSession().setAttribute("courses", courses);
-//			} catch (ParseException e) {
-//				logger.error(e.toString());
-//				e.printStackTrace();
-//			}
-//
-//		}
-//		ArrayList<Course> courses = (ArrayList<Course>) request.getSession().getAttribute("courses");
-//		
+		//
+		// if (request.getSession().getAttribute("student_courses") == null) {
+		// List<Student_course> student_courses = cs.getStudentCourses();
+		//
+		// request.getSession().setAttribute("student_courses", student_courses);
+		// }
+		// mav.addObject("student_courses",
+		// request.getSession().getAttribute("student_courses"));
+		// if (request.getSession().getAttribute("courses") == null) {
+		// Calendar c1 = Calendar.getInstance();
+		// Calendar c2 = Calendar.getInstance();
+		// c1.add(Calendar.MONTH, -1); // 得到前一个月
+		// String lastmonth = df.format(c1.getTime());
+		// c2.add(Calendar.MONTH, +1); // 得到后一个月
+		// String nextmonth = df.format(c2.getTime());
+		// List<Course> courses;
+		// try {
+		// courses = cs.getCoursesByTime(new Timestamp(df.parse(lastmonth).getTime()),
+		// new Timestamp(df.parse(nextmonth).getTime()));
+		// request.getSession().setAttribute("courses", courses);
+		// } catch (ParseException e) {
+		// logger.error(e.toString());
+		// e.printStackTrace();
+		// }
+		//
+		// }
+		// ArrayList<Course> courses = (ArrayList<Course>)
+		// request.getSession().getAttribute("courses");
+		//
 		ArrayList<Object> object_t = us.getAllUser(1);
 		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
 		for (Object obj : object_t) {
 			teachers.add((Teacher) obj);
 		}
-		mav.addObject("teachers",teachers);
+		mav.addObject("teachers", teachers);
 		request.getSession().setAttribute("teachers", teachers);
 		ArrayList<Object> object_s = us.getAllUser(2);
 		ArrayList<Student> students = new ArrayList<Student>();
 		for (Object obj : object_s) {
 			students.add((Student) obj);
 		}
-		mav.addObject("students",students);
+		mav.addObject("students", students);
 		request.getSession().setAttribute("students", students);
-		
+
 		List<Student_course> student_courses = cs.getStudentCourses();
-		mav.addObject("student_courses",student_courses);
+		mav.addObject("student_courses", student_courses);
 		request.getSession().setAttribute("student_courses", student_courses);
-		
+
 		Calendar c1 = Calendar.getInstance();
 		Calendar c2 = Calendar.getInstance();
 		c1.add(Calendar.MONTH, -1); // 得到前一个月
@@ -131,8 +133,10 @@ public class AdminController {
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
 		for (Course course : courses) {
-			//String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
-			String title = course.getName() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
+			// String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" +
+			// course.getTeacher_ID();
+			String title = course.getName() + "/" + course.getCourse_ID() + "/" + course.getStudent_ID() + "/"
+					+ course.getTeacher_ID();
 			String start = df.format(course.getTime()).replace(' ', 'T');
 			String end = df.format(course.getRest_time()).replace(' ', 'T');
 			String color = null;
@@ -149,10 +153,10 @@ public class AdminController {
 		}
 		mav.addObject("courses", sb.toString());
 		request.getSession().setAttribute("courses", courses);
-		
-		
+
 		return mav;
 	}
+
 	@RequestMapping(value = "/addCourse", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addCourse(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
@@ -161,19 +165,19 @@ public class AdminController {
 			mav.setViewName("forward:/login");
 			return mav;
 		}
-		
+
 		// Handle ISO-8859-1 to UTF-8
 		String cname = "";
 		String utf_name = "";
 		try {
 			request.setCharacterEncoding("utf-8");
 			cname = request.getParameter("course_name");
-			utf_name = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+			utf_name = new String(cname.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			logger.error(e.toString());
 			e.printStackTrace();
 		}
-		
+
 		Student_course student_course = new Student_course();
 		student_course.setStudent_id(request.getParameter("student_id"));
 		student_course.setCourse_name(utf_name);
@@ -203,20 +207,20 @@ public class AdminController {
 		course.setStudent_ID(request.getParameter("student_id"));
 		course.setTeacher_ID(request.getParameter("teacher_id"));
 		try {
-			course.setName(new String(request.getParameter("course_id").getBytes("ISO-8859-1"),"UTF-8"));
+			course.setName(new String(request.getParameter("course_id").getBytes("ISO-8859-1"), "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
+			logger.error(e1.toString());
 			e1.printStackTrace();
 		}
 		String classDate = request.getParameter("classDate");
-		
+
 		try {
 			String time = request.getParameter("time") + ":00";
 			String rest_time = request.getParameter("rest_time") + ":00";
 			course.setTime(new Timestamp(df.parse(classDate + " " + time).getTime()));
 			course.setRest_time(new Timestamp(df.parse(classDate + " " + rest_time).getTime()));
 		} catch (Exception e) {
-			logger.error( e.toString());
+			logger.error(e.toString());
 			e.printStackTrace();
 		}
 		Course_Service cs = new Course_Service_Imp();
@@ -241,14 +245,14 @@ public class AdminController {
 		boolean r = cs.arrangeCourse(course);
 
 		if (!r) {
-			//mav.addObject("error", "排课失败！");
+			// mav.addObject("error", "排课失败！");
 			mav.addObject("result", "schedule course failed！");
 		} else {
-			//mav.addObject("error", "排课成功！");
+			// mav.addObject("error", "排课成功！");
 			mav.addObject("result", "schedule course success！");
 		}
 		mav.setViewName("redirect:/admin");
-		//request.getSession().setMaxInactiveInterval(20 * 60);
+		// request.getSession().setMaxInactiveInterval(20 * 60);
 		return mav;
 	}
 
@@ -261,13 +265,13 @@ public class AdminController {
 			return mav;
 		}
 		String userId = request.getParameter("username");
-		String newPassword =""; 
-		String orgnewPassword=request.getParameter("password");
+		String newPassword = "";
+		String orgnewPassword = request.getParameter("password");
 		try {
 			request.setCharacterEncoding("utf-8");
-			newPassword = new String(orgnewPassword.getBytes("ISO-8859-1"),"UTF-8");
+			newPassword = new String(orgnewPassword.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			logger.error(e.toString());
 			e.printStackTrace();
 		}
 		int identity = 0;
@@ -288,8 +292,6 @@ public class AdminController {
 		return mav;
 	}
 
-	
-
 	@RequestMapping(value = "/addUser", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addTeacher(ModelAndView mav, HttpServletRequest request) {
 
@@ -304,15 +306,15 @@ public class AdminController {
 		boolean r = false;
 		if (request.getParameter("select_one").equals("add_student")) {
 			Student student = new Student();
-			String student_name="";
-			
+			String student_name = "";
+
 			try {
-				student.setName(new String(request.getParameter("student_name").getBytes("ISO-8859-1"),"UTF-8"));
+				student.setName(new String(request.getParameter("student_name").getBytes("ISO-8859-1"), "UTF-8"));
 			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
+				logger.error(e1.toString());
 				e1.printStackTrace();
 			}
-			String date=request.getParameter("enroll_time");
+			String date = request.getParameter("enroll_time");
 			try {
 				student.setEnroll_time(new java.sql.Date(ps.parse(date).getTime()));
 			} catch (ParseException e) {
@@ -326,9 +328,9 @@ public class AdminController {
 		} else if (request.getParameter("select_one").equals("add_teacher")) {
 			Teacher teacher = new Teacher();
 			try {
-				teacher.setName(new String(request.getParameter("teacher_name").getBytes("ISO-8859-1"),"UTF-8"));
+				teacher.setName(new String(request.getParameter("teacher_name").getBytes("ISO-8859-1"), "UTF-8"));
 			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
+				logger.error(e1.toString());
 				e1.printStackTrace();
 			}
 			// TODO
@@ -351,5 +353,12 @@ public class AdminController {
 		mav.setViewName("redirect:/admin");
 		return mav;
 	}
+
+//	@RequestMapping(value = "/deleteCourse", method = { RequestMethod.GET, RequestMethod.POST })
+//	private ModelAndView deleteCourse(ModelAndView mav, HttpServletRequest request) {
+//		
+//		String course_id=request.getParameter(course_id")deleteCourse
+//		return mav;
+//	}
 
 }
