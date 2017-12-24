@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -10,6 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import edu.pku.course_schedule.dao.entity.Student;
+import edu.pku.course_schedule.dao.entity.Teacher;
+import edu.pku.course_schedule.services.User_Service;
+import edu.pku.course_schedule.services.impl.User_Service_Imp;
 
 @Controller
 public class PageController {
@@ -71,11 +77,7 @@ public class PageController {
 //		return "teacher";
 //	}
 	
-	@RequestMapping(value = "/add-user", method = RequestMethod.GET)
-	public String addUser(Locale locale, Model model) {
-		logger.info("in add-user function");
-		return "add-user";
-	}
+	
 	
 	@RequestMapping(value = "/comment", method = RequestMethod.GET)
 	public String comment(Locale locale, Model model) {
@@ -83,22 +85,10 @@ public class PageController {
 		return "comment";
 	}
 	
-	@RequestMapping(value = "/add-course", method = {RequestMethod.GET,RequestMethod.POST})
-	public String addCourse(Locale locale, Model model) {
-		logger.info("in add-course function");
-		return "add-course";
-	}
 	
-	@RequestMapping(value = "/change-password", method = RequestMethod.GET)
-	public String changePassword(Locale locale, Model model) {
-		logger.info("in change-password function");
-		return "change-password";
-	}	
-	@RequestMapping(value = "/change-user-password", method = {RequestMethod.GET,RequestMethod.POST})
-	public String changeUserPassword(Locale locale, Model model) {
-		logger.info("in change-user-password function");
-		return "change-user-password";
-	}
+	
+
+	
 	
 //	@RequestMapping(value = "/all-salary", method = {RequestMethod.GET,RequestMethod.POST})
 //	public String allSalary(Locale locale, Model model) {

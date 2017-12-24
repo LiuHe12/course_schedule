@@ -10,9 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,72 +47,7 @@ public class AdminController {
 			return mav;
 		}
 
-		User_Service us = new User_Service_Imp();
 		Course_Service cs = new Course_Service_Imp();
-		// if (request.getSession().getAttribute("teachers") == null) {
-		// ArrayList<Object> object_t = us.getAllUser(1);
-		// ArrayList<Teacher> teachers = new ArrayList<Teacher>();
-		// for (Object obj : object_t) {
-		// teachers.add((Teacher) obj);
-		// }
-		// request.getSession().setAttribute("teachers", teachers);
-		// }
-		// if (request.getSession().getAttribute("students") == null) {
-		// ArrayList<Object> object_s = us.getAllUser(2);
-		// ArrayList<Student> students = new ArrayList<Student>();
-		// for (Object obj : object_s) {
-		// students.add((Student) obj);
-		// }
-		// request.getSession().setAttribute("students", students);
-		// }
-		//
-		// mav.addObject("teachers", request.getSession().getAttribute("teachers"));
-		//
-		// mav.addObject("students", request.getSession().getAttribute("students"));
-
-		//
-		// if (request.getSession().getAttribute("student_courses") == null) {
-		// List<Student_course> student_courses = cs.getStudentCourses();
-		//
-		// request.getSession().setAttribute("student_courses", student_courses);
-		// }
-		// mav.addObject("student_courses",
-		// request.getSession().getAttribute("student_courses"));
-		// if (request.getSession().getAttribute("courses") == null) {
-		// Calendar c1 = Calendar.getInstance();
-		// Calendar c2 = Calendar.getInstance();
-		// c1.add(Calendar.MONTH, -1); // 得到前一个月
-		// String lastmonth = df.format(c1.getTime());
-		// c2.add(Calendar.MONTH, +1); // 得到后一个月
-		// String nextmonth = df.format(c2.getTime());
-		// List<Course> courses;
-		// try {
-		// courses = cs.getCoursesByTime(new Timestamp(df.parse(lastmonth).getTime()),
-		// new Timestamp(df.parse(nextmonth).getTime()));
-		// request.getSession().setAttribute("courses", courses);
-		// } catch (ParseException e) {
-		// logger.error(e.toString());
-		// e.printStackTrace();
-		// }
-		//
-		// }
-		// ArrayList<Course> courses = (ArrayList<Course>)
-		// request.getSession().getAttribute("courses");
-		//
-		ArrayList<Object> object_t = us.getAllUser(1);
-		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
-		for (Object obj : object_t) {
-			teachers.add((Teacher) obj);
-		}
-		mav.addObject("teachers", teachers);
-		request.getSession().setAttribute("teachers", teachers);
-		ArrayList<Object> object_s = us.getAllUser(2);
-		ArrayList<Student> students = new ArrayList<Student>();
-		for (Object obj : object_s) {
-			students.add((Student) obj);
-		}
-		mav.addObject("students", students);
-		request.getSession().setAttribute("students", students);
 
 		List<Student_course> student_courses = cs.getStudentCourses();
 		mav.addObject("student_courses", student_courses);
@@ -133,8 +71,6 @@ public class AdminController {
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
 		for (Course course : courses) {
-			// String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" +
-			// course.getTeacher_ID();
 			String title = course.getName() + "/" + course.getStudent_name() + "/" + course.getTeacher_name() + "/"
 					+ course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
 			String start = df.format(course.getTime()).replace(' ', 'T');
@@ -153,6 +89,27 @@ public class AdminController {
 		}
 		mav.addObject("courses", sb.toString());
 		request.getSession().setAttribute("courses", courses);
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/add-course", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addCourseHome(ModelAndView mav, HttpServletRequest request) {
+		User_Service us = new User_Service_Imp();
+		ArrayList<Object> object_t = us.getAllUser(1);
+		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+		for (Object obj : object_t) {
+			teachers.add((Teacher) obj);
+		}
+		mav.addObject("teachers", teachers);
+		request.getSession().setAttribute("teachers", teachers);
+		ArrayList<Object> object_s = us.getAllUser(2);
+		ArrayList<Student> students = new ArrayList<Student>();
+		for (Object obj : object_s) {
+			students.add((Student) obj);
+		}
+		mav.addObject("students", students);
+		request.getSession().setAttribute("students", students);
 
 		return mav;
 	}
@@ -256,45 +213,13 @@ public class AdminController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET, RequestMethod.POST })
-	private ModelAndView changePwd(ModelAndView mav, HttpServletRequest request) {
-		if ((request.getSession().getAttribute("identity")) == null
-				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
-			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
-			return mav;
-		}
-		String userId = request.getParameter("username");
-		String newPassword = "";
-		String orgnewPassword = request.getParameter("password");
-		try {
-			request.setCharacterEncoding("utf-8");
-			newPassword = new String(orgnewPassword.getBytes("ISO-8859-1"), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e.toString());
-			e.printStackTrace();
-		}
-		int identity = 0;
-		if (userId.substring(0, 1).equals("S")) {
-			identity = 2;
-		} else if (userId.substring(0, 1).equals("T")) {
-			identity = 1;
-		}
-		User_Service us = new User_Service_Imp();
-		boolean r = us.modifyPassword(userId, identity, newPassword);
-		if (!r) {
-			// mav.addObject("error","修改密码失败！");
-			mav.setViewName("redirect:/change-user-password");
-		} else {
-			// mav.addObject("error","修改密码成功！");
-			mav.setViewName("redirect:/admin");
-		}
-		return mav;
+	@RequestMapping(value = "/add-user", method = RequestMethod.GET)
+	public String addUser(Locale locale, Model model) {
+		return "add-user";
 	}
 
 	@RequestMapping(value = "/addUser", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addTeacher(ModelAndView mav, HttpServletRequest request) {
-
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
@@ -351,6 +276,60 @@ public class AdminController {
 			mav.addObject("error", "add user failed");
 		}
 		mav.setViewName("redirect:/admin");
+		return mav;
+	}
+
+	@RequestMapping(value = "/change-user-password", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView changeUserPasswordHome(ModelAndView mav, HttpServletRequest request) {
+		User_Service us = new User_Service_Imp();
+		ArrayList<Object> object_t = us.getAllUser(1);
+		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+		for (Object obj : object_t) {
+			teachers.add((Teacher) obj);
+		}
+		mav.addObject("teachers", teachers);
+		ArrayList<Object> object_s = us.getAllUser(2);
+		ArrayList<Student> students = new ArrayList<Student>();
+		for (Object obj : object_s) {
+			students.add((Student) obj);
+		}
+		mav.addObject("students", students);
+		return mav;
+	}
+
+	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView changePwd(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/login");
+			return mav;
+		}
+		String userId = request.getParameter("username");
+		String newPassword = "";
+		String orgnewPassword = request.getParameter("password");
+		try {
+			request.setCharacterEncoding("utf-8");
+			newPassword = new String(orgnewPassword.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+		int identity = 0;
+		if (userId.substring(0, 1).equals("S")) {
+			identity = 2;
+		} else if (userId.substring(0, 1).equals("T")) {
+			identity = 1;
+		}
+		User_Service us = new User_Service_Imp();
+		boolean r = us.modifyPassword(userId, identity, newPassword);
+		if (!r) {
+			mav.addObject("error", "修改密码失败！");
+			mav.setViewName("redirect:/change-user-password");
+		} else {
+			mav.addObject("error", "修改密码成功！");
+			mav.setViewName("redirect:/admin");
+		}
 		return mav;
 	}
 
