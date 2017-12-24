@@ -81,16 +81,8 @@ $(document).ready(function() {
               
                 <c:forEach var="teacher_salary" items="${teacher_salaries}">
                 	<tr class="${teacher_salary.teacher_id}">
-                		<td>
-	                		<script>
-	                		<c:forEach var="teacher" items="${teachers}">
-	                		if(${teacher_salary.teacher_id}==<%=session.getAttribute("user")%>){
-	                			
-	                		}
-	                		</c:forEach>
-	                		${teacher_salary.teacher_id}
-	                		</script>
-                		</td>
+                		<td>${teacher_salary.teacher_id}</td>
+                		<td>${teacher_salary.teacher_name}</td>
 	                	<td>${teacher_salary.time}</td>
 	                	<td class="${teacher_salary.bonus}">${teacher_salary.bonus}</td>
 	                	<td class="${teacher_salary.salary}">${teacher_salary.salary}</td>
