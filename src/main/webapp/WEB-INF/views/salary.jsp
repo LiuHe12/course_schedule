@@ -48,43 +48,8 @@ $(document).ready(function() {
 </div>
 <!--close-Header-part--> 
 
-<!--top-Header-menu-->
-	<div id="user-nav" class="navbar navbar-inverse">
-		<ul class="nav">
-			<li class="" id="profile-messages"><a title="" href="#"
-				data-target="#profile-messages"><i class="icon icon-user"></i> <span
-					class="text">Welcome User</span><b class="caret"></b></a></li>
-
-			<li class=""><a title="" href="login"><i
-					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
-		</ul>
-	</div>
-
-
-<!--sidebar-menu-->
-	<div id="sidebar">
-		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
-			Dashboard</a>
-		<ul>
-			<li class="admin-bar" style="display: none"><a href="admin"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="teacher-bar" style="display: none"><a href="teacher"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="student-bar" style="display: none"><a href="student"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="admin-bar teacher-bar active" style="display: none"><a href="salary"><i
-					class="icon icon-signal"></i><span>查看薪资</span></a></li>
-			<li class="admin-bar" style="display: none"><a href="add-course"><i
-					class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li class="admin-bar" style="display: none"><a href="add-user"><i
-					class="icon icon-lock"></i><span>新增用户</span></a></li>
-			<li class="admin-bar" style="display: none"><a
-				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li class="admin-bar teacher-bar student-bar"><a
-				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
-		</ul>
-	</div>
-<!--sidebar-menu-->
+	<c:import url="top-bar.jsp"></c:import>
+	<c:import url="left-bar.jsp"></c:import>
 
 <div id="content">
   <div id="content-header">
@@ -115,7 +80,16 @@ $(document).ready(function() {
               
                 <c:forEach var="teacher_salary" items="${teacher_salaries}">
                 	<tr class="${teacher_salary.teacher_id}">
-                		<td>${teacher_salary.teacher_id}</td>
+                		<td>
+	                		<script>
+	                		<c:forEach var="teacher" items="${teachers}">
+	                		if(${teacher_salary.teacher_id}==<%=session.getAttribute("user")%>){
+	                			
+	                		}
+	                		</c:forEach>
+	                		${teacher_salary.teacher_id}
+	                		</script>
+                		</td>
 	                	<td>${teacher_salary.time}</td>
 	                	<td class="${teacher_salary.bonus}">${teacher_salary.bonus}</td>
 	                	<td class="${teacher_salary.salary}">${teacher_salary.salary}</td>

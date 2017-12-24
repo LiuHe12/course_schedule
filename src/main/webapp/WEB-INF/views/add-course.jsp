@@ -25,50 +25,34 @@
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.ui.custom.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.uniform.js"></script>
+<script src="js/select2.min.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/matrix.js"></script>
+<script src="js/matrix.form_validation.js"></script>
 </head>
 <body>
 
 	<%
 		request.setCharacterEncoding("utf-8");
 		String s = request.getParameter("course_name");
-		out.print(s);
 	%>
 	<!--Header-part-->
 	<div id="header">
 		<h1>
-			<a href="dashboard.html">Matrix Admin</a>
+			<a href="dashboard">Matrix Admin</a>
 		</h1>
 	</div>
 	<!--close-Header-part-->
-
 	<!--top-Header-menu-->
-	<div id="user-nav" class="navbar navbar-inverse">
-		<ul class="nav">
-			<li class="" id="profile-messages"><a title="" href="#"
-				data-target="#profile-messages"><i class="icon icon-user"></i> <span
-					class="text">Welcome User</span><b class="caret"></b></a></li>
-
-			<li class=""><a title="" href="login"><i
-					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
-		</ul>
-	</div>
 
 
-	<!--close-top-serch-->
-
-	<!--sidebar-menu-->
-	<div id="sidebar">
-		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
-			Dashboard</a>
-		<ul>
-			<li><a href="admin"><i class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li><a href="salary"><i class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li class="active"><a href="add-course"><i class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li><a href="add-user"><i class="icon icon-lock"></i><span>新增用户</span></a></li>	
-			<li><a href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li><a href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
-		</ul>
-	</div>
+	<c:import url="top-bar.jsp"></c:import>
+	<c:import url="left-bar.jsp"></c:import>
 
 	<!--close-left-menu-stats-sidebar-->
 
@@ -92,46 +76,47 @@
 							<h5>新增课程</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form class="form-horizontal" method="POST" action="addCourse" id="my_validate">
+							<form class="form-horizontal" method="POST" action="addCourse"
+								id="my_validate">
 								<!-- Validate by #my_validate, see matrix.form_validation -->
 
 								<div class="control-group">
 									<label class="control-label">课程名称 :</label>
 									<div class="controls">
-										<input type="text" name="course_name" id="course_name" />
+										<input type="text" name="course_name" id="course_name" class="span11"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">教师名称/ID :</label>
 									<div class="controls">
 										<select name="teacher_id" id="teacher_id">
-										<c:forEach var="teacher" items="${teachers}">
-											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
-										</c:forEach>
-									</select>
+											<c:forEach var="teacher" items="${teachers}">
+												<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
+											</c:forEach>
+										</select>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">学生名称/ID :</label>
 									<div class="controls">
 										<select name="student_id" id="student_id">
-										<c:forEach var="student" items="${students}">
-											<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
-										</c:forEach>
-									</select>
+											<c:forEach var="student" items="${students}">
+												<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
+											</c:forEach>
+										</select>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">课程价格 :</label>
 									<div class="controls">
 										<input type="text" name="price" id="price" class="span11"
-											placeholder="每堂课的价格" />
+											placeholder="整数,每堂课的价格" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">课程数量 :</label>
 									<div class="controls">
-										<input type="text" name="number" id="number" class="span11" />
+										<input type="text" name="number" id="number" class="span11" placeholder="整数"/>
 									</div>
 								</div>
 								<div class="form-actions">
@@ -149,14 +134,5 @@
 	</div>
 	<!--Footer-part-->
 
-	<!--end-Footer-part-->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery.ui.custom.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.uniform.js"></script>
-	<script src="js/select2.min.js"></script>
-	<script src="js/jquery.validate.js"></script>
-	<script src="js/matrix.js"></script>
-	<script src="js/matrix.form_validation.js"></script>
 </body>
 </html>

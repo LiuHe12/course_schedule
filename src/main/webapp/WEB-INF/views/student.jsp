@@ -7,7 +7,8 @@
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
@@ -30,55 +31,121 @@
 <link rel="stylesheet" href="css/context.bootstrap.css" />
 <script src='js/context.js'></script>
 
+<!-- Qtip -->
+<link type="text/css" rel="stylesheet"
+	href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" />
+<script type="text/javascript"
+	src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
 
 <script>
 	$(document).ready(function() {
 		
 		// left-bar
 		var id = "<%=session.getAttribute("identity")%>";
-			if (id == 0) { // admin
-				$(".admin-bar").show();
-			} else if (id == 1) { //teacher
-				$(".teacher-bar").show();
-			} else if (id == 2) { //student
-				$(".student-bar").show();
+						if (id == 0) { // admin
+							$(".admin-bar").show();
+						} else if (id == 1) { //teacher
+							$(".teacher-bar").show();
+						} else if (id == 2) { //student
+							$(".student-bar").show();
 
-			}
-			
-		$('#calendar').fullCalendar({
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay,listWeek'
-			},
-			defaultDate: getNowFormatDate(),
-			navLinks: true, // can click day/week names to navigate views
-			editable: false,
-			eventLimit: true, // allow "more" link when too many events
-			events: [[${courses}]]
-		});
-		
-	});
+						}
+
+						// qtip
+						var tooltip = $('<div/>').qtip({
+							id : 'fullcalendar',
+							prerender : true,
+							overwrite : false,
+							content : {
+								text : ' ',
+								title : {
+									button : true
+								}
+							},
+							position : {
+								my : 'bottom center',
+								at : 'top center',
+								target : 'mouse',
+								viewport : $('#fullcalendar'),
+								adjust : {
+									mouse : false,
+									scroll : false
+								}
+							},
+							show : false,
+							hide : false,
+							style : 'qtip-light'
+						}).qtip('api');
+
+						$('#calendar')
+								.fullCalendar(
+										{
+											header : {
+												left : 'prev,next today',
+												center : 'title',
+												right : 'month,agendaWeek,agendaDay,listWeek'
+											},
+											defaultDate : getNowFormatDate(),
+											navLinks : true, // can click day/week names to navigate views
+											editable : false,
+											eventLimit : true, // allow "more" link when too many events
+											events : [
+													{
+														title : 'JAVA/201711250001/S1711250001/T0003',
+														start : '2017-12-29T10:00:00',
+														end : '2017-12-29T11:00:00',
+														color : 'red',
+														description : 'This is a cool event'
+													},
+													{
+														title : 'JAVA/201711250004/S1711250001/T0003',
+														start : '2017-12-20T09:00:00',
+														end : '2017-12-20T10:00:00',
+														color : 'blue'
+													} ],
+											eventClick : function(data, event,
+													view) {
+												var content = '<h4>'
+														+ data.title
+														+ '</h4>'
+														+ '<p><b>Start:</b> '
+														+ data.start
+														+ '<br />'
+														+ (data.end
+																&& '<p><b>End:</b> '
+																+ data.end
+																+ '</p>' || '')
+														+ (data.description
+																&& '<p><b>Description:</b><br>'
+																+ data.description
+																+ '</p>' || '');
+
+												tooltip.set({
+													'content.text' : content
+												}).reposition(event)
+														.show(event);
+											}
+										});
+
+					});
 
 	//获取当前时间，格式YYYY-MM-DD
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
-    }
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
 </script>
-
-
 <body>
 	<!--Header-part-->
 	<div id="header">
@@ -87,46 +154,12 @@
 		</h1>
 	</div>
 	<!--close-Header-part-->
-	<!--top-Header-menu-->
 
 
-	<!--top-Header-menu-->
-	<div id="user-nav" class="navbar navbar-inverse">
-		<ul class="nav">
-			<li class="" id="profile-messages"><a title="" href="#"
-				data-target="#profile-messages"><i class="icon icon-user"></i> <span
-					class="text">Welcome User</span><b class="caret"></b></a></li>
-
-			<li class=""><a title="" href="login"><i
-					class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
-		</ul>
-	</div>
-	<!-- left-sidebar -->
-	<div id="sidebar">
-		<a href="#" class="visible-phone"><i class="icon icon-home"></i>
-			Dashboard</a>
-		<ul>
-			<li class="admin-bar" style="display: none"><a href="admin"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="teacher-bar" style="display: none"><a href="teacher"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="student-bar active" style="display: none"><a href="student"><i
-					class="icon icon-calendar"></i><span>查看课表</span></a></li>
-			<li class="admin-bar" style="display: none"><a href="all-salary"><i
-					class="icon icon-signal"></i><span>查看薪资报表</span></a></li>
-			<li class="teacher-bar" style="display: none"><a href="salary"><i
-					class="icon icon-signal"></i><span>查看薪资</span></a></li>
-			<li class="admin-bar" style="display: none"><a href="add-course"><i
-					class="icon icon-lock"></i><span>新增课程</span></a></li>
-			<li class="admin-bar" style="display: none"><a href="add-user"><i
-					class="icon icon-lock"></i><span>新增用户</span></a></li>
-			<li class="admin-bar" style="display: none"><a
-				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
-			<li class="admin-bar teacher-bar student-bar" style="display: none"><a
-				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
-		</ul>
-	</div>
-
+	
+	<c:import url="top-bar.jsp"></c:import>
+	<c:import url="left-bar.jsp"></c:import>
+	
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">

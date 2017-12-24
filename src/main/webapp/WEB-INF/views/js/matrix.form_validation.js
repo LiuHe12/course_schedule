@@ -88,4 +88,34 @@ $(document).ready(function(){
 			$(element).parents('.control-group').addClass('success');
 		}
 	});
+	
+	// Created by ChungYuan
+	$(".my_validate").validate({
+		rules:{
+			required:{
+				required:true
+			},
+			min:{
+				required: true,
+				min:10
+			},
+			max:{
+				required:true,
+				max:24
+			},
+			number:{
+				required:true,
+				number:true
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
 });
