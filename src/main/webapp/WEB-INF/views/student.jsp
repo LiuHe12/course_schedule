@@ -75,20 +75,7 @@
 											navLinks : true, // can click day/week names to navigate views
 											editable : false,
 											eventLimit : true, // allow "more" link when too many events
-											events : [
-													{
-														title : 'JAVA/201711250001/S1711250001/T0003',
-														start : '2017-12-29T10:00:00',
-														end : '2017-12-29T11:00:00',
-														color : 'red',
-														description : 'This is a cool event'
-													},
-													{
-														title : 'JAVA/201711250004/S1711250001/T0003',
-														start : '2017-12-20T09:00:00',
-														end : '2017-12-20T10:00:00',
-														color : 'blue'
-													} ],
+											events : [${courses}],
 											eventClick : function(data, event,
 													view) {
 												var content = '<h4>'
@@ -112,6 +99,22 @@
 														.show(event);
 											}
 										});
+						
+						
+						context.init({
+							fadeSpeed : 100,
+							filter : function($obj) {
+							},
+							above : 'auto',
+							preventDoubleContext : true,
+							compress : false
+						});		
+						context.attach('.fc-event,.fc-list-item', [ {
+							text : '课程評價',
+							action : function(){
+							}
+						}
+						]);
 
 					});
 
