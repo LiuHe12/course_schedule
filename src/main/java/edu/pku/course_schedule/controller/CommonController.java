@@ -21,6 +21,11 @@ import edu.pku.course_schedule.util.MD5Util;
 @Controller
 public class CommonController {
 	private Logger logger=Logger.getLogger(CommonController.class);
+//	@RequestMapping(value = "/", method = { RequestMethod.GET,RequestMethod.POST})
+//	public ModelAndView index(ModelAndView mav,HttpServletRequest request) {
+//		request.getSession().
+//		return mav;
+//	}
 	@RequestMapping(value = "/change-my-pwd", method = { RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView changePwd(ModelAndView mav,HttpServletRequest request) {
 		Object user=request.getSession().getAttribute("user");
