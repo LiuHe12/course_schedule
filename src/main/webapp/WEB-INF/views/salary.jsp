@@ -71,6 +71,7 @@ $(document).ready(function() {
               <thead>
                 <tr>
                   <th>Teacher_ID</th>
+                  <th>Teacher_Name</th>
                   <th>Time</th>
                   <th>Bonus</th>
                   <th>Salary</th>

@@ -32,10 +32,8 @@
 <script src='js/context.js'></script>
 
 <!-- Qtip -->
-<link type="text/css" rel="stylesheet"
-	href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css" />
-<script type="text/javascript"
-	src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
+<link type="text/css" rel="stylesheet" href="css/jquery.qtip.css" />
+<script type="text/javascript" src="js/jquery.qtip.js"></script>
 
 <script>
 	$(document).ready(function() {

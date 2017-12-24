@@ -28,6 +28,10 @@
 <script src='lib/jquery.min.js'></script>
 <script src='js/fullcalendar.min.js'></script>
 
+<!-- Qtip -->
+<link type="text/css" rel="stylesheet" href="css/jquery.qtip.css" />
+<script type="text/javascript" src="js/jquery.qtip.js"></script>
+
 <!-- DatePicker -->
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -60,7 +64,87 @@
 		} else if (id == 2) { //student
 			$(".student-bar").show();
 		}
+		// qtip
+		var tooltip = $('<div/>').qtip({
+			id : 'fullcalendar',
+			prerender : true,
+			overwrite : false,
+			content : {
+				text : ' ',
+				title : {
+					button : true
+				}
+			},
+			position : {
+				my : 'bottom center',
+				at : 'top center',
+				target : 'mouse',
+				viewport : $('#fullcalendar'),
+				adjust : {
+					mouse : false,
+					scroll : false
+				}
+			},
+			show : false,
+			hide : false,
+			style : 'qtip-light'
+		}).qtip('api');
+		
+		
+		// fullCalendar
+		$('#calendar').fullCalendar({
+			header : {
+				left : 'prev,next today',
+				center : 'title',
+				right : 'month,agendaWeek,agendaDay,listWeek'
+			},
+			defaultDate : getNowFormatDate(),
+			navLinks : true, // can click day/week names to navigate views
+			editable : false,
+			eventLimit : true, // allow "more" link when too many events
+			events : [${courses}],
+			eventClick : function(data, event,
+					view) {
+				var content = '<h4>'
+						+ data.title
+						+ '</h4>'
+						+ '<p><b>Start:</b> '
+						+ data.start
+						+ '<br />'
+						+ (data.end
+								&& '<p><b>End:</b> '
+								+ data.end
+								+ '</p>' || '')
+						+ (data.description
+								&& '<p><b>Description:</b><br>'
+								+ data.description
+								+ '</p>' || '');
 
+				tooltip.set({
+					'content.text' : content
+				}).reposition(event)
+						.show(event);
+			}
+		});
+		
+		//获取当前时间，格式YYYY-MM-DD
+	    function getNowFormatDate() {
+	        var date = new Date();
+	        var seperator1 = "-";
+	        var year = date.getFullYear();
+	        var month = date.getMonth() + 1;
+	        var strDate = date.getDate();
+	        if (month >= 1 && month <= 9) {
+	            month = "0" + month;
+	        }
+	        if (strDate >= 0 && strDate <= 9) {
+	            strDate = "0" + strDate;
+	        }
+	        var currentdate = year + seperator1 + month + seperator1 + strDate;
+	        return currentdate;
+	    }
+	});
+		
 		//右鍵選單
 		context.init({
 			fadeSpeed : 100,
@@ -79,12 +163,18 @@
 		},{
 			text : '已上课',
 			action : function(){
-				PassedCourse();
+				if(confirm('确定修改?\n'+contextEle)){
+					PassedCourse();
+					window.location.reload();
+				}
 			}			
 		}, {
 			text : '删除',
 			action : function(){
-				deleteCourse();
+				if(confirm('确定删除?\n'+contextEle)){
+					deleteCourse();
+					window.location.reload();
+				}
 			}
 		} ]);
 		
@@ -139,37 +229,7 @@
 		
 
 		
-		// fullCalendar
-		$('#calendar').fullCalendar({
-			header : {
-				left : 'prev,next today',
-				center : 'title',
-				right : 'month,agendaWeek,agendaDay,listWeek'
-			},
-			defaultDate : getNowFormatDate(),
-			navLinks : true, // can click day/week names to navigate views
-			editable : false,
-			eventLimit : true, // allow "more" link when too many events
-			events : [${courses}]
-		});
-		
-		//获取当前时间，格式YYYY-MM-DD
-	    function getNowFormatDate() {
-	        var date = new Date();
-	        var seperator1 = "-";
-	        var year = date.getFullYear();
-	        var month = date.getMonth() + 1;
-	        var strDate = date.getDate();
-	        if (month >= 1 && month <= 9) {
-	            month = "0" + month;
-	        }
-	        if (strDate >= 0 && strDate <= 9) {
-	            strDate = "0" + strDate;
-	        }
-	        var currentdate = year + seperator1 + month + seperator1 + strDate;
-	        return currentdate;
-	    }
-	});
+
 	
 </script>
 
@@ -193,24 +253,20 @@
 		arrStudent = new Array();
 		arrCourse = null;
 		
+		var str = "<option>---请选择---</option>";
 		<c:forEach var="course" items="${student_courses}"> //從課表中找出這名老師的學生
 			if(sellectBox.value=="${course.teacher_id}"){
 				//console.log("${course.student_id}");
-				<c:forEach var="student" items="${students}"> //用學生id獲得完整學生信息
-					if("${course.student_id}"==("${student.id}")){
-						arrStudent.push("${student.name}/${student.id}");
-					}
-				</c:forEach>
+				
+				str += "<option "+
+				"id=\"${course.student_id}\" "+
+				"value=\"${course.student_id}\">"+
+				"${course.student_name}/${course.student_id}"+
+				"</option>";
 			} 
 		</c:forEach>
 		
-		//塞进option
-		var str = "<option>---请选择---</option>";
-		for(var i=0;i<arrStudent.length;i++){
-			var sp = new Array();
-			sp = arrStudent[i].split("/");
-			str += "<option id=\""+ sp[1] +"\" value=\""+ sp[1] +"\">"+arrStudent[i]+"</option>"
-		}
+
 		document.all('student-' + formSuffix).innerHTML = str;
 		document.all('course-' + formSuffix).innerHTML = ""; // 選完課又偷改老師,要清掉唷
 	}
@@ -252,14 +308,14 @@
 		
 		
 		//自動填值
-		$('#teacher-edit').val(course_id[3]);
+		$('#teacher-edit').val(course_id[5]);
 		getStudent($('#teacher-edit')[0]);
-		$('#student-edit').val(course_id[2]);
+		$('#student-edit').val(course_id[4]);
 		getCourse($('#student-edit')[0]);
 		$('#course-edit').val(course_id[0]);
 		
 		//修改的課號
-		$('#course_id').val(course_id[1]);
+		$('#course_id').val(course_id[3]);
 	}
 	
 	// 刪課

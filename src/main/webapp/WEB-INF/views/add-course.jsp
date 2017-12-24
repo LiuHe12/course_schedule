@@ -1,15 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- 
-*
-*
-*注意：此页面为“加课”，并非“排课”
-*排课功能在admin页面
-*
-*
- -->
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <title>Matrix Admin</title>
@@ -17,23 +9,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="css/uniform.css" />
-<link rel="stylesheet" href="css/select2.css" />
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link
 	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
 	rel='stylesheet' type='text/css'>
+<!-- <link rel="stylesheet" href="css/datepicker.css" />-->
+<link rel="stylesheet" href="css/uniform.css" />
+<link rel="stylesheet" href="css/select2.css" />
+
+<script src='lib/jquery.min.js'></script>
+<script src='lib/moment.min.js'></script>
 
 <script src="js/jquery.min.js"></script>
-<script src="js/jquery.ui.custom.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.uniform.js"></script>
 <script src="js/select2.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script src="js/matrix.js"></script>
 <script src="js/matrix.form_validation.js"></script>
+
+<script>
+$(document).ready(function() {
+	
+	// left-bar
+	
+	
+	var id = "<%=session.getAttribute("identity")%>";
+		if (id == 0) { // admin
+			$(".admin-bar").show();
+		} else if (id == 1) { //teacher
+			$(".teacher-bar").show();
+		} else if (id == 2) { //student
+			$(".student-bar").show();
+		}
+	});
+</script>
 </head>
 <body>
 
@@ -49,7 +61,10 @@
 	</div>
 	<!--close-Header-part-->
 	<!--top-Header-menu-->
-
+	<script>
+		
+		$('#add-course-bar').addClass("active");
+	</script>
 
 	<c:import url="top-bar.jsp"></c:import>
 	<c:import url="left-bar.jsp"></c:import>
@@ -60,8 +75,7 @@
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="index.html" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Form
-					elements</a> <a href="#" class="current">Common elements</a>
+					class="icon-home"></i> Home</a> <a href="#" class="current">新增课程</a>
 			</div>
 			<h1>新增课程</h1>
 		</div>
@@ -83,7 +97,8 @@
 								<div class="control-group">
 									<label class="control-label">课程名称 :</label>
 									<div class="controls">
-										<input type="text" name="course_name" id="course_name" class="span11"/>
+										<input type="text" name="course_name" id="course_name"
+											class="span11" />
 									</div>
 								</div>
 								<div class="control-group">
@@ -116,7 +131,8 @@
 								<div class="control-group">
 									<label class="control-label">课程数量 :</label>
 									<div class="controls">
-										<input type="text" name="number" id="number" class="span11" placeholder="整数"/>
+										<input type="text" name="number" id="number" class="span11"
+											placeholder="整数" />
 									</div>
 								</div>
 								<div class="form-actions">
@@ -132,7 +148,6 @@
 			</div>
 		</div>
 	</div>
-	<!--Footer-part-->
 
 </body>
 </html>
