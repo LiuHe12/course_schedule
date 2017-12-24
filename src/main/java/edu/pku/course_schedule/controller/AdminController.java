@@ -371,5 +371,69 @@ public class AdminController {
 			e.printStackTrace();
 		}
 	}
+	@RequestMapping(value = "/PassedCourse", method = { RequestMethod.GET, RequestMethod.POST })
+	private void PassedCourse(HttpServletRequest request, HttpServletResponse response) {
+		Course_Service cs = new Course_Service_Imp();
+		String course_string = request.getParameter("course_id");
+		String course_name = course_string.split("/")[0];
+		String course_id = course_string.split("/")[3];
+		boolean r = cs.setCoursePass(course_id);
+		try {
+			response.setContentType("text/html;charset=utf-8");
+			if (r) {
+				response.getWriter().print("设置 " + course_name + " 已上成功!");
+			} else {
+				response.getWriter().print("设置 " + course_name + " 已上失败!");
+			}
+			response.flushBuffer();
+		} catch (IOException e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping(value = "/editCourse", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView editCourse(ModelAndView mav,HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/login");
+			return mav;
+		}
+		Course course = new Course();
+		course.setStudent_ID(request.getParameter("student_id"));
+		course.setTeacher_ID(request.getParameter("teacher_id"));
+		course.setCourse_ID(request.getParameter("course_id"));
+		try {
+			course.setName(new String(request.getParameter("course_name").getBytes("ISO-8859-1"), "UTF-8"));
+		} catch (UnsupportedEncodingException e1) {
+			logger.error(e1.toString());
+			e1.printStackTrace();
+		}
+		String classDate = request.getParameter("classDate");
+
+		try {
+			String time = request.getParameter("time") + ":00";
+			String rest_time = request.getParameter("rest_time") + ":00";
+			course.setTime(new Timestamp(df.parse(classDate + " " + time).getTime()));
+			course.setRest_time(new Timestamp(df.parse(classDate + " " + rest_time).getTime()));
+		} catch (Exception e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+		Course_Service cs = new Course_Service_Imp();
+		
+		boolean r = cs.modifyCourse(course);
+
+		if (!r) {
+			//mav.addObject("error", "排课失败！");
+			mav.addObject("result", "modify course failed！");
+		} else {
+			// mav.addObject("error", "排课成功！");
+			mav.addObject("result", "modify course success！");
+		}
+		mav.setViewName("redirect:/admin");
+		// request.getSession().setMaxInactiveInterval(20 * 60);
+		return mav;
+	}
 
 }

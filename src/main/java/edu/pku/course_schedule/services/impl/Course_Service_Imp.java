@@ -237,4 +237,17 @@ public class Course_Service_Imp implements Course_Service {
 		return courses;
 	}
 
+	@Override
+	public boolean modifyCourse(Course course) {
+		boolean r=false;
+		try {
+			r=dao.modifyCourseTime(course);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}finally {
+			return r;
+		}
+	}
+
 }

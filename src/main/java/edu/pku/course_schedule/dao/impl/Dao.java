@@ -11,6 +11,7 @@ import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.dao.entity.Teacher_salary;
+import edu.pku.course_schedule.services.Course_Service;
 
 public interface Dao {
 	public Object login(String userId,String password,int identify) throws SQLException;//�û���¼
@@ -83,4 +84,6 @@ public interface Dao {
 	public ArrayList<Student_course> getStudentCourses() throws SQLException;
 	
 	public ArrayList<Course> getCoursesByUserId(String user_id)throws SQLException;
+	
+	public boolean modifyCourseTime(Course course)throws SQLException;
 }

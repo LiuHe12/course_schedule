@@ -1064,4 +1064,29 @@ public class JdbcDao implements Dao {
 		return courses;
 	}
 
+	@Override
+	public boolean modifyCourseTime(Course course) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		PreparedStatement st=null;
+		
+		String sql=String.format("update %s set time=?,rest_time=? where course_id=?", course_table_name);
+		st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setTimestamp(1, course.getTime());
+		st.setTimestamp(2, course.getRest_time());
+		st.setString(3, course.getCourse_ID());
+		st.execute();
+		int r = st.getUpdateCount();
+		jdbcUtil.release(st, conn);
+		if (r <= 0) {
+			logger.info(String.format("modify course [ %s ] failed -> %s", course.getName(),
+					df.format(new java.util.Date())));
+			return false;
+		} else {
+			logger.info(String.format("modify course [ %s ] successfully -> %s", course.getName(),
+					df.format(new java.util.Date())));
+			return true;
+		}
+
+	}
+
 }

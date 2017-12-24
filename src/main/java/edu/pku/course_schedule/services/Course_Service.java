@@ -49,5 +49,7 @@ public interface Course_Service {
 	public boolean setCoursePass(String teacher_id,String student_id,Timestamp course_time);//根据老师id，学生id和上课时间标记已上课
 
 	public ArrayList<Student_course> getStudentCourses();
+	
+	public boolean modifyCourse(Course course);
 	//TODO邮件提醒上课功能
 }

@@ -271,7 +271,7 @@
 			data: {"course_id":contextEle},
 			dataType: "text",
 			success: function(e){alert(e);},
-			error: function(e){alert("服务器返回状态失败");}
+			error: function(e){alert("服务器返回状态错误");}
 		});
 		
 	}
@@ -283,9 +283,9 @@
 			type: "post",
 			url: "PassedCourse",
 			data: {"course_id":contextEle},
-			dataType: "json",
-			success: function(e){alert("修改成功");},
-			error: function(e){alert("修改失败");}
+			dataType: "text",
+			success: function(e){alert(e);},
+			error: function(e){alert("服务器返回状态错误");}
 		});
 	}
 	
