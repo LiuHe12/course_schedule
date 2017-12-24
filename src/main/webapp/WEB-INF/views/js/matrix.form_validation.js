@@ -3,7 +3,7 @@ $(document).ready(function(){
 	
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 	
-	$('select').select2();
+	$('#s1').select2();
 	
 	// Form Validation
     $("#basic_validate").validate({
@@ -35,7 +35,7 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#my_validate").validate({
+	$("#form_validate").validate({
 		rules:{
 			required:{
 				required:true
@@ -51,7 +51,8 @@ $(document).ready(function(){
 			number:{
 				required:true,
 				number:true
-			}
+			},
+
 		},
 		errorClass: "help-inline",
 		errorElement: "span",
@@ -95,17 +96,51 @@ $(document).ready(function(){
 			required:{
 				required:true
 			},
-			min:{
-				required: true,
-				min:10
-			},
-			max:{
-				required:true,
-				max:24
-			},
 			number:{
 				required:true,
 				number:true
+			},
+			digits:{
+				required:true,
+				digits:true
+			},
+
+			student_pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			student_pwd2:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#student_pwd"
+			},
+			teacher_pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			teacher_pwd2:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#teacher_pwd"
+			},
+			admin_pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			admin_pwd2:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#admin_pwd"
+			},
+			email:{
+				required:true,
+				email: true
 			}
 		},
 		errorClass: "help-inline",

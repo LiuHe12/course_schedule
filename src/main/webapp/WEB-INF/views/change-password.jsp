@@ -21,19 +21,7 @@
 <script src="js/jquery.wizard.js"></script>
 <script src="js/matrix.js"></script>
 <script src="js/matrix.wizard.js"></script>
-<script>
-$(document).ready(function() {
-	// left-bar
-	var id = "<%=session.getAttribute("identity")%>";
-		if (id == 0) { // admin
-			$(".admin-bar").show();
-		} else if (id == 1) { //teacher
-			$(".teacher-bar").show();
-		} else if (id == 2) { //student
-			$(".student-bar").show();
-		}
-	});
-</script>
+
 </head>
 <body>
 

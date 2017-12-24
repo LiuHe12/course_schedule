@@ -31,17 +31,7 @@
 
 <script>
 	$(document).ready(function() {
-		
-		// left-bar
-		var id = "<%=session.getAttribute("identity")%>";
-			if (id == 0) { // admin
-				$(".admin-bar").show();
-			} else if (id == 1) { //teacher
-				$(".teacher-bar").show();
-			} else if (id == 2) { //student
-				$(".student-bar").show();
 
-			}
 			
 			// fullCalendar
 			$('#calendar').fullCalendar({

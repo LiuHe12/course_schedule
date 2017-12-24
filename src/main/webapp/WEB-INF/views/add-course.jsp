@@ -28,24 +28,9 @@
 <script src="js/select2.min.js"></script>
 <script src="js/jquery.validate.js"></script>
 <script src="js/matrix.js"></script>
-<script src="js/matrix.form_validation.js"></script>
+<script src="js/matrix.form_validation.js?version=4"></script>
 
-<script>
-$(document).ready(function() {
-	
-	// left-bar
-	
-	
-	var id = "<%=session.getAttribute("identity")%>";
-		if (id == 0) { // admin
-			$(".admin-bar").show();
-		} else if (id == 1) { //teacher
-			$(".teacher-bar").show();
-		} else if (id == 2) { //student
-			$(".student-bar").show();
-		}
-	});
-</script>
+
 </head>
 <body>
 
@@ -61,10 +46,6 @@ $(document).ready(function() {
 	</div>
 	<!--close-Header-part-->
 	<!--top-Header-menu-->
-	<script>
-		
-		$('#add-course-bar').addClass("active");
-	</script>
 
 	<c:import url="top-bar.jsp"></c:import>
 	<c:import url="left-bar.jsp"></c:import>
@@ -90,15 +71,13 @@ $(document).ready(function() {
 							<h5>新增课程</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form class="form-horizontal" method="POST" action="addCourse"
-								id="my_validate">
-								<!-- Validate by #my_validate, see matrix.form_validation -->
+							<form class="form-horizontal my_validate" method="POST" action="addCourse">
 
 								<div class="control-group">
 									<label class="control-label">课程名称 :</label>
 									<div class="controls">
 										<input type="text" name="course_name" id="course_name"
-											class="span11" />
+											class="span11 required" />
 									</div>
 								</div>
 								<div class="control-group">
@@ -124,15 +103,13 @@ $(document).ready(function() {
 								<div class="control-group">
 									<label class="control-label">课程价格 :</label>
 									<div class="controls">
-										<input type="text" name="price" id="price" class="span11"
-											placeholder="整数,每堂课的价格" />
+										<input type="text" name="price" id="price" class="span11 digits" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">课程数量 :</label>
 									<div class="controls">
-										<input type="text" name="number" id="number" class="span11"
-											placeholder="整数" />
+										<input type="text" name="number" id="number" class="span11 digits"/>
 									</div>
 								</div>
 								<div class="form-actions">
