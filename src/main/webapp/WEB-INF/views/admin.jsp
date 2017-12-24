@@ -134,7 +134,7 @@
 	        var currentdate = year + seperator1 + month + seperator1 + strDate;
 	        return currentdate;
 	    }
-	});
+	
 		
 		//右鍵選單
 		context.init({
@@ -219,7 +219,7 @@
 		});
 		
 
-		
+});	
 
 	
 </script>
@@ -344,7 +344,7 @@
 
 <!--//===========================新增課表彈出式畫面Css===================-->
 <style type="text/css">
-.aboveCal { #
+.aboveCal { 
 	padding-bottom: 0px;
 }
 
@@ -372,7 +372,7 @@
 	left: 50%;
 	top: 50%;
 	margin-left: -285px;
-	margin-top: -180.8px;
+	margin-top: -330.8px; #-180.8
 	border-radius: 3px;
 	background-color: #fff;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
