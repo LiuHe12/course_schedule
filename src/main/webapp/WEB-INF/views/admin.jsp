@@ -269,9 +269,9 @@
 			type: "post",
 			url: "deleteCourse",
 			data: {"course_id":contextEle},
-			dataType: "json",
-			success: function(e){alert("删除成功");},
-			error: function(e){alert("删除失败");}
+			dataType: "text",
+			success: function(e){alert(e);},
+			error: function(e){alert("服务器返回状态失败");}
 		});
 		
 	}

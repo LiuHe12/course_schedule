@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.interfaces.RSAKey;
 import java.sql.Date;
@@ -9,10 +10,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +59,18 @@ public class AdminController {
 		mav.addObject("student_courses", student_courses);
 		request.getSession().setAttribute("student_courses", student_courses);
 
+		Set<Teacher> teahcers = new HashSet<Teacher>();
+		List<String> teacher_ids = new ArrayList<String>();
+		for (Student_course student_course : student_courses) {
+			if (!teacher_ids.contains(student_course.getTeacher_id())) {
+				Teacher teacher = new Teacher();
+				teacher.setId(student_course.getTeacher_id());
+				teacher.setName(student_course.getTeacher_name());
+				teacher_ids.add(student_course.getTeacher_id());
+				teahcers.add(teacher);
+			}
+		}
+		mav.addObject("teachers", teahcers);
 		Calendar c1 = Calendar.getInstance();
 		Calendar c2 = Calendar.getInstance();
 		c1.add(Calendar.MONTH, -1); // 得到前一个月
@@ -333,13 +351,25 @@ public class AdminController {
 		return mav;
 	}
 
-	// @RequestMapping(value = "/deleteCourse", method = { RequestMethod.GET,
-	// RequestMethod.POST })
-	// private ModelAndView deleteCourse(ModelAndView mav, HttpServletRequest
-	// request) {
-	//
-	// String course_id=request.getParameter(course_id")deleteCourse
-	// return mav;
-	// }
+	@RequestMapping(value = "/deleteCourse", method = { RequestMethod.GET, RequestMethod.POST })
+	private void deleteCourse(HttpServletRequest request, HttpServletResponse response) {
+		Course_Service cs = new Course_Service_Imp();
+		String course_string = request.getParameter("course_id");
+		String course_name = course_string.split("/")[0];
+		String course_id = course_string.split("/")[3];
+		boolean r = cs.delCourse(course_id);
+		try {
+			response.setContentType("text/html;charset=utf-8");
+			if (r) {
+				response.getWriter().print("删除 " + course_name + " 成功!");
+			} else {
+				response.getWriter().print("删除 " + course_name + " 失败!");
+			}
+			response.flushBuffer();
+		} catch (IOException e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+	}
 
 }
