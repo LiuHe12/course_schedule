@@ -250,4 +250,17 @@ public class Course_Service_Imp implements Course_Service {
 		}
 	}
 
+	@Override
+	public boolean setRemind(String course_id,String remind) {
+		boolean r=false;
+		try {
+			r=dao.setRemind(course_id,remind);
+		} catch (SQLException e) {
+			logger.info(String.format("%s -> %s", e.toString(),df.format(new java.util.Date())));
+			e.printStackTrace();
+		}finally {
+			return r;
+		}
+	}
+
 }

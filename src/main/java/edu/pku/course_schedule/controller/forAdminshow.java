@@ -6,12 +6,14 @@ public class forAdminshow {
 	private String start;
 	private String end;
 	private String color;
+	private String description;
 
-	public forAdminshow(String title, String start, String end, String color) {
+	public forAdminshow(String title, String start, String end, String color,String description) {
 		this.title = title;
 		this.start = start;
 		this.end = end;
 		this.color = color;
+		this.description=description;
 	}
 
 	@Override
@@ -21,6 +23,7 @@ public class forAdminshow {
 				"start:" + "\'" + start + "\', " + 
 				"end:" + "\'" + end + "\', " + 
 				"color:" + "\'" + color + "\'" + 
+				"description"+ "\'" + description + "\'" + 
 				"}";
 	}
 

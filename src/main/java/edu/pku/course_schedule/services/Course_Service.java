@@ -51,5 +51,7 @@ public interface Course_Service {
 	public ArrayList<Student_course> getStudentCourses();
 	
 	public boolean modifyCourse(Course course);
+	
+	public boolean setRemind(String course_id,String remind);
 	//TODO邮件提醒上课功能
 }

@@ -100,7 +100,11 @@ public class AdminController {
 			} else {
 				color = "blue";
 			}
-			forAdminshow ads = new forAdminshow(title, start, end, color);
+			String description=course.getRemind();
+			if(description==null) {
+				description="null";
+			}
+			forAdminshow ads = new forAdminshow(title, start, end, color,description);
 			sb.append(ads.toString());
 			index++;
 			if (index != courses.size())

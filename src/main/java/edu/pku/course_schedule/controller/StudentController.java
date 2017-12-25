@@ -36,7 +36,6 @@ public class StudentController {
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
 		for (Course course : courses) {
-			//String title = course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
 			String title = course.getName() + "/" + course.getStudent_name() + "/" + course.getTeacher_name() + "/"
 					+ course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
 			String start = df.format(course.getTime()).replace(' ', 'T');
@@ -47,7 +46,11 @@ public class StudentController {
 			} else {
 				color = "blue";
 			}
-			forAdminshow ads = new forAdminshow(title, start, end, color);
+			String description=course.getRemind();
+			if(description==null) {
+				description="null";
+			}
+			forAdminshow ads = new forAdminshow(title, start, end, color,description);
 			sb.append(ads.toString());
 			index++;
 			if (index != courses.size())

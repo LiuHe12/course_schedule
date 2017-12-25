@@ -89,4 +89,6 @@ public interface Dao {
 	public ArrayList<Course> getCoursesByUserId(String user_id)throws SQLException;
 	
 	public boolean modifyCourseTime(Course course)throws SQLException;
+	
+	public boolean setRemind(String course_id,String remind) throws SQLException;
 }

@@ -30,6 +30,8 @@ public class Course {
 	
 	private String teacher_name;
 	
+	private String remind;
+	
 	
 	/**********Getter and Setter**********/
 
@@ -128,6 +130,14 @@ public class Course {
 
 	public void setTeacher_name(String teacher_name) {
 		this.teacher_name = teacher_name;
+	}
+
+	public String getRemind() {
+		return remind;
+	}
+
+	public void setRemind(String remind) {
+		this.remind = remind;
 	}
 	
 	
