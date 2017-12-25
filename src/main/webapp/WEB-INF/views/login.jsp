@@ -11,8 +11,8 @@
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="css/matrix-login.css" />
         <link rel="stylesheet" href="css/select2.css" />
+        <link href='css/googleapis.css' rel='stylesheet' type='text/css'>
         <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
         <style type="text/css"> 
             input,select { height:30px; vertical-align:top; border:0px; display:inline-block; width:75%; line-height:22px;  margin-bottom:3px; box-sizing: content-box;line-height: 22px}
          

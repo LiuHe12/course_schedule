@@ -22,8 +22,8 @@ public class forAdminshow {
 				"title:" + "\'" + title + "\', " + 
 				"start:" + "\'" + start + "\', " + 
 				"end:" + "\'" + end + "\', " + 
-				"color:" + "\'" + color + "\'" + 
-				"description"+ "\'" + description + "\'" + 
+				"color:" + "\'" + color + "\', " + 
+				"description:"+ "\'" + description + "\'" + 
 				"}";
 	}
 
