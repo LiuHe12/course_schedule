@@ -163,6 +163,26 @@ public class JdbcDao implements Dao {
 			return true;
 		}
 	}
+	@Override
+	public boolean addAdmin(Administrator admin) throws SQLException {
+		Connection conn = jdbcUtil.getConnection();
+		String sql = String.format(
+				"insert into %s (id,password)values (?,?)",administrator_table_name);
+		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
+		st.setString(1, admin.getId());
+		st.setString(2, MD5Util.getMD5(admin.getPassword()));
+		st.execute();
+		int r = st.getUpdateCount();
+		jdbcUtil.release(st, conn);
+		if (r <= 0) {
+			logger.debug(String.format("插入管理员[ %s] 失败", admin.getId()));
+			return false;
+		} else {
+			logger.debug(String.format("插入管理员 [ %s ]成功",admin.getId()));
+			return true;
+		}
+	}
+
 
 	@Override
 	public boolean modifyStudent(String student_id, Student student) throws SQLException {

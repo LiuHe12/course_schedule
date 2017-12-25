@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
@@ -21,6 +22,8 @@ public interface Dao {
 	public boolean addStudent(Student student)throws SQLException;//���ѧ��
 	
 	public boolean addTeacher(Teacher teacher)throws SQLException;//�����ʦ
+	
+	public boolean addAdmin(Administrator admin)throws SQLException;
 	
 	public boolean modifyStudent(String student_id,Student student)throws SQLException;//�޸�ѧ����Ϣ
 	

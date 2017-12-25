@@ -2,6 +2,7 @@ package edu.pku.course_schedule.services;
 
 import java.util.ArrayList;
 
+import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Teacher;
 
@@ -20,6 +21,8 @@ public interface User_Service {
 	public boolean modifyPassword(String userId,int identify,String newPassword);//修改密���
 	
 	public boolean addStudent(Student student);//添���学���
+	
+	public boolean addAdmin(Administrator admin);
 	
 	public boolean addTeacher(Teacher teacher);//添���������
 	

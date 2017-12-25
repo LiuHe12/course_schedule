@@ -24,6 +24,7 @@ public class User_Service_Imp implements User_Service {
 	public void test() throws SQLException {
 		dao.test();
 	}
+
 	@Override
 	public Object login(String userId, String password, int identify) {
 		Object obj = null;
@@ -45,13 +46,13 @@ public class User_Service_Imp implements User_Service {
 
 	@Override
 	public boolean modifyPassword(String userId, int identify, String newPassword) {
-		boolean r=false;
+		boolean r = false;
 		try {
-			r=dao.modifyPassword(userId, identify, newPassword);
+			r = dao.modifyPassword(userId, identify, newPassword);
 		} catch (SQLException e) {
 			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
 			e.printStackTrace();
-		}finally {
+		} finally {
 			return r;
 		}
 	}
@@ -74,6 +75,19 @@ public class User_Service_Imp implements User_Service {
 		boolean r = false;
 		try {
 			r = dao.addTeacher(teacher);
+		} catch (SQLException e) {
+			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
+			e.printStackTrace();
+		} finally {
+			return r;
+		}
+	}
+
+	@Override
+	public boolean addAdmin(Administrator admin) {
+		boolean r = false;
+		try {
+			r = dao.addAdmin(admin);
 		} catch (SQLException e) {
 			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
 			e.printStackTrace();
@@ -150,17 +164,17 @@ public class User_Service_Imp implements User_Service {
 
 	@Override
 	public Object getUserByIdentityId(String identifyId, int identify) {
-		Object user=null;
+		Object user = null;
 		try {
-			if(identify==dao.teacher_identify) {
-				user=(Teacher)dao.getUserByIdentityId(identifyId, identify);
-			}else if(identify==dao.student_identity) {
-				user=(Student)dao.getUserByIdentityId(identifyId, identify);
+			if (identify == dao.teacher_identify) {
+				user = (Teacher) dao.getUserByIdentityId(identifyId, identify);
+			} else if (identify == dao.student_identity) {
+				user = (Student) dao.getUserByIdentityId(identifyId, identify);
 			}
 		} catch (SQLException e) {
 			logger.error(String.format("%s -> %s", e.toString(), df.format(new Date())));
 			e.printStackTrace();
-		}finally {
+		} finally {
 			return user;
 		}
 	}

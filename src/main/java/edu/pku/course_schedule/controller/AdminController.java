@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
@@ -265,7 +266,7 @@ public class AdminController {
 				e.printStackTrace();
 			}
 			student.setEmail(request.getParameter("email"));
-			student.setPassword(request.getParameter("student_passwd"));
+			student.setPassword(request.getParameter("student_pwd"));
 			student.setIdentify_id(request.getParameter("student_identify_id"));
 			r = us.addStudent(student);
 		} else if (request.getParameter("select_one").equals("add_teacher")) {
@@ -277,9 +278,9 @@ public class AdminController {
 				e1.printStackTrace();
 			}
 			// TODO
-			teacher.setKind(Integer.parseInt(request.getParameter("kind")));// 最好设计成select
-			teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));// 前端检查
-			teacher.setPassword(request.getParameter("teacher_passwd"));
+			teacher.setKind(Integer.parseInt(request.getParameter("kind")));
+			teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));
+			teacher.setPassword(request.getParameter("teacher_pwd"));
 			teacher.setIdentify_id(request.getParameter("teacher_identify_id"));
 			String enroll_time = request.getParameter("entertime");
 			try {
@@ -289,6 +290,16 @@ public class AdminController {
 				e.printStackTrace();
 			}
 			r = us.addTeacher(teacher);
+		}else if (request.getParameter("select_one").equals("add_admin")) {
+			Administrator admin=new Administrator();
+			try {
+				admin.setId(new String(request.getParameter("admin_name").getBytes("ISO-8859-1"), "UTF-8"));
+				admin.setPassword(new String(request.getParameter("admin_pwd").getBytes("ISO-8859-1"), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				
+				e.printStackTrace();
+			}
+			r=us.addAdmin(admin);
 		}
 		if (!r) {
 			mav.addObject("error", "add user failed");

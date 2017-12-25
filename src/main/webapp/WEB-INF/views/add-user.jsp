@@ -102,7 +102,7 @@
 								<option value="add_teacher">新增教师帐号</option>
 								<option value="add_admin">新增管理员帐号</option>
 							</select>
-							<form id="form-wizard" class="form-horizontal my_validate" method="post">
+							<form id="form-wizard" action="addUser" class="form-horizontal my_validate" method="post">
 								<!--//選擇創建哪個角色的帳號-->
 								<input id="hidden_type" type="hidden" name="select_one" />
 								<div id="form-wizard-1" class="step">
@@ -113,14 +113,14 @@
 										<div class="control-group">
 											<label class="control-label">学生姓名</label>
 											<div class="controls">
-												<input type="text" name="name" class="required"/>
+												<input type="text" name="student_name" class="required"/>
 											</div>
 										</div>
 										
 										<div class="control-group">
 											<label class="control-label">身份证号</label>
 											<div class="controls">
-												<input type="text" name="identify_id" class="required"/>
+												<input type="text" name="student_identify_id" class="required"/>
 											</div>
 										</div>
 										
@@ -157,14 +157,14 @@
 										<div class="control-group">
 											<label class="control-label">教师姓名</label>
 											<div class="controls">
-												<input type="text" name="name" class="required" />
+												<input type="text" name="teacher_name" class="required" />
 											</div>
 										</div>
 										
 										<div class="control-group">
 											<label class="control-label">身份证号</label>
 											<div class="controls">
-												<input type="text" name="identify_id" class="required" />
+												<input type="text" name="teacher_identify_id" class="required" />
 											</div>
 										</div>
 										
@@ -228,7 +228,7 @@
 										<div class="control-group">
 											<label class="control-label">Admin名称</label>
 											<div class="controls">
-												<input type="text" name="name" class="required" />
+												<input type="text" name="admin_name" class="required" />
 											</div>
 										</div>
 										

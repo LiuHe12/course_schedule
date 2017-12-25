@@ -509,6 +509,7 @@
 							<div class="col-md-9 col-sm-12">
 								<h3>修改课程</h3>
 
+
 								<!-- 自动填值 -->
 								<form id="editCourse" action="editCourse" method="post">
 
@@ -523,9 +524,9 @@
 
 									</select><br> 选择课程:<br> <select name="course_name"
 										id="course-edit"></select><br> 上课日期:<br> <input
-										type="text" class="datepicker"><br> 上课时间:<br>
-									<input type="text" class="timePicker"><br> 下课时间:<br>
-									<input type="text" class="timePicker"><br> <input
+										type="text" class="datepicker" name="classDate"><br> 上课时间:<br>
+									<input type="text" class="timePicker" name="time"><br> 下课时间:<br>
+									<input type="text" class="timePicker" name="rest_time"><br> <input
 										type="hidden" name="course_id" id="course_id">
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
