@@ -15,9 +15,7 @@
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
+<link href='css/googleapis.css' rel='stylesheet' type='text/css'>
 
 <!-- Full calendar -->
 <link href='css/fullcalendar.min.css' rel='stylesheet' />

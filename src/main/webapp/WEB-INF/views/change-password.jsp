@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='css/googleapis.css' rel='stylesheet' type='text/css'>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.ui.custom.js"></script>
