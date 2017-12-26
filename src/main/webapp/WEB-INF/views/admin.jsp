@@ -177,7 +177,6 @@
 		// 隱藏選單相關
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
-			cleanForm();
 		}
 
 		function showLayer(id) {
@@ -368,29 +367,30 @@
 			var json_course = eval("[" + "${courses}" + "]");
 
 			var conflict = "";
-
+			//console.log("start:"+start+"\nend:"+end);
 			$.each(json_course, function(index, course) {
-				//console.log(index+'content: '+course.start);
-				var course_start = course.start.replace('T', ' ');
-				var course_end = course.end.replace('T', ' ');
 				var title = course.title.split('/');
 				//console.log(title);
+					var c_start = new Date(course.start);
+					var c_end = new Date(course.end);				
+				//console.log("course:"+title[3]+"\nc_start:"+c_start+"\nc_end: "+c_end);
 				if (title[5] == teacher_id || title[4] == student_id) {
-					if ((course_start < start && start < course_end)
-							|| (course_start < end && end < course_end)) {
+					// (開始時間包了已排時段)||(結束時間包了已排時段)||(包住了已排時段)
+					if ((c_start < start && start < c_end)
+							|| (c_start < end && end < c_end)
+							|| (c_start > start && c_end < end)){
 						
-						conflict = course.title;
-						console.log(course.title+","+conflict);
+						conflict = course.title+"\nStart: "+c_start+"\nEnd:   "+c_end;
+						//console.log(course.title+","+conflict);
 						return false; //break
 					}
 				}
 
 			});
 
-			if (conflict == "") {
-				alert('okok');
-			} else {
-				alert("课程冲突：请选择其他时间\n" + conflict);
+			if (conflict != "") {
+				alert("课程冲突,请选择其他时间\n" + conflict);
+				return false;
 			}
 		}
 	}
@@ -524,11 +524,9 @@
 							</div>
 							<div class="col-md-9 col-sm-12">
 								<h3>排课</h3>
-								<form id="addCourse" class="my_validate" action="arrangeCourse"
-									method="post">
+								<form id="addCourse" class="my_validate" action="arrangeCourse" method="post" onsubmit="return courseSubmit('add')">
 
-									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
-										class="required" onchange="getStudent(this)">
+									教师名称/ID:<br> <select name="teacher_id" id="teacher-add" class="required" onchange="getStudent(this)">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
@@ -545,7 +543,7 @@
 										type="text" class="timePicker required" id="endTime-add"
 										name="rest_time"><br>
 
-									<button class="btn btn-success hwLayer-ok" onclick="courseSubmit('add')">确 定</button>
+									<button class="btn btn-success hwLayer-ok" type="submit">确 定</button>
 									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
 								</form>
 							</div>
@@ -566,27 +564,23 @@
 
 
 								<!-- 自动填值 -->
-								<form id="editCourse" action="editCourse" method="post">
+								<form id="editCourse" class="my_validate" action="editCourse" method="post" onsubmit="return courseSubmit('edit')">
 
-									教师名称/ID:<br> <select name="teacher_id" id="teacher-edit"
-										onchange="getStudent(this)">
+									教师名称/ID:<br> <select name="teacher_id" class="required" id="teacher-edit" onchange="getStudent(this)">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
-									</select><br> 学生名称/ID:<br> <select name="student_id"
-										id="student-edit" onchange="getCourse(this)">
+									</select><br> 
+									学生名称/ID:<br> <select name="student_id" class="required" id="student-edit" onchange="getCourse(this)"></select><br> 
+									选择课程:<br> <select name="course_name" class="required" id="course-edit"></select><br> 
+									
+									上课日期:<br> <input type="text" class="datepicker required" name="classDate" id="classDate-edit"><br> 
+									上课时间:<br> <input type="text" class="timePicker required" name="time" id="startTime-edit"><br>
+									下课时间:<br> <input type="text" class="timePicker required" name="rest_time" id="endTime-edit"><br> 
+									<input type="hidden" name="course_id" id="course_id">
 
-									</select><br> 选择课程:<br> <select name="course_name"
-										id="course-edit"></select><br> 上课日期:<br> <input
-										type="text" class="datepicker" id="classDate-edit"
-										name="classDate"><br> 上课时间:<br> <input
-										type="text" class="timePicker" name="time" id="startTime-edit"><br>
-									下课时间:<br> <input type="text" class="timePicker"
-										name="rest_time" id="endTime-edit"><br> <input
-										type="hidden" name="course_id" id="course_id">
-
-									<button class="btn btn-success hwLayer-ok" onclick="courseSubmit('edit')">确定</button>
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
 									<button class="btn btn-warning hwLayer-cancel" type="reset">取消</button>
 								</form>
 							</div>
