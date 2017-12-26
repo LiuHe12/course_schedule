@@ -167,6 +167,11 @@
 		$(document).on('contextmenu', '.fc-event', function(e) {
 			contextEle = $(this).find(".fc-title").text();
 		});
+		$(document).on('contextmenu', '.fc-list-item', function(e) {
+			contextEle = $(this).find(".fc-list-item-title").text();
+		});
+		
+		
 
 		// DatePicker and TimePicker
 		$(".timePicker").hunterTimePicker();
@@ -378,7 +383,7 @@
 					// (開始時間包了已排時段)||(結束時間包了已排時段)||(包住了已排時段)
 					if ((c_start < start && start < c_end)
 							|| (c_start < end && end < c_end)
-							|| (c_start > start && c_end < end)){
+							|| (c_start >= start && c_end <= end)){
 						
 						conflict = course.title+"\nStart: "+c_start+"\nEnd:   "+c_end;
 						//console.log(course.title+","+conflict);
