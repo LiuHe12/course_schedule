@@ -8,25 +8,28 @@
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
 <link rel="stylesheet" href="css/matrix-style.css" />
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link
-	href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800'
-	rel='stylesheet' type='text/css'>
+<link href='css/googleapis.css' rel='stylesheet' type='text/css'>
 
-<!-- Full calendar -->
-<link href='css/fullcalendar.min.css' rel='stylesheet' />
-<link href='css/fullcalendar.print.min.css' rel='stylesheet'
-	media='print' />
-<script src='lib/moment.min.js'></script>
+
+<script src="js/jquery-3.2.1.min.js"></script>
 <script src='lib/jquery.min.js'></script>
-<script src='js/fullcalendar.min.js'></script>
+<script src="js/jquery.min.js"></script>
+
+<script src='lib/moment.min.js'></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.uniform.js"></script>
+<script src="js/select2.min.js"></script>
+<script src="js/jquery.validate.js"></script>
+
+<script src="js/matrix.js"></script>
+<script src="js/matrix.form_validation.js?version=4"></script>
+
 
 <!-- Qtip -->
 <link type="text/css" rel="stylesheet" href="css/jquery.qtip.css" />
@@ -38,6 +41,8 @@
 <link rel="stylesheet"
 	href="http://jqueryui.com/resources/demos/style.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- <link rel="stylesheet" href="css/jquery-ui.min.css">
+<script src="js/jquery-ui.min.js"></script>-->
 
 <!-- ContextJS -->
 <link rel="stylesheet" href="css/context.bootstrap.css" />
@@ -45,14 +50,18 @@
 
 <!-- timepicker -->
 <link rel="stylesheet" href="css/timepicker.css" />
-<script src='js/jquery.timepicker.js'></script>
+<script src='js/jquery.timepicker.js?version=4'></script>
 
+<!-- Full calendar -->
+<link href='css/fullcalendar.min.css' rel='stylesheet' />
+<link href='css/fullcalendar.print.min.css' rel='stylesheet'
+	media='print' />
+<script src='js/fullcalendar.min.js'></script>
 
 
 <script>
-
 	var contextEle = "";
-	
+
 	$(function() {
 
 		// qtip
@@ -80,62 +89,47 @@
 			hide : false,
 			style : 'qtip-light'
 		}).qtip('api');
-		
-		
-		// fullCalendar
-		$('#calendar').fullCalendar({
-			header : {
-				left : 'prev,next today',
-				center : 'title',
-				right : 'month,agendaWeek,agendaDay,listWeek'
-			},
-			defaultDate : getNowFormatDate(),
-			navLinks : true, // can click day/week names to navigate views
-			editable : false,
-			eventLimit : true, // allow "more" link when too many events
-			events : [${courses}],
-			eventClick : function(data, event,
-					view) {
-				var content = '<h4>'
-						+ data.title
-						+ '</h4>'
-						+ '<p><b>Start:</b> '
-						+ data.start
-						+ '<br />'
-						+ (data.end
-								&& '<p><b>End:</b> '
-								+ data.end
-								+ '</p>' || '')
-						+ (data.description
-								&& '<p><b>Description:</b><br>'
-								+ data.description
-								+ '</p>' || '');
 
-				tooltip.set({
-					'content.text' : content
-				}).reposition(event)
-						.show(event);
-			}
-		});
-		
-		//获取当前时间，格式YYYY-MM-DD
-	    function getNowFormatDate() {
-	        var date = new Date();
-	        var seperator1 = "-";
-	        var year = date.getFullYear();
-	        var month = date.getMonth() + 1;
-	        var strDate = date.getDate();
-	        if (month >= 1 && month <= 9) {
-	            month = "0" + month;
-	        }
-	        if (strDate >= 0 && strDate <= 9) {
-	            strDate = "0" + strDate;
-	        }
-	        var currentdate = year + seperator1 + month + seperator1 + strDate;
-	        return currentdate;
-	    }
-	
-		
+		// fullCalendar
+		$('#calendar').fullCalendar(
+				{
+					header : {
+						left : 'prev,next today',
+						center : 'title',
+						right : 'month,agendaWeek,agendaDay,listWeek'
+					},
+					defaultDate : getNowFormatDate(),
+					navLinks : true, // can click day/week names to navigate views
+					editable : false,
+					eventLimit : true, // allow "more" link when too many events
+					events : [${courses}],
+					eventClick : function(data, event, view) {
+						//扣掉+08:00時區
+						var start = new Date(data.start-60000*480);
+						var end = new Date(data.end-60000*480);
+						/*start = start.getFullYear()+'-'+(start.getMonth()+1)+'-'+start.getDate()+'&nbsp;&nbsp;&nbsp;'+
+								start.getHours()+':'+start.getMinutes();
+						end = end.getFullYear()+'-'+(end.getMonth()+1)+'-'+end.getDate()+'&nbsp;&nbsp;&nbsp;'+
+								end.getHours()+':'+end.getMinutes();*/
+						var content = '<h4>'
+								+ data.title
+								+ '</h4>'
+								+ '<p><b>Start:</b>&nbsp;'
+								+ start
+								+ '<br />'
+								+ (end && '<p><b>End:</b>&nbsp;&nbsp;' + end
+										+ '</p>' || '')
+								+ (data.description
+										&& '<p><b>Description:</b><br>'
+										+ data.description + '</p>' || '');
+
+						tooltip.set({
+							'content.text' : content,
+							'style.class' : 'qtip-bootstrap'
+						}).reposition(event).show(event);
+					}
+				});
+
 		//右鍵選單
 		context.init({
 			fadeSpeed : 100,
@@ -144,38 +138,36 @@
 			above : 'auto',
 			preventDoubleContext : true,
 			compress : false
-		});		
+		});
 		context.attach('.fc-event,.fc-list-item', [ {
 			text : '修改',
-			action : function(){
+			action : function() {
 				fillEditForm();
 				showLayer('hw-layer-edit');
 			}
-		},{
+		}, {
 			text : '已上课',
-			action : function(){
-				if(confirm('确定修改?\n'+contextEle)){
+			action : function() {
+				if (confirm('确定修改?\n' + contextEle)) {
 					PassedCourse();
 					window.location.reload();
 				}
-			}			
+			}
 		}, {
 			text : '删除',
-			action : function(){
-				if(confirm('确定删除?\n'+contextEle)){
+			action : function() {
+				if (confirm('确定删除?\n' + contextEle)) {
 					deleteCourse();
 					window.location.reload();
 				}
 			}
 		} ]);
-		
+
 		// 取得右鍵元素
-		$(document).on('contextmenu', '.fc-event', function (e) {
+		$(document).on('contextmenu', '.fc-event', function(e) {
 			contextEle = $(this).find(".fc-title").text();
 		});
-		
 
-		
 		// DatePicker and TimePicker
 		$(".timePicker").hunterTimePicker();
 		$(".datepicker").datepicker({
@@ -185,8 +177,9 @@
 		// 隱藏選單相關
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
+			cleanForm();
 		}
-		
+
 		function showLayer(id) {
 			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
 			layer.fadeIn();
@@ -194,7 +187,7 @@
 				'margin-top' : -layerwrap.outerHeight() / 2
 			});
 		}
-		
+
 		$('.hwLayer-ok,.hwLayer-cancel,.hwLayer-close').on('click', function() {
 			hideLayer();
 		});
@@ -217,134 +210,195 @@
 				hideLayer();
 			}
 		});
-		
 
-});	
+	});
 
-	
+	//获取当前时间，格式YYYY-MM-DD
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
 </script>
 
 <script>
-
 	//排课相关
 	/*操作流程如下:
-	**	1.選擇老師
-	**	2.選擇學生
-	**	3.選擇課程
-	*/
+	 **	1.選擇老師
+	 **	2.選擇學生
+	 **	3.選擇課程
+	 */
 	var tid = "";
 	var arrCourse = null;
 	var arrStudent = null;
-	
-	function getStudent(sellectBox){
+
+	function getStudent(sellectBox) {
 		//console.log("sellectBox: "+sellectBox.outerHTML);
 		tid = sellectBox.value; // 設定教師ID以便課程檢索
 		var formSuffix = $(sellectBox).attr('id').split('-')[1]; // 取得表單後綴,讓function在add或edit都能用
-				
+
 		arrStudent = new Array();
 		arrCourse = null;
-		
+
 		var str = "<option>---请选择---</option>";
 		<c:forEach var="course" items="${student_courses}"> //從課表中找出這名老師的學生
-			if(sellectBox.value=="${course.teacher_id}"){
-				//console.log("${course.student_id}");
-				
-				str += "<option "+
+		if (sellectBox.value == "${course.teacher_id}") {
+			//console.log("${course.student_id}");
+
+			str += "<option "+
 				"id=\"${course.student_id}\" "+
-				"value=\"${course.student_id}\">"+
-				"${course.student_name}/${course.student_id}"+
-				"</option>";
-			} 
+				"value=\"${course.student_id}\">"
+					+ "${course.student_name}/${course.student_id}"
+					+ "</option>";
+		}
 		</c:forEach>
-		
 
 		document.all('student-' + formSuffix).innerHTML = str;
 		document.all('course-' + formSuffix).innerHTML = ""; // 選完課又偷改老師,要清掉唷
 	}
-	
-	function getCourse(sellectBox){
+
+	function getCourse(sellectBox) {
 		var formSuffix = $(sellectBox).attr('id').split('-')[1];
 		arrCourse = new Array();
-		
+
 		<c:forEach var="course" items="${student_courses}"> // 用老師id&學生id查課表
-			if(sellectBox.value=="${course.student_id}" && tid=="${course.teacher_id}"){
-				arrCourse.push("${course.course_name}");
-			}
+		if (sellectBox.value == "${course.student_id}"
+				&& tid == "${course.teacher_id}") {
+			arrCourse.push("${course.course_name}");
+		}
 		</c:forEach>
-		
+
 		//寫回option
 		var str = "<option>---请选择---</option>";
-		for(var i=0;i<arrCourse.length;i++){
-			str += "<option id=\""+ arrCourse[i] +"\" value=\""+ arrCourse[i] +"\">"+arrCourse[i]+"</option>"
+		for (var i = 0; i < arrCourse.length; i++) {
+			str += "<option id=\""+ arrCourse[i] +"\" value=\""+ arrCourse[i] +"\">"
+					+ arrCourse[i] + "</option>"
 		}
 		document.all('course-' + formSuffix).innerHTML = str;
 	}
-	
-	function cleanForm(){ //按了取消表單清空
+
+	function cleanForm() { //按了取消表單清空
 		document.all('student-add').innerHTML = "";
 		document.all('course-add').innerHTML = "";
+		$('#addCourse')[0].reset();
+		$('#editCourse')[0].reset();
 	}
-	
-	
-	
+
 	// 改課相關
 	/* fillEditForm()自動填值
-	** deleteCourse()刪課
-	** courseDone()  課程已上
-	*/ 
+	 ** deleteCourse()刪課
+	 ** courseDone()  課程已上
+	 */
 	//自動填值
-	function fillEditForm(){
+	function fillEditForm() {
 		var course_id = new Array();
 		course_id = contextEle.split("/");
-		
-		
+
 		//自動填值
 		$('#teacher-edit').val(course_id[5]);
 		getStudent($('#teacher-edit')[0]);
 		$('#student-edit').val(course_id[4]);
 		getCourse($('#student-edit')[0]);
 		$('#course-edit').val(course_id[0]);
-		
+
 		//修改的課號
 		$('#course_id').val(course_id[3]);
 	}
-	
+
 	// 刪課
-	function deleteCourse(){
-		alert(contextEle);
+	function deleteCourse() {
 		$.ajax({
-			type: "post",
-			url: "deleteCourse",
-			data: {"course_id":contextEle},
-			dataType: "text",
-			success: function(e){alert(e);},
-			error: function(e){alert("服务器返回状态错误");}
+			type : "post",
+			url : "deleteCourse",
+			data : {
+				"course_id" : contextEle
+			},
+			dataType : "text",
+			success : function(e) {
+				alert(e);
+			},
+			error : function(e) {
+				alert("服务器返回状态错误");
+			}
 		});
-		
+
 	}
-	
+
 	// 課已上
-	function PassedCourse(){
-		alert(contextEle);
+	function PassedCourse() {
 		$.ajax({
-			type: "post",
-			url: "PassedCourse",
-			data: {"course_id":contextEle},
-			dataType: "text",
-			success: function(e){alert(e);},
-			error: function(e){alert("服务器返回状态错误");}
+			type : "post",
+			url : "PassedCourse",
+			data : {
+				"course_id" : contextEle
+			},
+			dataType : "text",
+			success : function(e) {
+				alert(e);
+			},
+			error : function(e) {
+				alert("服务器返回状态错误");
+			}
 		});
 	}
-	
-	
-	
-	
-	
+
+	//排課&改課的日期驗證
+	function courseSubmit(suffix) {
+		var classDate = $('#classDate-' + suffix).val();
+		var start = new Date(Date.parse(classDate + " "
+				+ $('#startTime-' + suffix).val() + ":00"));
+		var end = new Date(Date.parse(classDate + " "
+				+ $('#endTime-' + suffix).val() + ":00"));
+
+		if (start > end) {
+			alert("下课时间必须晚于上课时间！");
+		} else {
+			var teacher_id = $('#teacher-' + suffix).val();
+			var student_id = $('#student-' + suffix).val();
+			var json_course = eval("[" + "${courses}" + "]");
+
+			var conflict = "";
+
+			$.each(json_course, function(index, course) {
+				//console.log(index+'content: '+course.start);
+				var course_start = course.start.replace('T', ' ');
+				var course_end = course.end.replace('T', ' ');
+				var title = course.title.split('/');
+				//console.log(title);
+				if (title[5] == teacher_id || title[4] == student_id) {
+					if ((course_start < start && start < course_end)
+							|| (course_start < end && end < course_end)) {
+						
+						conflict = course.title;
+						console.log(course.title+","+conflict);
+						return false; //break
+					}
+				}
+
+			});
+
+			if (conflict == "") {
+				alert('okok');
+			} else {
+				alert("课程冲突：请选择其他时间\n" + conflict);
+			}
+		}
+	}
 </script>
 
 <!--//===========================新增課表彈出式畫面Css===================-->
 <style type="text/css">
-.aboveCal { 
+.aboveCal {
 	padding-bottom: 0px;
 }
 
@@ -431,7 +485,7 @@
 	}
 }
 </style>
-<!--//===========================新增課表彈出式畫面Css===================-->
+
 </head>
 
 
@@ -470,28 +524,29 @@
 							</div>
 							<div class="col-md-9 col-sm-12">
 								<h3>排课</h3>
-								<form id="addCourse" action="arrangeCourse" method="post">
+								<form id="addCourse" class="my_validate" action="arrangeCourse"
+									method="post">
 
 									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
-										onchange="getStudent(this)">
+										class="required" onchange="getStudent(this)">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
 									</select><br> 学生名称/ID:<br> <select name="student_id"
-										id="student-add" onchange="getCourse(this)">
+										class="required" id="student-add" onchange="getCourse(this)">
 									</select><br> 选择课程:<br> <select name="course_name"
-										id="course-add">
-									</select><br> 上课日期:<br> <input type="text" class="datepicker"
-										id="classDate-add" name="classDate"><br> 上课时间:<br>
-									<input type="text" class="timePicker" id="time" name="time"><br>
-									下课时间:<br> <input type="text" class="timePicker"
-										id="rest_time" name="rest_time"><br>
+										id="course-add" class="required">
+									</select><br> 上课日期:<br> <input type="text"
+										class="datepicker required" id="classDate-add"
+										name="classDate"><br> 上课时间:<br> <input
+										type="text" class="timePicker required" id="startTime-add"
+										name="time"><br> 下课时间:<br> <input
+										type="text" class="timePicker required" id="endTime-add"
+										name="rest_time"><br>
 
-									<button class="btn btn-success hwLayer-ok" type="submit">确
-										定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset"
-										onclick="cleanForm()">取 消</button>
+									<button class="btn btn-success hwLayer-ok" onclick="courseSubmit('add')">确 定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
 								</form>
 							</div>
 						</div>
@@ -524,12 +579,14 @@
 
 									</select><br> 选择课程:<br> <select name="course_name"
 										id="course-edit"></select><br> 上课日期:<br> <input
-										type="text" class="datepicker" name="classDate"><br> 上课时间:<br>
-									<input type="text" class="timePicker" name="time"><br> 下课时间:<br>
-									<input type="text" class="timePicker" name="rest_time"><br> <input
+										type="text" class="datepicker" id="classDate-edit"
+										name="classDate"><br> 上课时间:<br> <input
+										type="text" class="timePicker" name="time" id="startTime-edit"><br>
+									下课时间:<br> <input type="text" class="timePicker"
+										name="rest_time" id="endTime-edit"><br> <input
 										type="hidden" name="course_id" id="course_id">
 
-									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-success hwLayer-ok" onclick="courseSubmit('edit')">确定</button>
 									<button class="btn btn-warning hwLayer-cancel" type="reset">取消</button>
 								</form>
 							</div>

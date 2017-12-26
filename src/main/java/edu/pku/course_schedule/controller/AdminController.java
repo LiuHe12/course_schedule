@@ -92,8 +92,8 @@ public class AdminController {
 		for (Course course : courses) {
 			String title = course.getName() + "/" + course.getStudent_name() + "/" + course.getTeacher_name() + "/"
 					+ course.getCourse_ID() + "/" + course.getStudent_ID() + "/" + course.getTeacher_ID();
-			String start = df.format(course.getTime()).replace(' ', 'T');
-			String end = df.format(course.getRest_time()).replace(' ', 'T');
+			String start = df.format(course.getTime());
+			String end = df.format(course.getRest_time());
 			String color = null;
 			if (course.getStatus() > 0) {
 				color = "red";

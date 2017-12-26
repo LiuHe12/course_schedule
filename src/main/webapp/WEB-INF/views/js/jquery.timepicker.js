@@ -20,7 +20,7 @@
 	$.hunterTimePicker = function (box, options) {
 		var dates = {
 		  hour: ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
-		  minute: ['00',  '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'],
+		  minute: ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'],
 		};
 
 		var box = $(box);
@@ -104,7 +104,9 @@
 				_this.find('.Hunter-hour').addClass('active');
 
 				var hourValue = _this.data('hour');
+				if(hourValue<10)hourValue="0"+hourValue;
 				var temp = box.val().split(":");
+				
 				if(temp.length > 1){
 					box.val(hourValue+":"+temp[1]);
 				}else{
@@ -125,6 +127,8 @@
 				var _this = $(this);
 
 				var minuteValue = _this.data('minute');
+				if(minuteValue=="0") minuteValue="00";
+				if(minuteValue=="5") minuteValue="05";
 				var temp = box.val().split(":")[0]+":"+minuteValue;
 				box.val(temp);
 				template.remove();
