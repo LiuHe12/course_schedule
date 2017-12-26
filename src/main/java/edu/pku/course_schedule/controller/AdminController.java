@@ -2,8 +2,6 @@ package edu.pku.course_schedule.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.interfaces.RSAKey;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,31 +10,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Course;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
-import edu.pku.course_schedule.dao.entity.Teacher_salary;
 import edu.pku.course_schedule.services.Course_Service;
-import edu.pku.course_schedule.services.Salary_Service;
 import edu.pku.course_schedule.services.User_Service;
 import edu.pku.course_schedule.services.impl.Course_Service_Imp;
-import edu.pku.course_schedule.services.impl.Salary_Service_Imp;
 import edu.pku.course_schedule.services.impl.User_Service_Imp;
 
 @Controller
@@ -50,7 +39,7 @@ public class AdminController {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
+			mav.setViewName("forward:/");
 			return mav;
 		}
 
@@ -100,11 +89,11 @@ public class AdminController {
 			} else {
 				color = "blue";
 			}
-			String description=course.getRemind();
-			if(description==null) {
-				description="null";
+			String description = course.getRemind();
+			if (description == null) {
+				description = "null";
 			}
-			forAdminshow ads = new forAdminshow(title, start, end, color,description);
+			forAdminshow ads = new forAdminshow(title, start, end, color, description);
 			sb.append(ads.toString());
 			index++;
 			if (index != courses.size())
@@ -118,6 +107,12 @@ public class AdminController {
 
 	@RequestMapping(value = "/add-course", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView addCourseHome(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
 		User_Service us = new User_Service_Imp();
 		ArrayList<Object> object_t = us.getAllUser(1);
 		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
@@ -142,7 +137,7 @@ public class AdminController {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
+			mav.setViewName("forward:/");
 			return mav;
 		}
 
@@ -166,11 +161,10 @@ public class AdminController {
 		student_course.setPrice(Integer.parseInt(request.getParameter("price")));
 		Course_Service cs = new Course_Service_Imp();
 		boolean r = cs.addCourse(student_course);
-		mav.setViewName("redirect:/admin");
 		if (!r) {
-			mav.addObject("error", "添加课程失败！");
+			mav.setViewName("redirect:/add-course");
 		} else {
-			mav.addObject("error", "添加课程成功！");
+			mav.setViewName("redirect:/admin");
 		}
 		return mav;
 	}
@@ -180,7 +174,7 @@ public class AdminController {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
+			mav.setViewName("forward:/");
 			return mav;
 		}
 		Course course = new Course();
@@ -223,22 +217,24 @@ public class AdminController {
 		}
 
 		boolean r = cs.arrangeCourse(course);
-
+		mav.setViewName("redirect:/admin");
 		if (!r) {
 			// mav.addObject("error", "排课失败！");
 			mav.addObject("result", "schedule course failed！");
-		} else {
-			// mav.addObject("error", "排课成功！");
-			mav.addObject("result", "schedule course success！");
 		}
-		mav.setViewName("redirect:/admin");
 		// request.getSession().setMaxInactiveInterval(20 * 60);
 		return mav;
 	}
 
 	@RequestMapping(value = "/add-user", method = RequestMethod.GET)
-	public String addUser(Locale locale, Model model) {
-		return "add-user";
+	public String addUser(HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			return "login";
+		} else {
+			return "add-user";
+		}
+
 	}
 
 	@RequestMapping(value = "/addUser", method = { RequestMethod.GET, RequestMethod.POST })
@@ -246,7 +242,7 @@ public class AdminController {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
+			mav.setViewName("forward:/");
 			return mav;
 		}
 		DateFormat ps = new SimpleDateFormat("yyyy-MM-dd");
@@ -281,7 +277,6 @@ public class AdminController {
 				logger.error(e1.toString());
 				e1.printStackTrace();
 			}
-			// TODO
 			teacher.setKind(Integer.parseInt(request.getParameter("kind")));
 			teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));
 			teacher.setPassword(request.getParameter("teacher_pwd"));
@@ -294,26 +289,35 @@ public class AdminController {
 				e.printStackTrace();
 			}
 			r = us.addTeacher(teacher);
-		}else if (request.getParameter("select_one").equals("add_admin")) {
-			Administrator admin=new Administrator();
+		} else if (request.getParameter("select_one").equals("add_admin")) {
+			Administrator admin = new Administrator();
 			try {
 				admin.setId(new String(request.getParameter("admin_name").getBytes("ISO-8859-1"), "UTF-8"));
 				admin.setPassword(new String(request.getParameter("admin_pwd").getBytes("ISO-8859-1"), "UTF-8"));
 			} catch (UnsupportedEncodingException e) {
-				
+
 				e.printStackTrace();
 			}
-			r=us.addAdmin(admin);
+			r = us.addAdmin(admin);
 		}
 		if (!r) {
-			mav.addObject("error", "add user failed");
+			// mav.addObject("error", "add user failed");
+			mav.setViewName("redirect:/add-user");
+		} else {
+			mav.setViewName("redirect:/admin");
 		}
-		mav.setViewName("redirect:/admin");
+
 		return mav;
 	}
 
 	@RequestMapping(value = "/change-user-password", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView changeUserPasswordHome(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
+			mav.addObject("error", "请以管理员身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
 		User_Service us = new User_Service_Imp();
 		ArrayList<Object> object_t = us.getAllUser(1);
 		ArrayList<Teacher> teachers = new ArrayList<Teacher>();
@@ -357,10 +361,10 @@ public class AdminController {
 		User_Service us = new User_Service_Imp();
 		boolean r = us.modifyPassword(userId, identity, newPassword);
 		if (!r) {
-			mav.addObject("error", "修改密码失败！");
+			// mav.addObject("error", "修改密码失败！");
 			mav.setViewName("redirect:/change-user-password");
 		} else {
-			mav.addObject("error", "修改密码成功！");
+			// mav.addObject("error", "修改密码成功！");
 			mav.setViewName("redirect:/admin");
 		}
 		return mav;
@@ -368,6 +372,19 @@ public class AdminController {
 
 	@RequestMapping(value = "/deleteCourse", method = { RequestMethod.GET, RequestMethod.POST })
 	private void deleteCourse(HttpServletRequest request, HttpServletResponse response) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0
+				|| request.getParameter("course_id") == null) {
+
+			response.setContentType("text/html;charset=utf-8");
+			try {
+				response.getWriter().print("请先登录");
+				response.flushBuffer();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		Course_Service cs = new Course_Service_Imp();
 		String course_string = request.getParameter("course_id");
 		String course_name = course_string.split("/")[0];
@@ -386,8 +403,21 @@ public class AdminController {
 			e.printStackTrace();
 		}
 	}
+
 	@RequestMapping(value = "/PassedCourse", method = { RequestMethod.GET, RequestMethod.POST })
 	private void PassedCourse(HttpServletRequest request, HttpServletResponse response) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) != 0
+				|| request.getParameter("course_id") == null) {
+
+			response.setContentType("text/html;charset=utf-8");
+			try {
+				response.getWriter().print("请先登录");
+				response.flushBuffer();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		Course_Service cs = new Course_Service_Imp();
 		String course_string = request.getParameter("course_id");
 		String course_name = course_string.split("/")[0];
@@ -406,12 +436,13 @@ public class AdminController {
 			e.printStackTrace();
 		}
 	}
+
 	@RequestMapping(value = "/editCourse", method = { RequestMethod.GET, RequestMethod.POST })
-	private ModelAndView editCourse(ModelAndView mav,HttpServletRequest request) {
+	private ModelAndView editCourse(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
 			mav.addObject("error", "请以管理员身份登录！");
-			mav.setViewName("forward:/login");
+			mav.setViewName("forward:/");
 			return mav;
 		}
 		Course course = new Course();
@@ -436,11 +467,11 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		Course_Service cs = new Course_Service_Imp();
-		
+
 		boolean r = cs.modifyCourse(course);
 
 		if (!r) {
-			//mav.addObject("error", "排课失败！");
+			// mav.addObject("error", "排课失败！");
 			mav.addObject("result", "modify course failed！");
 		} else {
 			// mav.addObject("error", "排课成功！");

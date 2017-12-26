@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import edu.pku.course_schedule.dao.entity.Administrator;
 import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Teacher;
