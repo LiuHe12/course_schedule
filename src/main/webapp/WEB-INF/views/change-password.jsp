@@ -40,7 +40,7 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="#" title="Go to Home" class="tip-bottom"><i
+				<a href="index" title="Go to Home" class="tip-bottom"><i
 					class="icon-home"></i> Home</a> <a href="#" class="current"> 修改密码</a>
 			</div>
 			<h1>修改密码</h1>

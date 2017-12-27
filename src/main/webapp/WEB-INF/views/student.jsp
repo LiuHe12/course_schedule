@@ -246,7 +246,7 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="#" title="Go to Home" class="tip-bottom current"><i class="icon-home"></i> Home</a>
+				<a href="index" title="Go to Home" class="tip-bottom current"><i class="icon-home"></i> Home</a>
 			</div>
 			
 			<!-- **********课程评价********** -->

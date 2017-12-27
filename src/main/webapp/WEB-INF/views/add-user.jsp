@@ -77,7 +77,7 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="#" title="Go to Home" class="tip-bottom"><i
+				<a href="index" title="Go to Home" class="tip-bottom"><i
 					class="icon-home"></i> Home</a> <a href="#" class="current">新增用户</a>
 			</div>
 			<h1>新增用户</h1>
