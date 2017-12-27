@@ -224,7 +224,7 @@
 									<!--//創建管理員的欄位-->
 									<div id="add_admin" class="float_area" style="display: none;">
 										<div class="control-group">
-											<label class="control-label">Admin名称</label>
+											<label class="control-label">管理员名称</label>
 											<div class="controls">
 												<input type="text" name="admin_name" class="required" />
 											</div>
@@ -247,8 +247,8 @@
 									</div>
 								</div>
 								<div class="form-actions">
-                  <input type="submit" value="Validate" class="btn btn-success">
-                </div>
+                					<input type="submit" value="提交" class="btn btn-success">
+                				</div>
 							</form>
 						</div>
 					</div>

@@ -81,7 +81,7 @@
 								<div class="control-group">
 									<label class="control-label">教师名称/ID :</label>
 									<div class="controls">
-										<select name="teacher_id" id="teacher_id">
+										<select name="teacher_id" id="teacher_id" class="span11">
 											<c:forEach var="teacher" items="${teachers}">
 												<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 											</c:forEach>
@@ -91,7 +91,7 @@
 								<div class="control-group">
 									<label class="control-label">学生名称/ID :</label>
 									<div class="controls">
-										<select name="student_id" id="student_id">
+										<select name="student_id" id="student_id" class="span11">
 											<c:forEach var="student" items="${students}">
 												<option id="${student.id}" value="${student.id}">${student.name}/${student.id}</option>
 											</c:forEach>
