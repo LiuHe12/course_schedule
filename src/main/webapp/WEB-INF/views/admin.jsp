@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='css/googleapis.css' rel='stylesheet' type='text/css'>
-
+<link href='css/hw-layer.css' rel='stylesheet' type='text/css'>
 
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src='lib/jquery.min.js'></script>
@@ -385,7 +385,7 @@
 		var end = new Date(Date.parse(classDate + " "
 				+ $('#endTime-' + suffix).val() + ":00"));
 
-		if (start > end) {
+		if (start >= end) {
 			alert("下课时间必须晚于上课时间！");
 		} else {
 			var teacher_id = $('#teacher-' + suffix).val();
@@ -420,30 +420,10 @@
 		}
 	}
 </script>
-
 <!--//===========================新增課表彈出式畫面Css===================-->
-<style type="text/css">
-.aboveCal {
-	padding-bottom: 0px;
-}
+<style  type="text/css">
 
-.btn-info {
-	float: left;
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-.hw-overlay {
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.3);
-	z-index: 10;
-}
-
+#主要是調整margin-top的高度
 .hw-layer-wrap {
 	box-sizing: border-box;
 	width: 570px;
@@ -456,58 +436,6 @@
 	background-color: #fff;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
 	padding: 45px 50px;
-}
-
-.hwLayer-close {
-	position: absolute;
-	right: 20px;
-	top: 20px;
-	width: 20px;
-	height: 20px;
-	cursor: pointer;
-	font-size: 20px;
-	color: #ccc;
-}
-
-.hw-layer-wrap .hw-icon {
-	color: #b4d8f3;
-	font-size: 86px;
-	text-align: center;
-}
-
-.hw-layer-wrap h4 {
-	margin: 5px 0 30px;
-	font-size: 24px;
-	color: #383c3e;
-}
-
-.hw-layer-wrap p {
-	margin: 30px 0;
-	line-height: 22px;
-	color: #595d60;
-	text-align: left;
-}
-
-.hw-layer-wrap {
-	z-index: 999;
-}
-
-@media ( max-width :768px) {
-	.hw-layer-wrap {
-		width: 350px;
-		margin-left: -175px;
-		margin-top: -200px;
-		padding: 45px 50px;
-		text-align: center;
-	}
-}
-
-@media ( max-width :400px) {
-	.hw-layer-wrap {
-		width: 250px;
-		margin-left: -125px;
-		padding: 25px 30px;
-	}
 }
 </style>
 
@@ -529,8 +457,8 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="#" title="Go to Home" class="tip-bottom"><i
-					class="icon-home current"></i> Home</a>
+				<a href="#" title="Go to Home" class="tip-bottom current"><i
+					class="icon-home"></i> Home</a>
 			</div>
 			<!--//==============排课按鈕-->
 			<div class="aboveCal">
@@ -552,28 +480,24 @@
 								<form id="addCourse" class="my_validate" action="arrangeCourse"
 									method="post" onsubmit="return courseSubmit('add')">
 
-									教师名称/ID:<br> <select name="teacher_id" id="teacher-add"
-										class="required" onchange="getStudent(this)">
+									教师名称/ID:<br> 
+									<select name="teacher_id" id="teacher-add" class="required" onchange="getStudent(this)">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
-									</select><br> 学生名称/ID:<br> <select name="student_id"
-										class="required" id="student-add" onchange="getCourse(this)">
-									</select><br> 选择课程:<br> <select name="course_name"
-										id="course-add" class="required">
-									</select><br> 上课日期:<br> <input type="text"
-										class="datepicker required" id="classDate-add"
-										name="classDate"><br> 上课时间:<br> <input
-										type="text" class="timePicker required" id="startTime-add"
-										name="time"><br> 下课时间:<br> <input
-										type="text" class="timePicker required" id="endTime-add"
-										name="rest_time"><br>
+									</select><br> 
+									学生名称/ID:<br> 
+									<select name="student_id" class="required" id="student-add" onchange="getCourse(this)"></select><br> 
+									选择课程:<br> 
+									<select name="course_name" id="course-add" class="required"></select><br> 
+									上课日期:<br> 
+									<input type="text" class="datepicker required" id="classDate-add" name="classDate"><br> 
+									上课时间:<br> <input type="text" class="timePicker required" id="startTime-add" name="time"><br> 
+									下课时间:<br> <input type="text" class="timePicker required" id="endTime-add" name="rest_time"><br>
 
-									<button class="btn btn-success hwLayer-ok" type="submit">确
-										定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset"
-										onclick="cleanForm()">取 消</button>
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
 								</form>
 							</div>
 						</div>

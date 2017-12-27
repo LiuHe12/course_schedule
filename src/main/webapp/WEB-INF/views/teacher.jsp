@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='css/googleapis.css' rel='stylesheet' type='text/css'>
+<link href='css/hw-layer.css' rel='stylesheet' type='text/css'>
 
 <!-- Full calendar -->
 <link href='css/fullcalendar.min.css' rel='stylesheet' />
@@ -35,10 +36,16 @@
 
 
 <script>
+	var contextEle = "";
+	var contextTitle = "";
+	var contextColor = "";
+
 	$(document).ready(function() {
-		
+		//console.log("${courses}");
+	
+
 		// qtip
-		var tooltip = $('<div/>').qtip({
+		var tooltip = $('<div>').qtip({
 			id : 'fullcalendar',
 			prerender : true,
 			overwrite : false,
@@ -54,15 +61,15 @@
 				target : 'mouse',
 				viewport : $('#fullcalendar'),
 				adjust : {
-					mouse : false,
+					mouse : true,
 					scroll : false
 				}
 			},
-			show : false,
-			hide : false,
-			style : 'qtip-light'
+			show : 'mouseover',
+			hide : 'mouseout',
+			style : 'qtip-dark qtip-shadow qtip-rounded'
 		}).qtip('api');
-
+	
 		// fullCalendar
 		$('#calendar').fullCalendar({
 			header : {
@@ -75,30 +82,31 @@
 			editable : false,
 			eventLimit : true, // allow "more" link when too many events
 			events : [${courses}],
-			eventClick : function(data, event,
-					view) {
+			eventClick : function(data, event, view) {
+				//扣掉+08:00時區
+				var start = new Date(data.start - 60000 * 480);
+				var end = new Date(data.end - 60000 * 480);
 				var content = '<h4>'
 						+ data.title
 						+ '</h4>'
-						+ '<p><b>Start:</b> '
-						+ data.start
+						+ '<p><b>Start:</b>&nbsp;'
+						+ start
 						+ '<br />'
-						+ (data.end
-								&& '<p><b>End:</b> '
-								+ data.end
-								+ '</p>' || '')
-						+ (data.description
-								&& '<p><b>Description:</b><br>'
-								+ data.description
-								+ '</p>' || '');
+						+ '<p><b>End:</b>&nbsp;&nbsp;&nbsp;'
+						+ end
+						+ '</p>'
+						+ '<p><b>Description:</b><br>'
+						+ data.description
+						+ '</p>';
 
 				tooltip.set({
+					'content.title' : "课程信息",
 					'content.text' : content
 				}).reposition(event)
 						.show(event);
 			}
 		});
-		
+	
 		context.init({
 			fadeSpeed : 100,
 			filter : function($obj) {
@@ -106,37 +114,137 @@
 			above : 'auto',
 			preventDoubleContext : true,
 			compress : false
-		});		
+		});
 		context.attach('.fc-event,.fc-list-item', [ {
-			text : '课程評價',
-			action : function(){
+			
+			text : '课前提醒',
+			action : function() {
+				if (contextColor == "blue") {
+					$('#course_id').val(contextTitle);
+					addRemind();
+				} else {
+					alert('课程已上，请重新选择');
+				}
 			}
 		},{
-			text : '课前提醒',
-			action : function(){
+				text : '课后評價',
+				action : function() {
+					if (contextColor == "purple") {
+						$('#course_id-evaluate').val(contextTitle);
+						addEvaluate();
+					} else if (contextColor == "red") {
+						alert("此课程已评价！");
+					} else {
+						alert("课还没上，请课后再评价");
+					}
+				}
 			}
-		} ]);
-
+		]);
+	
 		
+	
+		function addRemind() {
+			showLayer('hw-layer');
+		}
+	
+		function addEvaluate() {
+			showLayer('hw-layer-evaluate');
+		}
+		
+		// 隱藏選單相關
+		function hideLayer() {
+			$('.hw-overlay').fadeOut();
+		}
+	
+		function showLayer(id) {
+			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
+			layer.fadeIn();
+			layerwrap.css({
+				'margin-top' : -layerwrap.outerHeight() / 2
+			});
+		}
+	
+		$('.hwLayer-ok,.hwLayer-cancel,.hwLayer-close').on(
+				'click', function() {
+					hideLayer();
+				});
+	
+		//点击或者触控弹出层外的半透明遮罩层，关闭弹出层 
+		$('.hw-overlay').on('click', function(event) {
+			if (event.target == this) {
+				hideLayer();
+			}
+		});
+	
+		//按ESC键关闭弹出层 
+		$(document).keyup(function(event) {
+			if (event.keyCode == 27) {
+				hideLayer();
+			}
+		});
+	
 	});
 
+	// 取得右鍵元素
+	$(document).on('contextmenu', '.fc-event', function(e) {
+		contextEle = $(this);
+		contextTitle = $(this).find(".fc-title").text();
+		contextColor = getContextColor();
+	});
+	$(document).on('contextmenu', '.fc-list-item', function(e) {
+		contextEle = $(this);
+		contextTitle = $(this).find(".fc-list-item-title").text();
+		contextColor = getContextColor();
+	});
+
+	function getContextColor() {
+		var color = $(contextEle).css("background-color");
+		switch (color) {
+		case "rgb(255, 0, 0)":
+			color = "red";
+			break;
+		case "rgb(0, 0, 255)":
+			color = "blue";
+			break;
+		default:
+			color = "purple";
+		}
+
+		return color;
+	}
+
 	//获取当前时间，格式YYYY-MM-DD
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
-    }
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
 </script>
+<style type="text/css">
+.hw-layer-wrap {
+	box-sizing: border-box;
+	width: 570px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -285px;
+	margin-top: -180.8px; #-180.8
+	border-radius: 3px;
+	background-color: #fff;
+	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
+	padding: 45px 50px;
+}
+</style>
 <body>
 	<!--Header-part-->
 	<div id="header">
@@ -154,10 +262,56 @@
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
-				<a href="#" title="Go to Home" class="tip-bottom"><i
-					class="icon-home"></i> Home</a> <a href="#" class="current">Calendar</a>
+				<a href="#" title="Go to Home" class="tip-bottom current"><i
+					class="icon-home" ></i> Home</a> 
 			</div>
 
+			<!-- **********課前提醒********** -->
+			<div class="hw-overlay" id="hw-layer" style="display: none">
+					<div class="hw-layer-wrap">
+						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+						<div class="row">
+							<div class="col-md-3 col-sm-12 hw-icon">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</div>
+							<div class="col-md-9 col-sm-12">
+								<h3>课前提醒</h3>
+								<form id="addRemind" class="my_validate" action="addRemind" method="post" onsubmit="return confirm('确定提交？')">
+
+									课程名称：<br><input id="course_id" name="course_id" type="text" disabled style="width:100%" /><br>
+									提醒内容：<br><textarea id="remind" name="remind" style="width:100%"></textarea><br><br>
+
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- **********課前提醒結束********** -->
+			<!-- **********课后评价********** -->
+			<div class="hw-overlay" id="hw-layer-evaluate" style="display: none">
+					<div class="hw-layer-wrap">
+						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+						<div class="row">
+							<div class="col-md-3 col-sm-12 hw-icon">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</div>
+							<div class="col-md-9 col-sm-12">
+								<h3>课后评价</h3>
+								<form id="addEvaluate" class="my_validate" action="addEvaluate" method="post" onsubmit="return confirm('确定提交？')">
+
+									课程名称：<br><input id="course_id-evaluate" name="course_id" type="text" disabled style="width:100%" /><br>
+									课后评价：<br><textarea id="evaluate" name="evaluate" style="width:100%"></textarea><br><br>
+
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- **********課前提醒結束********** -->
 		</div>
 
 		<div id='calendar'></div>
