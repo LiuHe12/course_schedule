@@ -117,11 +117,13 @@
 		context.attach('.fc-event,.fc-list-item', [ {
 			text : '课程評價',
 			action : function(){
-				if(contextColor == "blue"){
-					alert("课还没上，请课后再评分");
-				} else{
+				if(contextColor == "red"){
 					$('#course_id').val(contextTitle);
 					addSatisfaction();
+				} else if(contextColor == 'gray'){
+					alert("此课程已评价！");
+				} else{
+					alert("课还没上，请课后再评分");
 				}
 			}
 		}
@@ -180,19 +182,26 @@
 	
 	
 	
-	function getContextColor(){
-		var color = $(contextEle).css("background-color");
-		switch(color){
-			case "rgb(255, 0, 0)":
-				color = "red";
-				break;
-			case "rgb(0, 0, 255)":
-				color = "blue";
-				break;
-			default :
-				color = "purple";
+	function getContextColor(sourse) {
+		var color = "";
+		if(sourse == 'month'){
+			color = $(contextEle).css("background-color");
+		}else if(sourse == 'list'){
+			color = $(contextEle).find(".fc-event-dot").css("background-color");
+			console.log(color);
 		}
 		
+		switch (color) {
+		case "rgb(255, 0, 0)":
+			color = "red";
+			break;
+		case "rgb(0, 0, 255)":
+			color = "blue";
+			break;
+		default:
+			color = "gray";
+		}
+
 		return color;
 	}
 

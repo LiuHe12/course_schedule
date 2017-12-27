@@ -123,16 +123,16 @@
 					$('#course_id').val(contextTitle);
 					addRemind();
 				} else {
-					alert('课程已上，请重新选择');
+					alert('此课程已上');
 				}
 			}
 		},{
 				text : '课后評價',
 				action : function() {
-					if (contextColor == "purple") {
+					if (contextColor == "red") {
 						$('#course_id-evaluate').val(contextTitle);
 						addEvaluate();
-					} else if (contextColor == "red") {
+					} else if (contextColor == "gray") {
 						alert("此课程已评价！");
 					} else {
 						alert("课还没上，请课后再评价");
@@ -189,16 +189,23 @@
 	$(document).on('contextmenu', '.fc-event', function(e) {
 		contextEle = $(this);
 		contextTitle = $(this).find(".fc-title").text();
-		contextColor = getContextColor();
+		contextColor = getContextColor('month');
 	});
 	$(document).on('contextmenu', '.fc-list-item', function(e) {
 		contextEle = $(this);
 		contextTitle = $(this).find(".fc-list-item-title").text();
-		contextColor = getContextColor();
+		contextColor = getContextColor('list');
 	});
 
-	function getContextColor() {
-		var color = $(contextEle).css("background-color");
+	function getContextColor(sourse) {
+		var color = "";
+		if(sourse == 'month'){
+			color = $(contextEle).css("background-color");
+		}else if(sourse == 'list'){
+			color = $(contextEle).find(".fc-event-dot").css("background-color");
+			console.log(color);
+		}
+		
 		switch (color) {
 		case "rgb(255, 0, 0)":
 			color = "red";
@@ -207,7 +214,7 @@
 			color = "blue";
 			break;
 		default:
-			color = "purple";
+			color = "gray";
 		}
 
 		return color;
