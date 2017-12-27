@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -80,10 +81,18 @@ public class TeacherController {
 			return mav;
 		}
 		String course_id=request.getParameter("course_id");
-		String evaluate=request.getParameter("evaluate");
-		Course_Service cs = new Course_Service_Imp();
-		logger.info(course_id+" "+evaluate);
+		String evaluate;
+		try {
+			evaluate = new String(request.getParameter("evaluate").getBytes("ISO-8859-1"), "UTF-8");
+			Course_Service cs = new Course_Service_Imp();
+			logger.info(course_id+" "+evaluate);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+		
 		//cs.setEvaluate(course_id, evaluate);
+		mav.setViewName("redirect:/teacher");
 		return mav;
 	}
 	

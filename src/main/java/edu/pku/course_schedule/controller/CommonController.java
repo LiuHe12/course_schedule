@@ -104,5 +104,21 @@ public class CommonController {
 	public String changePassword(Locale locale, Model model) {
 		return "change-password";
 	}
+	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView index(ModelAndView mav, HttpServletRequest request) {
+		if(request.getSession().getAttribute("identity")==null) {
+			mav.setViewName("forward:/");
+			return mav;
+		}
+		int identity = (Integer) request.getSession().getAttribute("identity");
+		if(identity==0) {
+			mav.setViewName("redirect:/admin");
+		}else if(identity==1) {
+			mav.setViewName("redirect:/teacher");
+		}else if (identity==2){
+			mav.setViewName("redirect:/student");
+		}
+		return mav;
+	}
 
 }
