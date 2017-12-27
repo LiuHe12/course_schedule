@@ -7,8 +7,7 @@
 <title>Matrix Admin</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
@@ -17,6 +16,8 @@
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='css/googleapis.css' rel='stylesheet' type='text/css'>
 <link href='css/hw-layer.css' rel='stylesheet' type='text/css'>
+
+<script src="js/jquery-3.2.1.min.js"></script>
 
 <!-- Full calendar -->
 <link href='css/fullcalendar.min.css' rel='stylesheet' />
