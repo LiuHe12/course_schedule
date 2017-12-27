@@ -295,7 +295,7 @@
 								<h3>课后评价</h3>
 								<form id="addEvaluate" class="my_validate" action="addEvaluate" method="post" onsubmit="return confirm('确定提交？')">
 
-									课程名称：<br><input id="course_id-evaluate" name="course_id" type="text" disabled style="width:100%" /><br>
+									课程名称：<br><input id="course_id-evaluate" name="course_id" type="hidden" style="width:100%" /><br>
 									课后评价：<br><textarea id="evaluate" name="evaluate" style="width:100%"></textarea><br><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
