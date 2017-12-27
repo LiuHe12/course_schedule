@@ -84,10 +84,10 @@ public class AdminController {
 			String start = df.format(course.getTime());
 			String end = df.format(course.getRest_time());
 			String color = null;
-			if (course.getStatus() <=0) {
-				color = "red";
-			} else{
+			if (course.getStatus() <=0) {//未上
 				color = "blue";
+			} else{//已上
+				color = "red";
 			}
 			String description = course.getRemind();
 			if (description == null) {

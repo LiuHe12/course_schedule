@@ -41,11 +41,11 @@ public class StudentController {
 			String start = df.format(course.getTime()).replace(' ', 'T');
 			String end = df.format(course.getRest_time()).replace(' ', 'T');
 			String color = null;
-			if (course.getStatus() <= 0) {
+			if (course.getStatus() <= 0) {//未上
 				color = "blue";
-			} else if(course.getStatus() > 0 && course.getSatisfaction()<0){
+			} else if(course.getStatus() > 0 && course.getSatisfaction()<0){//已上未评
 				color = "red";
-			}else if(course.getStatus() > 0 && course.getSatisfaction()>0) {
+			}else if(course.getStatus() > 0 && course.getSatisfaction()>0) {//已上已评
 				color = "gray";
 			}
 			String description=course.getRemind();

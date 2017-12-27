@@ -49,11 +49,11 @@ public class TeacherController {
 			String start = df.format(course.getTime()).replace(' ', 'T');
 			String end = df.format(course.getRest_time()).replace(' ', 'T');
 			String color = null;
-			if (course.getStatus() <= 0) {
+			if (course.getStatus() <= 0) {//未上
 				color = "blue";
-			} else if(course.getStatus()==1){
+			} else if(course.getStatus()==1){//已上未评价
 				color = "red";
-			}else {
+			}else {//已上已评价
 				color = "gray";
 			}
 			String description=course.getRemind();
