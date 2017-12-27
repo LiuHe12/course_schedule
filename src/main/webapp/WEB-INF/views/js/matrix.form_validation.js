@@ -1,9 +1,9 @@
 
 $(document).ready(function(){
 	
-	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	//$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 	
-	$('#s1').select2();
+	//$('#s1').select2();
 	
 	// Form Validation
     $("#basic_validate").validate({
@@ -137,6 +137,17 @@ $(document).ready(function(){
 				minlength:6,
 				maxlength:20,
 				equalTo:"#admin_pwd"
+			},
+			password:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			password2:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#password"
 			},
 			email:{
 				required:true,

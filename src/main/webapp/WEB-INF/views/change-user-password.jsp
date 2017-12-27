@@ -20,7 +20,7 @@
 <script src="js/jquery.validate.js"></script>
 <script src="js/jquery.wizard.js"></script>
 <script src="js/matrix.js"></script>
-<script src="js/matrix.wizard.js"></script>
+<script src="js/matrix.form_validation.js?version=2"></script>
 
 </head>
 <body>
@@ -55,7 +55,7 @@
 							<h5>修改用户密码</h5>
 						</div>
 						<div class="widget-content nopadding">
-							<form id="form-wizard" class="form-horizontal" action="changePwd"
+							<form id="form-wizard" class="form-horizontal my_validate" action="changePwd"
 								method="post">
 								<div id="form-wizard-1" class="step">
 									<div class="control-group">
@@ -92,10 +92,8 @@
 								</div>
 
 								<div class="form-actions">
-									<input id="next" class="btn btn-primary" type="submit" />
-									<div id="status"></div>
-								</div>
-								<div id="submitted"></div>
+                					<input type="submit" value="提交" class="btn btn-success">
+                				</div>
 							</form>
 						</div>
 					</div>
