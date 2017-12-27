@@ -61,12 +61,12 @@
 				target : 'mouse',
 				viewport : $('#fullcalendar'),
 				adjust : {
-					mouse : true,
+					mouse : false,
 					scroll : false
 				}
 			},
-			show : 'mouseover',
-			hide : 'mouseout',
+			show : false,
+			hide : false,
 			style : 'qtip-dark qtip-shadow qtip-rounded'
 		}).qtip('api');
 	
@@ -230,21 +230,7 @@
 		return currentdate;
 	}
 </script>
-<style type="text/css">
-.hw-layer-wrap {
-	box-sizing: border-box;
-	width: 570px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -285px;
-	margin-top: -180.8px; #-180.8
-	border-radius: 3px;
-	background-color: #fff;
-	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
-	padding: 45px 50px;
-}
-</style>
+
 <body>
 	<!--Header-part-->
 	<div id="header">

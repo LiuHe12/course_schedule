@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/matrix-media.css" />
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 <link href='css/googleapis.css' rel='stylesheet' type='text/css'>
+<link href='css/hw-layer.css' rel='stylesheet' type='text/css'>
 
 <!-- Full calendar -->
 <link href='css/fullcalendar.min.css' rel='stylesheet' />
@@ -34,88 +35,172 @@
 <script type="text/javascript" src="js/jquery.qtip.js"></script>
 
 <script>
+	var contextEle = "";
+	var contextTitle = "";
+	var contextColor = "";
+
 	$(document).ready(function() {
-						// qtip
-						var tooltip = $('<div/>').qtip({
-							id : 'fullcalendar',
-							prerender : true,
-							overwrite : false,
-							content : {
-								text : ' ',
-								title : {
-									button : true
-								}
-							},
-							position : {
-								my : 'bottom center',
-								at : 'top center',
-								target : 'mouse',
-								viewport : $('#fullcalendar'),
-								adjust : {
-									mouse : false,
-									scroll : false
-								}
-							},
-							show : false,
-							hide : false,
-							style : 'qtip-light'
-						}).qtip('api');
 
-						$('#calendar')
-								.fullCalendar(
-										{
-											header : {
-												left : 'prev,next today',
-												center : 'title',
-												right : 'month,agendaWeek,agendaDay,listWeek'
-											},
-											defaultDate : getNowFormatDate(),
-											navLinks : true, // can click day/week names to navigate views
-											editable : false,
-											eventLimit : true, // allow "more" link when too many events
-											events : [${courses}],
-											eventClick : function(data, event,
-													view) {
-												var content = '<h4>'
-														+ data.title
-														+ '</h4>'
-														+ '<p><b>Start:</b> '
-														+ data.start
-														+ '<br />'
-														+ (data.end
-																&& '<p><b>End:</b> '
-																+ data.end
-																+ '</p>' || '')
-														+ (data.description
-																&& '<p><b>Description:</b><br>'
-																+ data.description
-																+ '</p>' || '');
+		
+		// qtip
+		var tooltip = $('<div/>').qtip({
+			id : 'fullcalendar',
+			prerender : true,
+			overwrite : false,
+			content : {
+				text : ' ',
+				title : {
+					button : true
+				}
+			},
+			position : {
+				my : 'bottom center',
+				at : 'top center',
+				target : 'mouse',
+				viewport : $('#fullcalendar'),
+				adjust : {
+					mouse : false,
+					scroll : false
+				}
+			},
+			show : false,
+			hide : false,
+			style : 'qtip-dark qtip-shadow qtip-rounded'
+		}).qtip('api');
 
-												tooltip.set({
-													'content.text' : content
-												}).reposition(event)
-														.show(event);
-											}
-										});
-						
-						
-						context.init({
-							fadeSpeed : 100,
-							filter : function($obj) {
-							},
-							above : 'auto',
-							preventDoubleContext : true,
-							compress : false
-						});		
-						context.attach('.fc-event,.fc-list-item', [ {
-							text : '课程評價',
-							action : function(){
-							}
-						}
-						]);
+		// fullCalendar
+		$('#calendar').fullCalendar({
+			header : {
+				left : 'prev,next today',
+				center : 'title',
+				right : 'month,agendaWeek,agendaDay,listWeek'
+			},
+			defaultDate : getNowFormatDate(),
+			navLinks : true, // can click day/week names to navigate views
+			editable : false,
+			eventLimit : true, // allow "more" link when too many events
+			events : [${courses}],
+			eventClick : function(data, event, view) {
+				//扣掉+08:00時區
+				var start = new Date(data.start - 60000 * 480);
+				var end = new Date(data.end - 60000 * 480);
+				var content = '<h4>'
+						+ data.title
+						+ '</h4>'
+						+ '<p><b>Start:</b>&nbsp;'
+						+ start
+						+ '<br />'
+						+ '<p><b>End:</b>&nbsp;&nbsp;&nbsp;'
+						+ end
+						+ '</p>'
+						+ '<p><b>Description:</b><br>'
+						+ data.description
+						+ '</p>';
 
-					});
+				tooltip.set({
+					'content.title' : "课程信息",
+					'content.text' : content
+				}).reposition(event)
+						.show(event);
+			}
+		});
+		
+		
+		context.init({
+			fadeSpeed : 100,
+			filter : function($obj) {
+			},
+			above : 'auto',
+			preventDoubleContext : true,
+			compress : false
+		});		
+		context.attach('.fc-event,.fc-list-item', [ {
+			text : '课程評價',
+			action : function(){
+				if(contextColor == "blue"){
+					alert("课还没上，请课后再评分");
+				} else{
+					$('#course_id').val(contextTitle);
+					addSatisfaction();
+				}
+			}
+		}
+		]);
+		
+		function addSatisfaction(){
+			showLayer('hw-layer');
+		}
+		
+		
+		// 隱藏選單相關
+		function hideLayer() {
+			$('.hw-overlay').fadeOut();
+		}
+	
+		function showLayer(id) {
+			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
+			layer.fadeIn();
+			layerwrap.css({
+				'margin-top' : -layerwrap.outerHeight() / 2
+			});
+		}
+	
+		$('.hwLayer-ok,.hwLayer-cancel,.hwLayer-close').on(
+				'click', function() {
+					hideLayer();
+				});
+	
+		//点击或者触控弹出层外的半透明遮罩层，关闭弹出层 
+		$('.hw-overlay').on('click', function(event) {
+			if (event.target == this) {
+				hideLayer();
+			}
+		});
+	
+		//按ESC键关闭弹出层 
+		$(document).keyup(function(event) {
+			if (event.keyCode == 27) {
+				hideLayer();
+			}
+		});		
 
+	});
+	
+	// 取得右鍵元素
+	$(document).on('contextmenu', '.fc-event', function(e) {
+		contextEle = $(this);
+		contextTitle = $(this).find(".fc-title").text();
+		contextColor = getContextColor();
+	});
+	$(document).on('contextmenu', '.fc-list-item', function(e) {
+		contextEle = $(this);
+		contextTitle = $(this).find(".fc-list-item-title").text();
+		contextColor = getContextColor();
+	});
+	
+	
+	
+	function getContextColor(){
+		var color = $(contextEle).css("background-color");
+		switch(color){
+			case "rgb(255, 0, 0)":
+				color = "red";
+				break;
+			case "rgb(0, 0, 255)":
+				color = "blue";
+				break;
+			default :
+				color = "purple";
+		}
+		
+		return color;
+	}
+
+	
+
+		
+		
+	
 	//获取当前时间，格式YYYY-MM-DD
 	function getNowFormatDate() {
 		var date = new Date();
@@ -145,16 +230,47 @@
 	<!--close-Header-part-->
 
 
-	
+
 	<c:import url="top-bar.jsp"></c:import>
 	<c:import url="left-bar.jsp"></c:import>
-	
+
 	<div id="content">
 		<div id="content-header">
 			<div id="breadcrumb">
 				<a href="#" title="Go to Home" class="tip-bottom"><i
 					class="icon-home"></i> Home</a> <a href="#" class="current">Calendar</a>
 			</div>
+			
+			<!-- **********课程评价********** -->
+			<div class="hw-overlay" id="hw-layer" style="display: none">
+					<div class="hw-layer-wrap">
+						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
+						<div class="row">
+							<div class="col-md-3 col-sm-12 hw-icon">
+								<i class="glyphicon glyphicon-info-sign"></i>
+							</div>
+							<div class="col-md-9 col-sm-12">
+								<h3>课程评价</h3>
+								<form id="addSatisfaction" class="my_validate" action="addSatisfaction" method="post" onsubmit="return confirm('确定提交？')">
+
+									课程名称：<br><input id="course_id" name="course_id" type="text" disabled style="width:100%" /><br>
+									课程评价：（5分最高分，1分最低分）<br>
+					                <label><input type="radio" name="satisfaction" value="5"/>5分</label>
+					                <label><input type="radio" name="satisfaction" value="4"/>4分</label>
+					                <label><input type="radio" name="satisfaction" value="3"/>3分</label>	
+					                <label><input type="radio" name="satisfaction" value="2"/>2分</label>			
+					                <label><input type="radio" name="satisfaction" value="1"/>1分</label>											
+									
+									<!-- <textarea id="remind" name="remind" style="width:100%"></textarea> -->
+									<br><br>
+									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset" onclick="cleanForm()">取 消</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- **********课程评价結束********** -->		
 
 		</div>
 
