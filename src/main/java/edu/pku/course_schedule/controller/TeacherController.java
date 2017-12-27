@@ -29,9 +29,15 @@ public class TeacherController {
 	@RequestMapping(value = { "/teacher" }, method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView teacherHome(HttpServletRequest request, ModelAndView mav) {
 		Course_Service cs = new Course_Service_Imp();
-		// Teacher teacher=(Teacher) request.getSession().getAttribute("user");
-		String userId = (String) request.getSession().getAttribute("userId");
+	
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) !=1) {
+			mav.addObject("error", "请以老师身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
 		ArrayList<Course> courses = null;
+		String userId = (String) request.getSession().getAttribute("userId");
 		if (userId != null) {
 			courses = cs.getCoursesByUserId(userId);
 		}
@@ -43,10 +49,12 @@ public class TeacherController {
 			String start = df.format(course.getTime()).replace(' ', 'T');
 			String end = df.format(course.getRest_time()).replace(' ', 'T');
 			String color = null;
-			if (course.getStatus() > 0) {
-				color = "red";
-			} else {
+			if (course.getStatus() <= 0) {
 				color = "blue";
+			} else if(course.getStatus()==1){
+				color = "red";
+			}else {
+				color = "gray";
 			}
 			String description=course.getRemind();
 			if(description==null) {
@@ -63,20 +71,20 @@ public class TeacherController {
 		return mav;
 	}
 
-	// @RequestMapping(value = { "/salary" }, method =
-	// {RequestMethod.POST,RequestMethod.GET})
-	// private ModelAndView getSalary(ModelAndView mav, HttpServletRequest request)
-	// {
-	// Salary_Service ss = new Salary_Service_Imp();
-	// if ((Integer) request.getSession().getAttribute("identity") == 1) {
-	// Teacher teacher = (Teacher) request.getSession().getAttribute("user");
-	// ArrayList<Teacher_salary> teacher_salaries =
-	// ss.getSalariesById(teacher.getId());
-	// mav.addObject("teacher_salaries", teacher_salaries);
-	// } else {
-	// mav.addObject("error", "请以老师身份登录！");
-	// mav.setViewName("forward:/login");
-	// }
-	// return mav;
-	// }
+	@RequestMapping(value = { "/addEvaluate" }, method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView addEvaluate(HttpServletRequest request, ModelAndView mav) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) !=1) {
+			mav.addObject("error", "请以老师身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
+		String course_id=request.getParameter("course_id");
+		String evaluate=request.getParameter("evaluate");
+		Course_Service cs = new Course_Service_Imp();
+		logger.info(course_id+" "+evaluate);
+		//cs.setEvaluate(course_id, evaluate);
+		return mav;
+	}
+	
 }

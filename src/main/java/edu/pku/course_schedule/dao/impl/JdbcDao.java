@@ -520,7 +520,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public void setSatification(String course_id, int score) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set satisfaction = ? where course_id= ? ", course_table_name);
+		String sql = String.format("update %s set satisfaction = ? where course_id= ? and status>0", course_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setInt(1, score);
 		st.setString(2, course_id);
