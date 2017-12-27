@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.CSS;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,7 @@ public class TeacherController {
 		return mav;
 	}
 
+	//TODO
 	@RequestMapping(value = { "/addEvaluate" }, method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView addEvaluate(HttpServletRequest request, ModelAndView mav) {
 		if ((request.getSession().getAttribute("identity")) == null
@@ -81,7 +83,7 @@ public class TeacherController {
 			return mav;
 		}
 		String course_id=request.getParameter("course_id");
-		String evaluate;
+		String evaluate = null;
 		try {
 			evaluate = new String(request.getParameter("evaluate").getBytes("ISO-8859-1"), "UTF-8");
 			Course_Service cs = new Course_Service_Imp();
@@ -91,7 +93,32 @@ public class TeacherController {
 			e.printStackTrace();
 		}
 		
-		//cs.setEvaluate(course_id, evaluate);
+		Course_Service cs=new Course_Service_Imp();
+		cs.setEvaluate(course_id, evaluate);
+		mav.setViewName("redirect:/teacher");
+		return mav;
+	}
+	//TODO
+	@RequestMapping(value = { "/addRemind" }, method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView addRemind(HttpServletRequest request, ModelAndView mav) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) !=1) {
+			mav.addObject("error", "请以老师身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
+		String course_id=request.getParameter("course_id");
+		String remind=null;
+		try {
+			remind = new String(request.getParameter("remind").getBytes("ISO-8859-1"), "UTF-8");
+			Course_Service cs = new Course_Service_Imp();
+			logger.info(course_id+" "+remind);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.toString());
+			e.printStackTrace();
+		}
+		Course_Service cs=new Course_Service_Imp();
+		cs.setRemind(course_id, remind);
 		mav.setViewName("redirect:/teacher");
 		return mav;
 	}

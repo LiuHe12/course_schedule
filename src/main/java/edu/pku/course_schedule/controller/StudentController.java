@@ -26,6 +26,12 @@ public class StudentController {
 
 	@RequestMapping(value = "/student", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView getAdmin(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) !=2) {
+			mav.addObject("error", "请以学生身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
 		Course_Service cs = new Course_Service_Imp();
 		//Student stdeunt = (Student) request.getSession().getAttribute("user");
 		String userId=(String) request.getSession().getAttribute("userId");
@@ -60,6 +66,23 @@ public class StudentController {
 		}
 		mav.addObject("courses", sb.toString());
 		request.getSession().setAttribute("courses", courses);
+		return mav;
+	}
+	@RequestMapping(value = "/addSatisfaction", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addSatisfaction(ModelAndView mav, HttpServletRequest request) {
+		if ((request.getSession().getAttribute("identity")) == null
+				|| (Integer) (request.getSession().getAttribute("identity")) !=2) {
+			mav.addObject("error", "请以学生身份登录！");
+			mav.setViewName("forward:/");
+			return mav;
+		}
+		String course_id=request.getParameter("course_id");
+		int satisfaction=Integer.parseInt(request.getParameter("satisfaction"));
+		Course_Service cs = new Course_Service_Imp();
+		//cs.setSatification(course_id, satisfaction);
+		logger.info(course_id+" "+satisfaction);
+		//cs.setSatification(course_id, satisfaction);
+		mav.setViewName("redirect:/index");
 		return mav;
 	}
 

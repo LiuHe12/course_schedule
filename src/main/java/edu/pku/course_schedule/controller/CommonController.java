@@ -49,22 +49,20 @@ public class CommonController {
 			userId = adm.getId();
 			adm.setPassword(MD5Util.getMD5(newPwd));
 			user = adm;
-			mav.setViewName("redirect:/admin");
 		} else if (identity == 1) {
 			Teacher teacher = (Teacher) user;
 			oldPwd = teacher.getPassword();
 			userId = teacher.getId();
 			teacher.setPassword(MD5Util.getMD5(newPwd));
 			user = teacher;
-			mav.setViewName("redirect:/teacher");
 		} else if (identity == 2) {
 			Student student = (Student) user;
 			oldPwd = student.getPassword();
 			userId = student.getId();
 			student.setPassword(MD5Util.getMD5(newPwd));
 			user = student;
-			mav.setViewName("redirect:/student");
 		}
+		mav.setViewName("redirect:/index");
 		// logger.info("old" +oldPwd);
 		// logger.info("input "+MD5Util.getMD5(request.getParameter("oldpassword")) );
 		if (!oldPwd.equals(MD5Util.getMD5(request.getParameter("oldpassword")))) {
