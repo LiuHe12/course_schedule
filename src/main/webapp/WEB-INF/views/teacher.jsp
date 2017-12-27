@@ -272,7 +272,7 @@
 								<h3>课前提醒</h3>
 								<form id="addRemind" class="my_validate" action="addRemind" method="post" onsubmit="return confirm('确定提交？')">
 
-									课程名称：<br><input id="course_id" name="course_id" type="text" disabled style="width:100%" /><br>
+									课程名称：<br><input id="course_id" name="course_id" type="hidden" style="width:100%" /><br>
 									提醒内容：<br><textarea id="remind" name="remind" style="width:100%"></textarea><br><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>

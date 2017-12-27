@@ -172,12 +172,12 @@
 	$(document).on('contextmenu', '.fc-event', function(e) {
 		contextEle = $(this);
 		contextTitle = $(this).find(".fc-title").text();
-		contextColor = getContextColor();
+		contextColor = getContextColor('month');
 	});
 	$(document).on('contextmenu', '.fc-list-item', function(e) {
 		contextEle = $(this);
 		contextTitle = $(this).find(".fc-list-item-title").text();
-		contextColor = getContextColor();
+		contextColor = getContextColor('list');
 	});
 	
 	
@@ -188,9 +188,7 @@
 			color = $(contextEle).css("background-color");
 		}else if(sourse == 'list'){
 			color = $(contextEle).find(".fc-event-dot").css("background-color");
-			console.log(color);
 		}
-		
 		switch (color) {
 		case "rgb(255, 0, 0)":
 			color = "red";
@@ -201,7 +199,6 @@
 		default:
 			color = "gray";
 		}
-		console.log(color);
 		return color;
 	}
 
@@ -261,7 +258,7 @@
 								<h3>课程评价</h3>
 								<form id="addSatisfaction" class="my_validate" action="addSatisfaction" method="post" onsubmit="return confirm('确定提交？')">
 
-									课程名称：<br><input id="course_id" name="course_id" type="text" disabled style="width:100%" /><br>
+									课程名称：<br><input id="course_id" name="course_id" type="hidden" style="width:100%" /><br>
 									课程评价：（5分最高分，1分最低分）<br>
 					                <label><input type="radio" name="satisfaction" value="5"/>5分</label>
 					                <label><input type="radio" name="satisfaction" value="4"/>4分</label>
