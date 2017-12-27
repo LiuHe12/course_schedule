@@ -1,5 +1,6 @@
 package edu.pku.course_schedule.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -27,16 +28,16 @@ public class StudentController {
 	@RequestMapping(value = "/student", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView getAdmin(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
-				|| (Integer) (request.getSession().getAttribute("identity")) !=2) {
+				|| (Integer) (request.getSession().getAttribute("identity")) != 2) {
 			mav.addObject("error", "请以学生身份登录！");
 			mav.setViewName("forward:/");
 			return mav;
 		}
 		Course_Service cs = new Course_Service_Imp();
-		//Student stdeunt = (Student) request.getSession().getAttribute("user");
-		String userId=(String) request.getSession().getAttribute("userId");
-		ArrayList<Course> courses=null;
-		if(userId!=null) {
+		// Student stdeunt = (Student) request.getSession().getAttribute("user");
+		String userId = (String) request.getSession().getAttribute("userId");
+		ArrayList<Course> courses = null;
+		if (userId != null) {
 			courses = cs.getCoursesByUserId(userId);
 		}
 		StringBuilder sb = new StringBuilder();
@@ -47,18 +48,18 @@ public class StudentController {
 			String start = df.format(course.getTime()).replace(' ', 'T');
 			String end = df.format(course.getRest_time()).replace(' ', 'T');
 			String color = null;
-			if (course.getStatus() <= 0) {//未上
+			if (course.getStatus() <= 0) {// 未上
 				color = "blue";
-			} else if(course.getStatus() > 0 && course.getSatisfaction()<0){//已上未评
+			} else if (course.getStatus() > 0 && course.getSatisfaction() < 0) {// 已上未评
 				color = "red";
-			}else if(course.getStatus() > 0 && course.getSatisfaction()>0) {//已上已评
+			} else if (course.getStatus() > 0 && course.getSatisfaction() > 0) {// 已上已评
 				color = "gray";
 			}
-			String description=course.getRemind();
-			if(description==null) {
-				description="null";
+			String description = course.getRemind();
+			if (description == null) {
+				description = "null";
 			}
-			forAdminshow ads = new forAdminshow(title, start, end, color,description);
+			forAdminshow ads = new forAdminshow(title, start, end, color, description);
 			sb.append(ads.toString());
 			index++;
 			if (index != courses.size())
@@ -68,20 +69,25 @@ public class StudentController {
 		request.getSession().setAttribute("courses", courses);
 		return mav;
 	}
+
 	@RequestMapping(value = "/addSatisfaction", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView addSatisfaction(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
-				|| (Integer) (request.getSession().getAttribute("identity")) !=2) {
+				|| (Integer) (request.getSession().getAttribute("identity")) != 2) {
 			mav.addObject("error", "请以学生身份登录！");
 			mav.setViewName("forward:/");
 			return mav;
 		}
-		String course_id=request.getParameter("course_id");
-		int satisfaction=Integer.parseInt(request.getParameter("satisfaction"));
+		String course = null;
+		try {
+			course = new String(request.getParameter("course_id").getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		String course_id = course.split("/")[3];
+		int satisfaction = Integer.parseInt(request.getParameter("satisfaction"));
 		Course_Service cs = new Course_Service_Imp();
-		//cs.setSatification(course_id, satisfaction);
-		logger.info(course_id+" "+satisfaction);
-		//cs.setSatification(course_id, satisfaction);
+		cs.setSatification(course_id, satisfaction);
 		mav.setViewName("redirect:/index");
 		return mav;
 	}
