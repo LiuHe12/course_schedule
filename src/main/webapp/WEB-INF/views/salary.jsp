@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Matrix Admin</title>
+<title>威德国际语言学校</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -25,6 +25,8 @@
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/matrix.js"></script>
 <script src="js/matrix.tables.js"></script>
+
+
 
 
 </head>
@@ -58,7 +60,7 @@
 					<div class="widget-box">
 						<div class="widget-title">
 							<span class="icon"><i class="icon-th"></i></span>
-							<h5>Data table</h5>
+							<h5>Data table</h5>						
 						</div>
 						<div class="widget-content nopadding">
 							<table class="table table-bordered data-table">

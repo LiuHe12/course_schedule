@@ -5,7 +5,7 @@
 <html lang="en">
     
 <head>
-        <title>Matrix Admin</title><meta charset="UTF-8" />
+        <title>威德国际语言学校</title><meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" http-equiv="Content-Type" charset="utf-8"/>
 		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
@@ -55,7 +55,7 @@
                	</div>
                 <div class="form-actions">
                     <span class="pull-left"><a class="flip-link btn btn-info" id="to-recover">Lost password?</a></span>
-                    <span class="pull-right"><button type="submit" class="btn btn-success" /> Login</button></span>
+                    <span class="pull-right"><button type="submit" class="btn btn-success">Login</button></span>
                 </div>
             </form>
             <form id="recoverform" action="forgetpwd" class="form-vertical">
@@ -69,7 +69,7 @@
                
                 <div class="form-actions">
                     <span class="pull-left"><a class="flip-link btn btn-success" id="to-login">&laquo; Back to login</a></span>
-                    <span class="pull-right"><button class="btn btn-info" type="submit"/>Reecover</button></span>
+                    <span class="pull-right"><button class="btn btn-info" type="submit">Reecover</button></span>
                 </div>
             </form>
         </div>
