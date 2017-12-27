@@ -62,6 +62,7 @@
 <script>
 	var contextEle = "";
 	var contextTitle = "";
+	var contextColor = "";
 
 	$(function() {
 
@@ -135,23 +136,37 @@
 		context.attach('.fc-event,.fc-list-item', [ {
 			text : '修改',
 			action : function() {
-				fillEditForm();
-				showLayer('hw-layer-edit');
+				if(contextColor=="blue"){
+					fillEditForm();
+					showLayer('hw-layer-edit');					
+				} else{
+					alert("课程已上，无法修改");
+				}
+
 			}
 		}, {
 			text : '已上课',
 			action : function() {
-				if (confirm('确定修改?\n' + contextTitle)) {
-					PassedCourse();
-					window.location.reload();
+				if(contextColor=="blue"){
+					if (confirm('确定修改?\n' + contextTitle)) {
+						PassedCourse();
+						window.location.reload();
+					}					
+				} else{
+					alert("课程已上，无法修改");
 				}
+
 			}
 		}, {
 			text : '删除',
 			action : function() {
-				if (confirm('确定删除?\n' + contextTitle)) {
-					deleteCourse();
-					window.location.reload();
+				if(contextColor=="blue"){
+					if (confirm('确定删除?\n' + contextTitle)) {
+						deleteCourse();
+						window.location.reload();
+					}
+				} else{
+					alert("课程已上，无法修改");
 				}
 			}
 		} ]);
@@ -160,12 +175,33 @@
 		$(document).on('contextmenu', '.fc-event', function(e) {
 			contextEle = $(this);
 			contextTitle = $(this).find(".fc-title").text();
+			contextColor = getContextColor('month');
 		});
 		$(document).on('contextmenu', '.fc-list-item', function(e) {
 			contextEle = $(this);
 			contextTitle = $(this).find(".fc-list-item-title").text();
+			contextColor = getContextColor('list');
 		});
 		
+		function getContextColor(sourse) {
+			var color = "";
+			if(sourse == 'month'){
+				color = $(contextEle).css("background-color");
+			}else if(sourse == 'list'){
+				color = $(contextEle).find(".fc-event-dot").css("background-color");
+			}
+			switch (color) {
+			case "rgb(255, 0, 0)":
+				color = "red";
+				break;
+			case "rgb(0, 0, 255)":
+				color = "blue";
+				break;
+			default:
+				color = "gray";
+			}
+			return color;
+		}
 		// 刪課
 		function deleteCourse() {
 			$.ajax({
