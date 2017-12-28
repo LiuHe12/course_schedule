@@ -467,7 +467,7 @@
 	left: 50%;
 	top: 50%;
 	margin-left: -285px;
-	margin-top: -330.8px; #-180.8
+	margin-top: -330.8px !important;
 	border-radius: 3px;
 	background-color: #fff;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
@@ -505,7 +505,7 @@
 
 				<!--=================排课===================-->
 				<div class="hw-overlay" id="hw-layer" style="display: none">
-					<div class="hw-layer-wrap">
+					<div class="hw-layer-wrap" style="margin-top: -330.8px !important;">
 						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
 						<div class="row">
 							<div class="col-md-3 col-sm-12 hw-icon">
@@ -542,7 +542,7 @@
 				<!--=================排课===================-->
 				<!--=================修改課程===================-->
 				<div class="hw-overlay" id="hw-layer-edit" style="display: none">
-					<div class="hw-layer-wrap">
+					<div class="hw-layer-wrap" style="margin-top: -330.8px !important;">
 						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
 						<div class="row">
 							<div class="col-md-3 col-sm-12 hw-icon">
