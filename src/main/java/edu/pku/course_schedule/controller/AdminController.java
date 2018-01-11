@@ -310,7 +310,7 @@ public class AdminController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/change-user-password", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/change-user-information", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView changeUserPasswordHome(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
@@ -334,7 +334,7 @@ public class AdminController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/changePwd", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/changeInformation", method = { RequestMethod.GET, RequestMethod.POST })
 	private ModelAndView changePwd(ModelAndView mav, HttpServletRequest request) {
 		if ((request.getSession().getAttribute("identity")) == null
 				|| (Integer) (request.getSession().getAttribute("identity")) != 0) {
