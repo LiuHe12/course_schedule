@@ -42,7 +42,7 @@
 			<li class="admin-bar" id="add-user-bar" style="display: none"><a href="add-user"><i
 					class="icon icon-lock"></i><span>新增用户</span></a></li>
 			<li class="admin-bar" id="change-user-password-bar" style="display: none"><a
-				href="change-user-password"><i class="icon icon-inbox"></i><span>修改用户密码</span></a></li>
+				href="change-user-information"><i class="icon icon-inbox"></i><span>修改用户信息</span></a></li>
 			<li class="admin-bar teacher-bar student-bar" id="change-password-bar" style="display: none"><a
 				href="change-password"><i class="icon icon-lock"></i><span>修改密码</span></a></li>
 		</ul>
