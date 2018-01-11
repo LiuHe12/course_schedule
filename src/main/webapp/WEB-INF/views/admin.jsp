@@ -36,13 +36,9 @@
 <script type="text/javascript" src="js/jquery.qtip.js"></script>
 
 <!-- DatePicker -->
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet"
-	href="http://jqueryui.com/resources/demos/style.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!-- <link rel="stylesheet" href="css/jquery-ui.min.css">
-<script src="js/jquery-ui.min.js"></script>-->
+<script src="js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<script src="js/jquery-ui.min.js"></script>
 
 <!-- ContextJS -->
 <link rel="stylesheet" href="css/context.bootstrap.css" />
