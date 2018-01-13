@@ -21,7 +21,6 @@
 <link href='css/jquery-ui.min.css' rel='stylesheet' type='text/css'>
 <link href='css/datepicker.css' rel='stylesheet' type='text/css'>
 
-
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -31,7 +30,6 @@
 <script src="js/matrix.js"></script>
 <script src="js/matrix.tables.js?version=1"></script>
 <script src="js/matrix.form_validation.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
 <script src="js/MonthPicker.js"></script>
 <script>
 	
@@ -40,15 +38,22 @@
 		var id = "<%=session.getAttribute("identity")%>";
 		if (id == 0) { // admin
 			$("#addBonus").show();
-		} 
-		
-		//$('.monthpicker').MonthPicker({AltFormat:'yy-mm'} );
+		}
+
+		/*$('.monthpicker').MonthPicker({
+			Button : false,
+			MonthFormat : "yy-mm",
+			Position : {
+				collision: 'fit',
+				at: 'bottom+10'
+			}
+		});*/
+
 		// 隱藏選單相關
 		function hideLayer() {
 			$('.hw-overlay').fadeOut();
 		}
 		function showLayer(id) {
-			console.log("in showLayer: "+id);
 			var layer = $('#' + id), layerwrap = layer.find('hw-layer-wrap');
 			layer.fadeIn();
 			layerwrap.css({
@@ -75,7 +80,6 @@
 			}
 		});
 
-	
 	});
 </script>
 </head>
@@ -99,14 +103,16 @@
 					class="icon-home"></i> Home
 				</a> <a href="#" class="current">查看薪資</a>
 			</div>
-			<h1>查看薪資
-				<button id="addBonus" class="btn btn-success show-layer" style="float:right;margin-right:20px;display:none" data-show-layer="hw-layer">新增奖金</button>
+			<h1>
+				查看薪資
+				<button id="addBonus" class="btn btn-success show-layer"
+					style="float: right; margin-right: 20px; display: none"
+					data-show-layer="hw-layer">新增奖金</button>
 			</h1>
-			
+
 		</div>
 		<div class="container-fluid">
 			<hr>
-			<input type="text" class="monthpicker">
 			<div class="row-fluid">
 				<div class="span12">
 					<div class="widget-box">
@@ -126,7 +132,6 @@
 									</tr>
 								</thead>
 								<tbody>
-
 									<c:forEach var="teacher_salary" items="${teacher_salaries}">
 										<tr class="${teacher_salary.teacher_id}">
 											<td>${teacher_salary.time}</td>
@@ -136,16 +141,13 @@
 											<td class="${teacher_salary.salary}">${teacher_salary.salary}</td>
 										</tr>
 									</c:forEach>
-
-
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
-			</div>
-			<!-- 新增獎金 -->
-			<div class="hw-overlay" id="hw-layer" style="display: none">
+				<!-- 新增獎金 -->
+				<div class="hw-overlay" id="hw-layer" style="display: none">
 					<div class="hw-layer-wrap" style="margin-top: -330.8px !important;">
 						<span class="glyphicon glyphicon-remove hwLayer-close"></span>
 						<div class="row">
@@ -157,25 +159,26 @@
 								<form id="addBonus" class="my_validate" action="addBonus"
 									method="post" onsubmit="return courseSubmit('add')">
 
-									教师名称/ID：<br> 
-									<select name="teacher_id" id="teacher_id" class="required">
+									教师名称/ID：<br> <select name="teacher_id" id="teacher_id"
+										class="required">
 										<option>---请选择---</option>
 										<c:forEach var="teacher" items="${teachers}">
 											<option id="${teacher.id}" value="${teacher.id}">${teacher.name}/${teacher.id}</option>
 										</c:forEach>
-									</select><br> 
-									
-									输入年月：(例：2018-01)<br> 
-									<input type="text" class="required monthpicker" id="time" name="time"><br> 
-									输入金额：<br> <input type="text" class="required digits" id="bonus" name="bonus"><br> 
+									</select><br> 输入年月：(例：2018-01)<br> <input type="text"
+										class="required monthpicker" id="time" name="time"><br>
+									输入金额：<br> <input type="text" class="required digits"
+										id="bonus" name="bonus"><br>
 
 									<button class="btn btn-success hwLayer-ok" type="submit">确定</button>
-									<button class="btn btn-warning hwLayer-cancel" type="reset">取 消</button>
+									<button class="btn btn-warning hwLayer-cancel" type="reset">取消</button>
 								</form>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+
 		</div>
 	</div>
 
