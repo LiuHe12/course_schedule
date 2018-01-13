@@ -84,9 +84,9 @@ public class AdminController {
 			String start = df.format(course.getTime());
 			String end = df.format(course.getRest_time());
 			String color = null;
-			if (course.getStatus() <=0) {//未上
+			if (course.getStatus() <= 0) {// 未上
 				color = "blue";
-			} else{//已上
+			} else {// 已上
 				color = "red";
 			}
 			String description = course.getRemind();
@@ -342,27 +342,85 @@ public class AdminController {
 			mav.setViewName("forward:/login");
 			return mav;
 		}
+		DateFormat ps = new SimpleDateFormat("yyyy-MM-dd");
 		String userId = request.getParameter("username");
-		String newPassword = "";
-		String orgnewPassword = request.getParameter("password");
 		try {
 			request.setCharacterEncoding("utf-8");
-			newPassword = new String(orgnewPassword.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			logger.error(e.toString());
 			e.printStackTrace();
 		}
-		int identity = 0;
+		int identity = -1;
+		User_Service us = new User_Service_Imp();
+		boolean r = false;
 		if (userId.substring(0, 1).equals("S")) {
 			identity = 2;
+			Student student = new Student();
+
+			student.setId(userId);
+
+			String student_name;
+			try {
+				student_name = new String(request.getParameter("student_name").getBytes("ISO-8859-1"), "UTF-8");
+				student.setName(student_name);
+
+				String student_identify_id = new String(
+						request.getParameter("student_identify_id").getBytes("ISO-8859-1"), "UTF-8");
+				student.setIdentify_id(student_identify_id);
+
+				String enroll_time = new String(request.getParameter("enroll_time").getBytes("ISO-8859-1"), "UTF-8");
+				try {
+					student.setEnroll_time(new java.sql.Date(ps.parse(enroll_time).getTime()));
+				} catch (ParseException e) {
+					logger.error(e.toString());
+					e.printStackTrace();
+				}
+
+				student.setEmail(new String(request.getParameter("email").getBytes("ISO-8859-1"), "UTF-8"));
+
+				String student_pwd = request.getParameter("student_pwd");
+				if (student_pwd != null) {
+					student.setPassword(new String(student_pwd.getBytes("ISO-8859-1"), "UTF-8"));
+				}
+				r = us.modifyStudent(userId, student);
+			} catch (UnsupportedEncodingException e) {
+				logger.error(e.toString());
+				e.printStackTrace();
+			}
+
 		} else if (userId.substring(0, 1).equals("T")) {
 			identity = 1;
+
+			Teacher teacher = new Teacher();
+			teacher.setId(userId);
+
+			try {
+				teacher.setName(new String(request.getParameter("teacher_name").getBytes("ISO-8859-1"), "UTF-8"));
+				teacher.setIdentify_id(
+						new String(request.getParameter("teacher_identify_id").getBytes("ISO-8859-1"), "UTF-8"));
+				teacher.setKind(Integer.parseInt(request.getParameter("kind")));
+				teacher.setIncumbency(Integer.parseInt(request.getParameter("incumbency")));
+				teacher.setBase_salary(Integer.parseInt(request.getParameter("base_salary")));
+				try {
+					teacher.setEntertime(new java.sql.Date(ps.parse(request.getParameter("entertime")).getTime()));
+				} catch (ParseException e) {
+					r = us.modifyTeacher(userId, teacher);
+					e.printStackTrace();
+				}
+				String teacher_pwd = request.getParameter("teacher_pwd");
+				if (teacher_pwd != null) {
+					teacher.setPassword(new String(teacher_pwd.getBytes("ISO-8859-1"), "UTF-8"));
+				}
+				r = us.modifyTeacher(userId, teacher);
+			} catch (UnsupportedEncodingException e) {
+				logger.error(e.toString());
+				e.printStackTrace();
+			}
+
 		}
-		User_Service us = new User_Service_Imp();
-		boolean r = us.modifyPassword(userId, identity, newPassword);
 		if (!r) {
 			// mav.addObject("error", "修改密码失败！");
-			mav.setViewName("redirect:/change-user-password");
+			mav.setViewName("redirect:/change-user-information");
 		} else {
 			// mav.addObject("error", "修改密码成功！");
 			mav.setViewName("redirect:/admin");

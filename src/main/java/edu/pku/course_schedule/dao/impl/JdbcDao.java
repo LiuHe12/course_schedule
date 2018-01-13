@@ -185,20 +185,32 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public boolean modifyStudent(String student_id, Student student) throws SQLException {
-		Student stu = (Student) getUser(student_id, student_identity);
-		if (stu == null) {
-			logger.info(String.format("学生[ %s ] 不存在！", student_id));
-			return false;
-		}
+		// Student stu = (Student) getUser(student_id, student_identity);
+		// if (stu == null) {
+		// logger.info(String.format("学生[ %s ] 不存在！", student_id));
+		// return false;
+		// }
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set name=?,enroll_time=?,email=?,identify_id=? where id=?",
-				student_table_name);
+		String sql = null;
+		if (student.getPassword() != null) {
+			sql = String.format("update %s set name=?,enroll_time=?,email=?,identify_id=?,password=? where id=?",
+					student_table_name);
+		} else {
+			sql = String.format("update %s set name=?,enroll_time=?,email=?,identify_id=? where id=?",
+					student_table_name);
+		}
+
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, student.getName());
 		st.setDate(2, student.getEnroll_time());
 		st.setString(3, student.getEmail());
 		st.setString(4, student.getIdentify_id());
-		st.setString(5, student_id);
+		if (student.getPassword() != null) {
+			st.setString(5, MD5Util.getMD5(student.getPassword()));
+			st.setString(6, student_id);
+		} else {
+			st.setString(5, student_id);
+		}
 		st.execute();
 		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
@@ -214,15 +226,22 @@ public class JdbcDao implements Dao {
 
 	@Override
 	public boolean modifyTeacher(String teacher_id, Teacher teacher) throws SQLException {
-		Teacher tch = (Teacher) getUser(teacher_id, teacher_identify);
-		if (tch == null) {
-			logger.info(String.format("教师[ %s ] 不存在！", teacher_id));
-			return false;
-		}
+		// Teacher tch = (Teacher) getUser(teacher_id, teacher_identify);
+		// if (tch == null) {
+		// logger.info(String.format("教师[ %s ] 不存在！", teacher_id));
+		// return false;
+		// }
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format(
-				"update %s set name=?,kind=?,base_salary=?,identify_id=?,incumbency=?,entertime=? where id=?",
-				teacher_table_name);
+		String sql = null;
+		if (teacher.getPassword() != null) {
+			sql = String.format(
+					"update %s set name=?,kind=?,base_salary=?,identify_id=?,incumbency=?,entertime=?,password=? where id=?",
+					teacher_table_name);
+		} else {
+			sql = String.format(
+					"update %s set name=?,kind=?,base_salary=?,identify_id=?,incumbency=?,entertime=? where id=?",
+					teacher_table_name);
+		}
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		st.setString(1, teacher.getName());
 		st.setInt(2, teacher.getKind());
@@ -230,7 +249,13 @@ public class JdbcDao implements Dao {
 		st.setString(4, teacher.getIdentify_id());
 		st.setInt(5, teacher.getIncumbency());
 		st.setDate(6, teacher.getEntertime());
-		st.setString(7, teacher_id);
+		if (teacher.getPassword() != null) {
+			st.setString(7, MD5Util.getMD5(teacher.getPassword()));
+			st.setString(8, teacher_id);
+		} else {
+			st.setString(7, teacher_id);
+		}
+
 		int r = st.executeUpdate();
 		jdbcUtil.release(st, conn);
 		if (r <= 0) {
