@@ -106,7 +106,7 @@ $(document).ready(function(){
 			},
 
 			student_pwd:{
-				required: true,
+				required:true,
 				minlength:6,
 				maxlength:20
 			},
@@ -117,7 +117,7 @@ $(document).ready(function(){
 				equalTo:"#student_pwd"
 			},
 			teacher_pwd:{
-				required: true,
+				required:true,
 				minlength:6,
 				maxlength:20
 			},
@@ -128,7 +128,7 @@ $(document).ready(function(){
 				equalTo:"#teacher_pwd"
 			},
 			admin_pwd:{
-				required: true,
+				required:true,
 				minlength:6,
 				maxlength:20
 			},
@@ -139,7 +139,7 @@ $(document).ready(function(){
 				equalTo:"#admin_pwd"
 			},
 			password:{
-				required: true,
+				required:true,
 				minlength:6,
 				maxlength:20
 			},

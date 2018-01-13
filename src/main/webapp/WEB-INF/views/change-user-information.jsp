@@ -173,18 +173,17 @@
 										<div class="control-group">
 											<label class="control-label">学生密码</label>
 											<div class="controls">
-												<input type="password" name="student_pwd"
-													class="student_pwd" id="student_pwd" />
+												<input type="password" name="student_password" class="required" placeholder="选填" />
 											</div>
 										</div>
-
+										<!-- 
 										<div class="control-group">
 											<label class="control-label">确认学生密码</label>
 											<div class="controls">
 												<input type="password" name="student_pwd2"
 													class="student_pwd2" id="student_pwd2" />
 											</div>
-										</div>
+										</div> -->
 
 									</div>
 									<!--//老師的欄位-->
@@ -244,18 +243,17 @@
 										<div class="control-group">
 											<label class="control-label">教师密码</label>
 											<div class="controls">
-												<input type="password" name="teacher_pwd"
-													class="teacher_pwd" id="teacher_pwd" />
+												<input type="password" name="teacher_password" class="required" placeholder="选填" />
 											</div>
 										</div>
-
+										<!-- 
 										<div class="control-group">
 											<label class="control-label">确认教师密码</label>
 											<div class="controls">
 												<input type="password" name="teacher_pwd2"
 													class="teacher_pwd2" id="teacher_pwd2" />
 											</div>
-										</div>
+										</div> -->
 
 									</div>
 
