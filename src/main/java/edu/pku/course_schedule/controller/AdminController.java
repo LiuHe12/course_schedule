@@ -24,8 +24,10 @@ import edu.pku.course_schedule.dao.entity.Student;
 import edu.pku.course_schedule.dao.entity.Student_course;
 import edu.pku.course_schedule.dao.entity.Teacher;
 import edu.pku.course_schedule.services.Course_Service;
+import edu.pku.course_schedule.services.Salary_Service;
 import edu.pku.course_schedule.services.User_Service;
 import edu.pku.course_schedule.services.impl.Course_Service_Imp;
+import edu.pku.course_schedule.services.impl.Salary_Service_Imp;
 import edu.pku.course_schedule.services.impl.User_Service_Imp;
 
 @Controller
@@ -539,5 +541,20 @@ public class AdminController {
 		// request.getSession().setMaxInactiveInterval(20 * 60);
 		return mav;
 	}
+	@RequestMapping(value = "/addBonus", method = { RequestMethod.GET, RequestMethod.POST })
+	private ModelAndView addBonus(ModelAndView mav, HttpServletRequest request) {
+		String teacher_id=request.getParameter("teacher_id");
+		int bonus=Integer.parseInt(request.getParameter("bonus"));
+		String time=request.getParameter("time");
+		//logger.info(teacher_id+" "+bonus+" "+time);
+		Salary_Service ss=new Salary_Service_Imp();
+		boolean r=ss.setBonus(teacher_id, time, bonus);
+		if(!r) {
+			mav.setViewName("redirect:/salary");
+		}else
+			mav.setViewName("redirect:/admin");
+		return mav;
+	}
+	
 
 }

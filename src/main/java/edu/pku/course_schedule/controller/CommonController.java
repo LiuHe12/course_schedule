@@ -3,6 +3,7 @@ package edu.pku.course_schedule.controller;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -86,6 +87,9 @@ public class CommonController {
 		Salary_Service ss = new Salary_Service_Imp();
 		if ((Integer) request.getSession().getAttribute("identity") == 0) {
 			ArrayList<Teacher_salary> teacher_salaries = ss.getAllSalaries();
+			User_Service us=new User_Service_Imp();
+			ArrayList<Object> teachers=us.getAllUser(1);
+			mav.addObject("teachers", teachers);
 			mav.addObject("teacher_salaries", teacher_salaries);
 		} else if ((Integer) request.getSession().getAttribute("identity") == 1) {
 			Teacher teacher = (Teacher) request.getSession().getAttribute("user");

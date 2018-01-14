@@ -967,7 +967,7 @@ public class JdbcDao implements Dao {
 	@Override
 	public boolean setBonus(String teacher_id, String salary_time, int bonus) throws SQLException {
 		Connection conn = jdbcUtil.getConnection();
-		String sql = String.format("update %s set bonus=? where teacher_id=?, time=?", teacherSalary_table_name);
+		String sql = String.format("update %s set bonus=? where teacher_id=? and time=?", teacherSalary_table_name);
 		PreparedStatement st = (PreparedStatement) conn.prepareStatement(sql);
 		// st.setString(1, teacherSalary_table_name);
 		st.setInt(1, bonus);
@@ -977,11 +977,11 @@ public class JdbcDao implements Dao {
 		int r = st.getUpdateCount();
 		jdbcUtil.release(st, conn);
 		if (r <= 0) {
-			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 成功 ->%s", teacher_id, salary_time, bonus,
+			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 失败 ->%s", teacher_id, salary_time, bonus,
 					df.format(new java.util.Date())));
 			return false;
 		} else {
-			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 失败->%s", teacher_id, salary_time, bonus,
+			logger.info(String.format("set [ %s ] %s 奖金 [ %d ] 成功->%s", teacher_id, salary_time, bonus,
 					df.format(new java.util.Date())));
 			return true;
 		}
